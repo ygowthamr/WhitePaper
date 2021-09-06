@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS file link -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" type="text/css">
+
+    <!-- google fonts link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font awesome CDN -->
+    <script src="https://kit.fontawesome.com/e2afe0d504.js" crossorigin="anonymous"></script>
+
+    <!-- title here -->
+    <title>My Notepad - Home</title>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            My Notepad
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchTxt" placeholder="Type Something...">
+            <input type="submit" value="Search">
+            <i class="fas fa-search"></i>
+        </div>
+    </header>
+
+    <div class="wrapper">
+
+        <!-- Login/ SignUp notification Section -->
+        <div class="buttons">
+            <div class="login"><a href="/accounts/login/">Login</a></div>
+            <div class="login"><a href="/accounts/signup/">SignUp</a></div>
+        </div>
+        <div class="custom-message">
+            <p>Login or SignUp to access your notes on any device and save notes globally...</p>
+        </div>
+
+        <!-- Note typing Section -->
+        <div class="text-input">
+            <h1>Add a New Notes</h1>
+            <textarea name="note" id="addTxt" cols="30" rows="10" name="textarea"></textarea>
+            <button>Add it</button>
+        </div>
+
+        <!-- Notes Showing Section -->
+        <div class="notes-container">
+            <h1>Your Saved Notes</h1>
+            <div id="notes">
+                <!-- All the Notes will be shown through javascript -->
+            </div>
+        </div>
+    </div>
+    <!-- Javascript fire link -->
+    <script src="{% static 'javascript/script.js' %}"></script>
+</body>
+
+</html>

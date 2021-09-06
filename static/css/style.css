@@ -1,0 +1,325 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 37px;
+    font-weight: 800;
+    font-family: 'Josefin Sans', sans-serif;
+    margin: 20px 10px;
+}
+
+h1:after {
+    content: "";
+    display: block;
+    background-color: #F79F1F;
+    height: 7px;
+    width: 80px;
+}
+
+body {
+    background-color: #DCDDE1;
+}
+
+header {
+    background-color: #222F3E;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 170px;
+    position: relative;
+}
+
+header .logo, header .search-bar {
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+header .search-bar i{
+    display: none;
+}
+
+header .search-bar #searchTxt {
+    font-family: 'Poppins', sans-serif;
+    padding: 3px 10px;
+    font-weight: 500;
+}
+
+header .search-bar input[type="submit"] {
+    background-color: #F79F1F;
+    border: 1px solid #F79F1F;
+    margin-left: 10px;
+    color: black;
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.wrapper {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.wrapper .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 10px;
+}
+
+.wrapper .buttons .login{
+    background-color: #222F3E;
+    color: white;
+    display: block;
+    margin: 0 15px;
+    width: 150px;
+    padding: 7px 0px;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 3px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+}
+
+.wrapper .buttons .login:hover {
+    background-color: #F79F1F;
+    transition: 0.5s ease;
+    font-weight: 600;
+}
+
+.wrapper .buttons .login a {
+    color: white;
+    text-decoration: none;
+    padding: 6px 46px;
+}
+
+.wrapper .buttons .login a:hover{
+    color: black;
+}
+
+.wrapper .custom-message p {
+    text-align: center;
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Note taker section */
+
+.wrapper .text-input {
+    width: 65%;
+    margin: 20px auto;
+    padding: 20px 30px;
+    border-radius: 5px;
+    background-color: rgb(246, 246, 246);
+}
+
+.wrapper .text-input textarea {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    font-size: 17px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    padding: 7px 14px;
+    resize: none;
+    height: 180px;
+    color: rgb(37, 37, 37);
+}
+
+.wrapper .text-input button {
+    padding: 5px 16px;
+    font-size: 18px;
+    margin: 10px 45px;
+    font-weight: 500;
+    background-color: #F79F1F;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Notes Showing */
+
+.wrapper .notes-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px 30px;
+}
+
+.wrapper .notes-container #notes{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.wrapper .notes-container .cards {
+    padding: 25px;
+    margin: 10px;
+    background-color: white;
+    box-shadow: 0 2px 10px -3px rgba(0, 0, 0, 0.4);
+    height: 310px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.wrapper .notes-container .cards .title {
+    font-size: 26px;
+    font-weight: 700;
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 0 0 5px 0;
+}
+
+.wrapper .notes-container .cards .cardtxt p{
+    overflow: auto;
+}
+
+.wrapper .notes-container .cards i {
+    font-size: 29px;
+    color: #F79F1F;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 20px;
+    cursor: pointer;
+}
+
+/* Login form styling */
+
+.login-container {
+    width: 40%;
+    margin: 100px auto 0 auto;
+    padding: 30px 80px;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-container h1 {
+    display: block;
+}
+
+.login-container form {
+    /* border: 2px solid red; */
+    width: 70%;
+}
+
+.login-container form label {
+    display: block;
+    margin: 25px 0 0 20px;
+    font-size: 25px;
+    font-weight: 600;
+    font-family: 'Josefin Sans', sans-serif;
+}
+
+.login-container form input {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 9px 18px;
+    width: 100%;
+    border-radius: 23px;
+    outline: none;
+    margin: 5px auto;
+}
+
+.login-container form .password-error p{
+    color: red;
+    margin: 5px 20px;
+    font-size: 13px;
+    visibility: hidden;
+}
+
+.login-container form button {
+    padding: 6px 15px;
+    background-color: #F79F1F;
+    border-radius: 3px;
+    border: none;
+    margin: 10px auto;
+    display: block;
+}
+
+.login-container form button a {
+    background-color: #F79F1F;
+    color: black;
+    font-size: 18px;
+    padding: 3px 15px;
+    text-decoration: none;
+}
+
+.login-container form .new-user p{
+    text-align: center;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.login-container form .new-user p a{
+    text-decoration: none;
+}
+
+/* Logout Btn styling */
+
+.wrapper .user-logout{
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0 0 0;
+    padding: 7px 50px;
+    font-size: 25px;
+    background-color: rgb(246, 246, 246);
+    border-radius: 5px;
+}
+
+.wrapper .user-logout i{
+    margin: 5px 10px;
+    color: #F79F1F;
+}
+
+.wrapper .user-logout a{
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+}
+
+/* Content box styling */
+
+.wrapper .content-box{
+    background-color: white;
+    display: block;
+    visibility: visible;
+    position: absolute;
+    top: 300px;
+    left: 35%;
+    width: 30%;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 20px 0px rgb(182 182 182);
+}
+
+.wrapper .content-box .title-cross{
+    display: flex;
+    justify-content: space-between;
+    font-size: 27px;
+    padding: 0 0 7px 0;
+}
+
+.wrapper .content-box .title-cross .content-title{
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.wrapper .content-box .title-cross i{
+    color: #F79F1F;
+    cursor: pointer;
+}

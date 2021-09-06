@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS file link -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" type="text/css">
+
+    <!-- Javascript fire link -->
+    <script src="{% static 'javascript/script.js' %}"></script>
+
+    <!-- google fonts link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- title here -->
+    <title>My Notepad - Sign Up</title>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            My Notepad
+        </div>
+        <div class="search-bar">
+            <input type="text" id="searchTxt" placeholder="Type Something...">
+            <input type="submit" value="Search">
+        </div>
+    </header>
+
+    <div class="login-container">
+        <h1>Sign Up Form</h1>
+        <!-- Sign Up details Fill form -->
+        <form action="/accounts/signup/" method="post">
+            <label for="email">First name</label>
+            <input type="text" id="email" placeholder="Enter your email address" name="firstname">
+            <label for="email">Last name</label>
+            <input type="text" id="email" placeholder="Enter your email address" name="lastname">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email address" name="email">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" name="password">
+            <label for="password">Re-enter Password</label>
+            <input type="password" id="password" placeholder="Enter your password">
+            <p>{{error}}</p>
+            <button><input type="submit" value="Sign Up"></button>
+            <div class="new-user"><p>Already have a account?<a href="http://localhost:8000/mynotepad/login/"> Login</a></p></div>
+        </form>
+    </div>
+</body>
+
+</html>

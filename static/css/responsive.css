@@ -1,0 +1,158 @@
+@media(max-width: 1550px){
+    .wrapper{
+        width: 88%;
+    }
+}
+
+@media(max-width: 1450px){
+    .wrapper{
+        width: 95%;
+    }
+}
+
+@media(max-width: 1300px){
+    .wrapper{
+        width: 100%;
+    }
+}
+
+@media(max-width: 1200px){
+    .wrapper .notes-container #notes{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    header{
+        padding: 8px 100px;
+    }
+}
+
+@media(max-width: 1000px){
+    header{
+        padding: 8px 60px;
+    }
+
+    .wrapper .text-input{
+        width: 75%;
+    }
+}
+
+@media(max-width: 900px){
+    .wrapper .notes-container .cards{
+        padding: 20px;
+        margin: 5px;
+    }
+}
+
+@media(max-width: 800px){
+    .wrapper .notes-container{
+        padding: 10px;
+    }
+
+    .wrapper .text-input button{
+        margin: 10px 30px;
+    }
+}
+
+@media(max-width: 750px){
+    .wrapper .notes-container{
+        padding: 13px;
+        width: 80%;
+    }
+
+    .wrapper .notes-container #notes{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    header{
+        padding: 8px 30px;
+    }
+}
+
+@media(max-width: 650px){
+    .wrapper .notes-container{
+        width: 95%;
+    }
+
+    .wrapper .text-input{
+        width: 85%;
+    }
+}
+
+@media(max-width: 540px){
+    .wrapper .notes-container{
+        width: 100%;
+    }
+
+    .wrapper .text-input{
+        width: 95%;
+        padding: 8px;
+    }
+
+    header{
+        padding: 8px 30px;
+    }
+
+    header .search-bar i{
+        display: block;
+        font-size: 20px;
+    }
+
+    header .search-bar input{
+        display: none;
+    }
+}
+
+@media(max-width: 500px){
+    h1{
+        font-size: 30px;
+    }
+
+    .wrapper .text-input textarea{
+        width: 95%;
+    }
+
+    h1:after{
+        height: 5px;
+        width: 60px;
+    }
+
+    .wrapper .custom-message p{
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .wrapper .notes-container #notes{
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .wrapper .notes-container{
+        width: 80%;
+        padding: 10px;
+    }
+
+    .wrapper .text-input button{
+        margin: 10px;
+    }
+
+    .wrapper .user-logout{
+        padding: 7px 0;
+        font-size: 20px;
+    }
+}
+
+@media(max-width: 400px){
+    .wrapper .notes-container{
+        width: 100%;
+    }
+
+    header{
+        padding: 8px 15px;
+    }
+}
+
+@media(max-width: 350px){
+    .wrapper .notes-container{
+        width: 100%;
+        padding: 10px;
+    }
+}
