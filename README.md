@@ -3,7 +3,7 @@
 
 ## Description
 
-White Paper is a web application developed using the Python Django framework. This project serves as [brief purpose or functionality, e.g., "a platform for managing tasks efficiently" or "a blog application for sharing ideas"]. It emphasizes simplicity, scalability, and an intuitive user experience.
+White Paper is a web application developed using the Python Django framework. This project serves as a digital notepad, allowing users to create, edit, and manage notes efficiently. It emphasizes simplicity, scalability, and an intuitive user experience for seamless note-taking.
 
 ---
 
