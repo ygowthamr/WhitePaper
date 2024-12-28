@@ -88,3 +88,10 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 Feel free to reach out for any queries or suggestions at [ygowthamr@gmail.com]. 😊
+
+## Collaborators
+
+- [Disha](https://github.com/Disha520) Role/Contribution
+- [Collaborator 2 Name](https://github.com/collaborator2-username) - Role/Contribution
+- [Collaborator 3 Name](https://github.com/collaborator3-username) - Role/Contribution
+
