@@ -53,7 +53,7 @@
             <input type="password" id="password" placeholder="Enter your password">
             <p>{{error}}</p>
             <button><input type="submit" value="Sign Up"></button>
-            <div class="new-user"><p>Already have a account?<a href="http://localhost:8000/mynotepad/login/"> Login</a></p></div>
+            <div class="new-user"><p>Already have a account?<a href="{% url 'login'%}"> Login</a></p></div>
         </form>
     </div>
 </body>

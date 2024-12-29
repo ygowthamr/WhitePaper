@@ -13,7 +13,7 @@ def signup(request):
         if User.objects.filter(username=username).exists():
             data={}
             data['error']="User already exist"
-            return render(request,'notesapp/signup.html',data)
+            return render(request,'notesapp/login.html/',data)
         else:
             user = User.objects.create_user(username=username,password=password,first_name=fname,last_name=lname)
             return redirect("/accounts/login")
