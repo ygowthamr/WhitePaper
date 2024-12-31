@@ -26,6 +26,18 @@
 <body>
     <!-- Header Section -->
     <header>
+        <style>
+            header{
+                position: fixed;
+                top: 0;
+                width: 100%;
+                background-color: #222F3E;
+                z-index: 1000;
+            }
+            body {
+                margin-top: 60px;
+            }
+        </style>
         <div class="logo">
             My Notepad
         </div>
@@ -35,6 +47,11 @@
             <i class="fas fa-search"></i>
         </div>
     </header>
+    <script>
+        document.querySelector('.logo').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 
     <div class="wrapper">
 
@@ -52,7 +69,9 @@
             <h1>Add a New Notes</h1>
             <form method="POST" action="/notes/newnote/">
                 <textarea name="note" id="addTxt" cols="30" rows="10"></textarea>
-                <button id="addBtn" ><input type="submit" value="Add it"></button>
+                <button id="addBtn">
+                    <input type="submit" value="Add it" style="background: none; border: none; padding: 0; cursor: pointer;">
+                </button>
         </div>
 
         <!-- Notes Showing Section -->
@@ -75,6 +94,7 @@
     </div>
     <!-- Javascript fire link -->
     <script src="{% static 'javascript/script.js' %}"></script>
+
 </body>
 
 </html>
