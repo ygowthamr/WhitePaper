@@ -39,6 +39,7 @@ def login(request):
         else:
                 # Provide the error data to the template
                 data = {"error": "Email or Password is incorrect"}
-                return render(request, 'notesapp/login.html', data)  # Ensure a response here
+                return render(request, 'notesapp/login.html', data)  # Ensure a response .
+            
     else:
         return render(request, 'notesapp/login.html')
