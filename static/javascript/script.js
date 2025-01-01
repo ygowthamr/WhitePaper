@@ -4,24 +4,8 @@ let addTxt = document.getElementById('addTxt');
 // Restict user to add empty note
 addBtn.addEventListener("click", function (e) {
     if (addTxt.value.trim() === "") {
-        addTxt.value = "Please write something to add a note.";
         addTxt.style.color = "#6c757d"; // Dark grey color for the placeholder text
-
-        setTimeout(() => {
-            if (addTxt.value === "Please write something to add a note.") {
-                addTxt.value = "";
-                addTxt.style.color = "#000"; // Reset to default text color
-            }
-        }, 1500);
-        
-        addTxt.addEventListener('input', () => {
-            if (addTxt.value === "Please write something to add a note.") {
-                addTxt.value = "";
-                addTxt.style.color = "#000";
-            }
-        }, { once: true });
-        
-        return;
+        return; // Do nothing if the input is empty
     }
 
     let notes = localStorage.getItem("notes");
