@@ -1,10 +1,31 @@
 showNotes();
 let addBtn = document.getElementById('addBtn');
-console.log("hello world...");
+let addTxt = document.getElementById('addTxt');
+// Restict user to add empty note
 addBtn.addEventListener("click", function (e) {
-    console.log("hello world...");
-    let addTxt = document.getElementById("addTxt");
+    if (addTxt.value.trim() === "") {
+        addTxt.value = "Please write something to add a note.";
+        addTxt.style.color = "#6c757d"; // Dark grey color for the placeholder text
+
+        setTimeout(() => {
+            if (addTxt.value === "Please write something to add a note.") {
+                addTxt.value = "";
+                addTxt.style.color = "#000"; // Reset to default text color
+            }
+        }, 1500);
+        
+        addTxt.addEventListener('input', () => {
+            if (addTxt.value === "Please write something to add a note.") {
+                addTxt.value = "";
+                addTxt.style.color = "#000";
+            }
+        }, { once: true });
+        
+        return;
+    }
+
     let notes = localStorage.getItem("notes");
+    let notesObj;
     if (notes == null) {
         notesObj = [];
     } else {
@@ -16,10 +37,11 @@ addBtn.addEventListener("click", function (e) {
     addTxt.value = "";
     console.log(notesObj);
     showNotes();
-})
-
+});
+// To show notes
 function showNotes() {
     let notes = localStorage.getItem("notes");
+    let notesObj;
     if (notes == null) {
         notesObj = [];
     } else {
@@ -35,7 +57,6 @@ function showNotes() {
                 </div>
                 <i class="fas fa-trash-alt"  id="${index}" onclick="deleteNote(this.id)"></i>
             </div>`;
-            // <span onclick="checkIndex()">Read More</span> 
     });
     let notesElm = document.getElementById("notes");
     if (notesObj.length != 0) {
@@ -45,11 +66,10 @@ function showNotes() {
         section above to add notes`;
     }
 }
-
-// To delete note
-
+// To delete a note
 function deleteNote(index) {
     let notes = localStorage.getItem("notes");
+    let notesObj;
     if (notes == null) {
         notesObj = [];
     } else {
@@ -60,23 +80,20 @@ function deleteNote(index) {
     localStorage.setItem("notes", JSON.stringify(notesObj));
     showNotes();
 }
-
-// To search function
-
+// To search notes
 let search = document.getElementById('searchTxt');
 search.addEventListener('input', function () {
     let inputVal = search.value.toLowerCase();
     console.log('Input event fired!', inputVal);
     let noteCards = document.getElementsByClassName('cards');
     Array.from(noteCards).forEach(function (element) {
-        let cardTxt = element.getElementsByTagName("p")[0].innerText;
-        if (cardTxt.includes(inputVal)) {
+        let cardTxt = element.getElementsByTagName("span")[0].innerText;
+        if (cardTxt.toLowerCase().includes(inputVal)) {
             element.style.display = "inline-block";
         }
         else {
             element.style.display = "none";
         }
-        // console.log(cardTxt);
     });
 });
 
