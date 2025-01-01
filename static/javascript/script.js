@@ -103,4 +103,31 @@ search.addEventListener('input', function () {
 //     })
 // }
 
+// -----Scroll button effect. -----
+document.addEventListener('DOMContentLoaded', function () {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 200) {
+            scrollToTopBtn.style.display = 'block';
+            scrollToTopBtn.classList.add('fade-in');
+            scrollToTopBtn.classList.remove('fade-out');
+        } else {
+            scrollToTopBtn.classList.add('fade-out');
+            scrollToTopBtn.classList.remove('fade-in');
+            setTimeout(() => {
+                scrollToTopBtn.style.display = 'none';
+            }, 300);
+        }
+    });
+
+    scrollToTopBtn.addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    });
+});
+
+
 console.log("hello world...");
