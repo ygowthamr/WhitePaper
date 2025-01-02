@@ -82,12 +82,22 @@ search.addEventListener('input', function () {
         }
     });
 
-    // Show "No results found" if no matches
-    let notesElm = document.getElementById("notes");
+    // Show "No results found" message dynamically
+    let noResultMessage = document.getElementById("noResultMessage");
+    if (!noResultMessage) {
+        // Create the "No results found" element if it doesn't exist
+        noResultMessage = document.createElement("p");
+        noResultMessage.id = "noResultMessage";
+        noResultMessage.style.textAlign = "center";
+        noResultMessage.style.color = "red";
+        noResultMessage.innerText = "No results found!";
+        document.getElementById("notes").appendChild(noResultMessage);
+    }
+
     if (noResult) {
-        notesElm.innerHTML = "No results found!";
+        noResultMessage.style.display = "block";
     } else {
-        showNotes(); // Call to display notes as usual
+        noResultMessage.style.display = "none";
     }
 });
 
