@@ -51,19 +51,31 @@
         <h1>Sign Up Form</h1>
         <!-- Sign Up details Fill form -->
         <form action="/accounts/signup/" method="post">
-            <label for="email">First name</label>
-            <input type="text" id="email" placeholder="Enter your email address" name="firstname">
-            <label for="email">Last name</label>
-            <input type="text" id="email" placeholder="Enter your email address" name="lastname">
+            {% csrf_token %}
+            <label for="firstname">First name</label>
+            <input type="text" id="firstname" placeholder="Enter your First Name" name="firstname" required>
+
+            <label for="lastname">Last name</label>
+            <input type="text" id="lastname" placeholder="Enter your Last Name" name="lastname" required>
+
             <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email address" name="email">
+            <input type="email" id="email" placeholder="Enter your email address" name="email" required>
+
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" name="password">
-            <label for="password">Re-enter Password</label>
-            <input type="password" id="password" placeholder="Enter your password">
-            <p>{{error}}</p>
+            <input type="password" id="password" placeholder="Enter your password" name="password" required>
+
+            <label for="confirm_password">Re-enter Password</label>
+            <input type="password" id="confirm_password" placeholder="Confirm your password"  name="confirm_password" required>
+
+            {% if error %}
+            <p style="color: red; font-weight: bold;">{{ error }}</p>
+            {% endif %}
+            
             <button><input type="submit" value="Sign Up"></button>
-            <div class="new-user"><p>Already have a account?<a href="/accounts/login/"> Login</a></p></div>
+            
+            <div class="new-user">
+                <p>Already have a account?<a href="/accounts/login/"> Login</a></p>
+            </div>
         </form>
     </div>
 </body>
