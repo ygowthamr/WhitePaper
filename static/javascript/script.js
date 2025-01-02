@@ -70,15 +70,35 @@ search.addEventListener('input', function () {
     let inputVal = search.value.toLowerCase();
     console.log('Input event fired!', inputVal);
     let noteCards = document.getElementsByClassName('cards');
+    let noResult = true;
     Array.from(noteCards).forEach(function (element) {
         let cardTxt = element.getElementsByTagName("span")[0].innerText;
         if (cardTxt.toLowerCase().includes(inputVal)) {
             element.style.display = "inline-block";
+            noResult = false;
         }
         else {
             element.style.display = "none";
         }
     });
+
+    // Show "No results found" message dynamically
+    let noResultMessage = document.getElementById("noResultMessage");
+    if (!noResultMessage) {
+        // Create the "No results found" element if it doesn't exist
+        noResultMessage = document.createElement("p");
+        noResultMessage.id = "noResultMessage";
+        noResultMessage.style.textAlign = "center";
+        noResultMessage.style.color = "red";
+        noResultMessage.innerText = "No results found!";
+        document.getElementById("notes").appendChild(noResultMessage);
+    }
+
+    if (noResult) {
+        noResultMessage.style.display = "block";
+    } else {
+        noResultMessage.style.display = "none";
+    }
 });
 
 // // Content box to show full content
@@ -104,4 +124,4 @@ search.addEventListener('input', function () {
 //     })
 // }
 
-console.log("hello world...");
+// console.log("hello world...");
