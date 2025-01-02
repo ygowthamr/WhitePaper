@@ -16,7 +16,7 @@ def signup(request):
             return render(request,'notesapp/signup.html',data)
         else:
             user = User.objects.create_user(username=username,password=password,first_name=fname,last_name=lname)
-            return redirect("/accounts/login")
+            return redirect("/accounts/login/")
     else:
         return render(request,'notesapp/signup.html')
 
