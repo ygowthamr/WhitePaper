@@ -50,13 +50,17 @@
         <form action="/accounts/login/" method="POST">
             {% csrf_token %}
             <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email address" name="email">
+            <input type="email" id="email" placeholder="Enter your email address" name="email" required>
+
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" name="password">
+            <input type="password" id="password" placeholder="Enter your password" name="password" required>
+
+            <p style="color: red;">{{ error }}</p>
             <button><input type="submit" value="Login"></button>
-            <p>{{error}}</p>
-        </form>
-            <div class="new-user"><p>New user? <a href="/accounts/signup/">Create a account</a></p></div>
+            
+            <div class="new-user">
+                <p>New user? <a href="/accounts/signup/">Create a account</a></p>
+            </div>
         </form>
     </div>
 
