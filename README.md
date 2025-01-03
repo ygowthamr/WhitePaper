@@ -16,6 +16,24 @@ White Paper is a web application developed using the Python Django framework. Th
 
 ---
 
+## Overview
+
+### Signup page
+
+![White_paper4](https://github.com/user-attachments/assets/a05cfcbb-4161-47c6-b245-59f58b2f946f)
+
+### Login Page
+
+![white_paper1](https://github.com/user-attachments/assets/67bc73bf-c72a-45ee-a74d-794de86798d6)
+
+### Home Page
+
+![White_paper2](https://github.com/user-attachments/assets/a8f3d584-dc9b-48fb-80d5-d144f8d7250e)
+
+### Create a new note
+
+![White_paper3](https://github.com/user-attachments/assets/52e57faa-5a3e-407f-b621-157144040343)
+
 ## Installation
 
 ### Prerequisites
