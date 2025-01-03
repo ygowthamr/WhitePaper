@@ -323,3 +323,41 @@ header .search-bar input[type="submit"] {
     color: #F79F1F;
     cursor: pointer;
 }
+/* Scroll-to-top Button */
+#scrollToTopBtn {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 60px;
+    height: 60px;
+    background: url("../images/scroll-top.png") no-repeat center center; /* Centers the image */
+    background-size: cover; /* Ensures the image covers the button */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Circular button */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+#scrollToTopBtn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+#scrollToTopBtn.fade-in {
+    display: block;
+    opacity: 1;
+}
+
+#scrollToTopBtn.fade-out {
+    opacity: 0;
+}
+
+/* Remove the default "↑" text */
+#scrollToTopBtn::before {
+    content: ""; /* No text */
+}
