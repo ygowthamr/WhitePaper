@@ -93,6 +93,12 @@
             <div class="content-txt">Kite flying has also been done as the tradition of Independence Day celebration, with kites of various sizes, shapes, and colors filling in the sky. Later on, from the year 1974, all the chief ministers of the through respective States unfurled the National flag. Kite flying has also been done as the tradition of Independence Day celebration, with kites of various sizes, shapes, and colors filling in the sky.</div>
         </div> -->
     </div>
+    {% if user.is_authenticated %}
+    <button id="scrollToTopBtn" aria-label="Scroll to Top"></button>
+    <script src="{% static 'js/scrollToTop.js' %}"></script>
+    {% endif %}
+    
+
     <!-- Javascript fire link -->
     <script src="{% static 'javascript/script.js' %}"></script>
 
