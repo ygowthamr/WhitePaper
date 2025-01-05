@@ -97,7 +97,15 @@
     <button id="scrollToTopBtn" aria-label="Scroll to Top"></button>
     <script src="{% static 'js/scrollToTop.js' %}"></script>
     {% endif %}
-    
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Whitepaper App. All rights reserved.</p>
+    </footer>
+
+    <!-- Inline JavaScript to add the current year -->
+    <script>
+        // JavaScript to dynamically insert the current year into the footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
 
     <!-- Javascript fire link -->
     <script src="{% static 'javascript/script.js' %}"></script>

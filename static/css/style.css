@@ -361,3 +361,34 @@ header .search-bar input[type="submit"] {
 #scrollToTopBtn::before {
     content: ""; /* No text */
 }
+
+/* Footer css */
+footer {
+    background-color: #222F3E; /* Match the header background color */
+    color: white; /* White text for good contrast */
+    text-align: center; /* Center-align the content */
+    padding: 15px 10px; /* Add some padding for spacing */
+    font-family: 'Poppins', sans-serif; /* Consistent font style with other sections */
+    font-size: 14px; /* Footer text size */
+    position: fixed; /* Fixed footer position */
+    bottom: 0; /* Align it to the bottom of the viewport */
+    left: 0; /* Extend from the left edge */
+    width: 100%; /* Full width footer */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+footer p {
+    margin: 0; /* Remove default paragraph margins */
+    line-height: 1.5; /* Better text readability */
+}
+
+footer a {
+    color: #F79F1F; /* Use highlight color for links */
+    text-decoration: none; /* Remove underline */
+    font-weight: 500; /* Slightly bold links */
+}
+
+footer a:hover {
+    color: #DCDDE1; /* Change link color to match background */
+    text-decoration: underline; /* Add underline on hover */
+}
