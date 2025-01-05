@@ -78,6 +78,15 @@
             </div>
         </form>
     </div>
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Whitepaper App. All rights reserved.</p>
+    </footer>
+
+    <!-- Inline JavaScript to add the current year -->
+    <script>
+        // JavaScript to dynamically insert the current year into the footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>
