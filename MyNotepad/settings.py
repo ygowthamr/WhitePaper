@@ -93,6 +93,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SECURE = True 
 # CSRF_COOKIE_SECURE = True 
 
+LOGIN_URL = '/accounts/login/'
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

@@ -3,6 +3,7 @@ from notesapp.models import text
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -61,6 +62,7 @@ def login(request):
     else:
         return render(request, 'notesapp/login.html')
 
+@login_required
 def logout(request):
     logout(request)
     return redirect('mynotepad')
