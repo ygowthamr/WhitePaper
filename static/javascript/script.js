@@ -16,7 +16,11 @@ addBtn.addEventListener("click", function (e) {
         notesObj = JSON.parse(notes);
     }
 
-    notesObj.push(addTxt.value);
+    let note = {
+        text: addTxt.value,
+        creationDate: new Date().toISOString()
+    };
+    notesObj.push(note);
     localStorage.setItem("notes", JSON.stringify(notesObj));
     addTxt.value = "";
     console.log(notesObj);
@@ -37,7 +41,7 @@ function showNotes() {
             `<div class="cards">
                 <div class="title">Note ${index + 1}</div>
                 <div class="cardtxt">
-                    <span>${element}</span>
+                    <span>${element.text}</span>
                 </div>
                 <i class="fas fa-trash-alt"  id="${index}" onclick="deleteNote(this.id)"></i>
             </div>`;
@@ -50,6 +54,43 @@ function showNotes() {
         section above to add notes`;
     }
 }
+
+document.getElementById('sortNotes').addEventListener('change', function () {
+    sortAndShowNotes(document.getElementById('sortNotes').value, document.getElementById('sortOrder').value);
+});
+
+document.getElementById('sortOrder').addEventListener('change', function () {
+    sortAndShowNotes(document.getElementById('sortNotes').value, document.getElementById('sortOrder').value);
+});
+
+function sortAndShowNotes(sortBy, sortOrder) {
+    let notes = localStorage.getItem("notes");
+    let notesObj = notes ? JSON.parse(notes) : [];
+
+    if (sortBy === 'none') {
+        return; // Do nothing if no sorting is selected
+    }
+
+    // Function to handle sorting order
+    function sortNotes(notesObj, sortBy, sortOrder) {
+        if (sortBy === 'title') {
+            notesObj.sort((a, b) => a.text.localeCompare(b.text));
+        } else if (sortBy === 'creationDate') {
+            notesObj.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
+        }
+
+        if (sortOrder === 'desc') {
+            notesObj.reverse();
+        }
+
+        return notesObj;
+    }
+
+    notesObj = sortNotes(notesObj, sortBy, sortOrder);
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+    showNotes();
+};
+
 // To delete a note
 function deleteNote(index) {
     let notes = localStorage.getItem("notes");
