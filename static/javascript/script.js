@@ -1,4 +1,10 @@
-showNotes();
+// Clear local storage on page reload
+window.onload = function() {
+    localStorage.clear();
+    showNotes();
+};
+
+// showNotes();
 let addBtn = document.getElementById('addBtn');
 let addTxt = document.getElementById('addTxt');
 // Restict user to add empty note
