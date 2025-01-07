@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render , redirect
 from notesapp.models import text
 
 # Create your views here.
-
+@login_required
 def newnote(request):
 	if request.method == "POST":
 		note = request.POST['note']
