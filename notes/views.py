@@ -5,9 +5,11 @@ from notesapp.models import text
 
 def newnote(request):
 	if request.method == "POST":
-		note = request.POST['note']
-		username = request.user.username
-		upload = text(Uname=username,content=note)
+		heading = request.POST.get('heading', '')
+		content = request.POST.get('content', '') 
+ 
+		# note = request.POST['note']
+		upload = text(heading=heading,content=content, username = request.user.username)
 		upload.save()
 		data = text.objects.filter(Uname=username)
 		context = {
@@ -17,7 +19,7 @@ def newnote(request):
 		return render(request, 'notesapp/main.html',context)
 	else:
 		username = request.user.username
-		data = text.objects.filter(Uname=username)
+		data = text.objects.filter(username=username)
 		context = {
 			'Uname': username,
 			'data': data,

@@ -1,6 +1,8 @@
 showNotes();
 let addBtn = document.getElementById('addBtn');
 let addTxt = document.getElementById('addTxt');
+let addTxtHeading = document.getElementById('addTxtHeading');
+
 // Restict user to add empty note
 addBtn.addEventListener("click", function (e) {
     if (addTxt.value.trim() === "") {
@@ -16,9 +18,12 @@ addBtn.addEventListener("click", function (e) {
         notesObj = JSON.parse(notes);
     }
 
-    notesObj.push(addTxt.value);
+    let noteHeading = addTxtHeading.value.trim() || "Untitled";
+    // notesObj.push(addTxt.value);
+    notesObj.push({ heading: noteHeading, content: addTxt.value });
     localStorage.setItem("notes", JSON.stringify(notesObj));
     addTxt.value = "";
+    addTxtHeading.value="";
     console.log(notesObj);
     showNotes();
 });
@@ -35,9 +40,9 @@ function showNotes() {
     notesObj.forEach(function (element, index) {
         html +=
             `<div class="cards">
-                <div class="title">Note ${index + 1}</div>
+                <div class="title">${element.heading}</div>
                 <div class="cardtxt">
-                    <span>${element}</span>
+                    <span>${element.content}</span>
                 </div>
                 <i class="fas fa-trash-alt"  id="${index}" onclick="deleteNote(this.id)"></i>
             </div>`;
@@ -73,7 +78,8 @@ search.addEventListener('input', function () {
     let noResult = true;
     Array.from(noteCards).forEach(function (element) {
         let cardTxt = element.getElementsByTagName("span")[0].innerText;
-        if (cardTxt.toLowerCase().includes(inputVal)) {
+        let cardTxtHeading = element.getElementsByClassName("title")[0].innerText;
+        if (cardTxt.toLowerCase().includes(inputVal) || (cardTxtHeading.toLowerCase().includes(inputVal))) {
             element.style.display = "inline-block";
             noResult = false;
         }
