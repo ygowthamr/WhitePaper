@@ -60,7 +60,7 @@
                 <i class="fas fa-user"></i>{{Uname}}
             </div>
             <div class="logout-btn">
-                <a href="/accounts/login/">Logout<i class="fas fa-sign-out-alt"></i></a>
+                <a href="/accounts/logout/">Logout<i class="fas fa-sign-out-alt"></i></a>
             </div>
         </div>
 
@@ -76,14 +76,20 @@
             </form>
         </div>
 
-        <!-- Notes Showing Section -->
         <div class="notes-container">
-            <h1>Your Saved Notes</h1>
-                <div id="notes">
-                    {% for data in data %}
-                        {{data.content}}
-                    {% endfor %}
-                </div>
+        <h1>Your Saved Notes</h1>
+        <div id="notes">
+            {% if user.is_authenticated %}
+            <!-- Display notes from the database for authenticated users -->
+            {% for note in data %}
+            <div class="cards">
+                <p>{{ note.content }}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Display notes from memory for unauthenticated users -->
+            <!-- This section will be populated by JavaScript -->
+            {% endif %}
         </div>
 
         <!-- <div class="content-box" id="content-box">

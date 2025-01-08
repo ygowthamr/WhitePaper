@@ -58,6 +58,21 @@
         <!-- Notes Showing Section -->
         <div class="notes-container">
             <h1>Your Saved Notes</h1>
+            <div class="sort-dropdown">
+                <label for="sortNotes">Sort by:</label>
+                <select id="sortNotes">
+                    <option value="creationDate">Creation Date</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+            </div>
+            <div class="sort-dropdown">
+                <label for="sortOrder">Sort Order:</label>
+                <select id="sortOrder">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+            <br>
             <div id="notes">
                 <!-- All the Notes will be shown through javascript -->
             </div>

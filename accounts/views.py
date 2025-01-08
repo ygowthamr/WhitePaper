@@ -1,7 +1,10 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from notesapp.models import text
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
@@ -58,3 +61,9 @@ def login(request):
             return render(request, 'notesapp/login.html', data)
     else:
         return render(request, 'notesapp/login.html')
+
+@login_required
+def logout(request):
+    auth_logout(request)
+    request.session.flush() 
+    return redirect('mynotepad')

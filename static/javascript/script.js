@@ -1,4 +1,10 @@
-showNotes();
+// Clear local storage on page reload
+window.onload = function() {
+    localStorage.clear();
+    showNotes();
+};
+
+// showNotes();
 let addBtn = document.getElementById('addBtn');
 let addTxt = document.getElementById('addTxt');
 let addTxtHeading = document.getElementById('addTxtHeading');
@@ -55,6 +61,43 @@ function showNotes() {
         section above to add notes`;
     }
 }
+
+document.getElementById('sortNotes').addEventListener('change', function () {
+    sortAndShowNotes(document.getElementById('sortNotes').value, document.getElementById('sortOrder').value);
+});
+
+document.getElementById('sortOrder').addEventListener('change', function () {
+    sortAndShowNotes(document.getElementById('sortNotes').value, document.getElementById('sortOrder').value);
+});
+
+function sortAndShowNotes(sortBy, sortOrder) {
+    let notes = localStorage.getItem("notes");
+    let notesObj = notes ? JSON.parse(notes) : [];
+
+    if (sortBy === 'none') {
+        return; // Do nothing if no sorting is selected
+    }
+
+    // Function to handle sorting order
+    function sortNotes(notesObj, sortBy, sortOrder) {
+        if (sortBy === 'title') {
+            notesObj.sort((a, b) => a.text.localeCompare(b.text));
+        } else if (sortBy === 'creationDate') {
+            notesObj.sort((a, b) => new Date(a.creationDate).getTime() - new Date(b.creationDate).getTime());
+        }
+
+        if (sortOrder === 'desc') {
+            notesObj.reverse();
+        }
+
+        return notesObj;
+    }
+
+    notesObj = sortNotes(notesObj, sortBy, sortOrder);
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+    showNotes();
+};
+
 // To delete a note
 function deleteNote(index) {
     let notes = localStorage.getItem("notes");
