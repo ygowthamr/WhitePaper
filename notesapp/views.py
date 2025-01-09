@@ -15,5 +15,8 @@ def index(request):
             'Uname': None,
             'data': None,
         }
-    print(context)
-    return render(request, 'notesapp/index.html', context)
+    # print(context)
+    if(context['Uname'] is not None):
+        return render(request, 'notesapp/main.html', context)
+    else:
+        return render(request, 'notesapp/index.html', context)
