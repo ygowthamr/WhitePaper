@@ -5,6 +5,29 @@ document.addEventListener('DOMContentLoaded', function () {
     let tagFilter = document.getElementById('tagFilter');
     let allTags = new Set();
 
+    document.getElementById('notes').addEventListener('click', function(e) {
+        if (e.target.classList.contains('fa-trash-alt')) {
+            const noteId = e.target.dataset.noteId;
+            if (noteId) {
+                // Make an AJAX request to delete the note
+                fetch(`/notes/deletenote/${noteId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotes();
+                    } else {
+                        console.error(data.error);
+                    }
+                });
+            }
+        }
+    });
+
     // Update tag filter dropdown
     function updateTagFilter() {
         let currentFilter = tagFilter.value;
