@@ -73,6 +73,7 @@
             <h1>Add a New Note</h1>
             <form>
                 <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
+                <input type="text" id="tagInput" placeholder="Add tags (comma separated)">
                 <button type="button" id="addBtn">
                     Add it
                 </button>
@@ -81,6 +82,11 @@
 
         <div class="notes-container">
             <h1>Your Saved Notes</h1>
+            <div class="filter-container">
+                <select id="tagFilter">
+                    <option value="">All Notes</option>
+                </select>
+            </div>
             <div id="notes">
                 {% if user.is_authenticated %}
                 <!-- Display notes from the database for authenticated users -->

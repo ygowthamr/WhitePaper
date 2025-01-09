@@ -1,69 +1,85 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Add event listener for adding notes
     let addBtn = document.getElementById('addBtn');
     let addTxt = document.getElementById('addTxt');
+    let tagInput = document.getElementById('tagInput');
+    let tagFilter = document.getElementById('tagFilter');
+    let allTags = new Set();
 
-    document.getElementById('notes').addEventListener('click', function(e) {
-        if (e.target.classList.contains('fa-trash-alt')) {
-            const noteId = e.target.dataset.noteId;
-            if (noteId) {
-                // Make an AJAX request to delete the note
-                fetch(`/notes/deletenote/${noteId}/`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showNotes();
-                    } else {
-                        console.error(data.error);
-                    }
-                });
+    // Update tag filter dropdown
+    function updateTagFilter() {
+        let currentFilter = tagFilter.value;
+        tagFilter.innerHTML = '<option value="">All Notes</option>';
+        allTags.forEach(tag => {
+            let option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            if (tag === currentFilter) {
+                option.selected = true;
             }
-        }
-    });
+            tagFilter.appendChild(option);
+        });
+    }
 
+    // Filter notes by tag
+    tagFilter.addEventListener('change', function() {
+        showNotes(this.value);
+    });
 
     addBtn.addEventListener("click", function (e) {
         if (addTxt.value.trim() === "") {
-            addTxt.style.color = "#6c757d"; // Dark grey color for the placeholder text
-            return; // Do nothing if the input is empty
+            return;
         }
 
-        // Handle note addition for authenticated users
-        let noteContent = addTxt.value;
-        // Make an AJAX request to save the note to the server
+        let tags = tagInput.value.split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag.length > 0);
+
         fetch('/notes/newnote/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken')
             },
-            body: JSON.stringify({ note: noteContent })
+            body: JSON.stringify({ 
+                note: addTxt.value,
+                tags: tags
+            })
         }).then(response => response.json())
           .then(data => {
               if (data.success) {
-                  // Clear the input field and refresh the notes
                   addTxt.value = "";
+                  tagInput.value = "";
                   showNotes();
               }
           });
     });
 
-    // Function to show notes for authenticated users
-    function showNotes() {
-        fetch('/notes/getnotes/')
+    function showNotes(tagFilter = '') {
+        let url = '/notes/getnotes/';
+        if (tagFilter) {
+            url += `?tag=${encodeURIComponent(tagFilter)}`;
+        }
+
+        fetch(url)
             .then(response => response.json())
             .then(data => {
                 let notesElm = document.getElementById("notes");
                 let html = "";
+                allTags.clear();
+
                 data.notes.forEach(function (note, index) {
+                    note.tags.forEach(tag => allTags.add(tag));
+                    
+                    let tagsHtml = note.tags.map(tag => 
+                        `<span class="note-tag">${tag}</span>`
+                    ).join('');
+
                     html += `
                         <div class="cards">
-                            <div class="title">Note ${index + 1}</div>
+                            <div class="title">
+                                Note ${index + 1}
+                                <div class="tags-container">${tagsHtml}</div>
+                            </div>
                             <div class="cardtxt">
                                 <span>${note.content}</span>
                             </div>
@@ -71,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>`;
                 });
                 notesElm.innerHTML = html;
+                updateTagFilter();
             });
     }
 

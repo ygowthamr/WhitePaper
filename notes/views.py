@@ -4,6 +4,7 @@ from notesapp.models import text
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import ensure_csrf_cookie
+from .models import Tag
 
 
 
@@ -15,29 +16,42 @@ def newnote(request):
         try:
             data = json.loads(request.body)
             note_content = data.get('note')
+            tags = data.get('tags', [])  # Get tags array from request
             username = request.user.username
             
             if not note_content:
                 return JsonResponse({'success': False, 'error': 'Note content is required'}, status=400)
             
-            # Save the note to the database
-            upload = text(Uname=username, content=note_content)
-            upload.save()
+            # Save the note
+            note = text(Uname=username, content=note_content)
+            note.save()
             
-            return JsonResponse({'success': True, 'note_id': upload.id}, status=201)
+            # Save tags
+            for tag_name in tags:
+                Tag.objects.create(name=tag_name.strip(), note=note)
+            
+            return JsonResponse({'success': True, 'note_id': note.id}, status=201)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
 
+
 @login_required
 def getnotes(request):
     username = request.user.username
-    data = text.objects.filter(Uname=username)
+    tag_filter = request.GET.get('tag')
     
-    # Prepare the data to be returned as JSON
-    notes_data = [{'id': note.id, 'content': note.content} for note in data]
+    notes = text.objects.filter(Uname=username)
+    if tag_filter:
+        notes = notes.filter(tags__name=tag_filter)
+    
+    notes_data = [{
+        'id': note.id, 
+        'content': note.content,
+        'tags': list(note.tags.values_list('name', flat=True))
+    } for note in notes]
     
     return JsonResponse({'notes': notes_data})
 
