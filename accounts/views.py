@@ -58,6 +58,7 @@ def login(request):
             return redirect('/')
         else:
             data['error'] = "Email or Password is incorrect"
+            print("log in called")
             return render(request, 'notesapp/login.html', data)
     else:
         return render(request, 'notesapp/login.html')
