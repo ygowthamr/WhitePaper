@@ -14,7 +14,9 @@
     <!-- google fonts link -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Font awesome CDN -->
     <script src="https://kit.fontawesome.com/e2afe0d504.js" crossorigin="anonymous"></script>
@@ -27,13 +29,14 @@
     <!-- Header Section -->
     <header>
         <style>
-            header{
+            header {
                 position: fixed;
                 top: 0;
                 width: 100%;
                 background-color: #222F3E;
                 z-index: 1000;
             }
+
             body {
                 margin-top: 60px;
             }
@@ -47,8 +50,9 @@
             <i class="fas fa-search"></i>
         </div>
     </header>
+
     <script>
-        document.querySelector('.logo').addEventListener('click', function() {
+        document.querySelector('.logo').addEventListener('click', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
@@ -70,6 +74,8 @@
             <form method="POST" action="/notes/newnote/">
                 <textarea name="note-heading" id="addTxtHeading" cols="1" rows="1" name="textarea" placeholder="Heading (optional)"></textarea>
                 <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
+                <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
+                <input type="text" id="tagInput" placeholder="Add tags (comma separated)">
                 <button type="button" id="addBtn">
                     Add it
                 </button>
@@ -77,33 +83,33 @@
         </div>
 
         <div class="notes-container">
-        <h1>Your Saved Notes</h1>
-        <div id="notes">
-            {% if user.is_authenticated %}
-            <!-- Display notes from the database for authenticated users -->
-            {% for note in data %}
-            <div class="cards">
-                <p>{{ note.content }}</p>
+            <h1>Your Saved Notes</h1>
+            <div class="filter-container">
+                <select id="tagFilter">
+                    <option value="">All Notes</option>
+                </select>
             </div>
-            {% endfor %}
-            {% else %}
-            <!-- Display notes from memory for unauthenticated users -->
-            <!-- This section will be populated by JavaScript -->
-            {% endif %}
+            <div id="notes">
+                {% if user.is_authenticated %}
+                <!-- Display notes from the database for authenticated users -->
+                {% for note in data %}
+                <div class="cards">
+                    <div class="title">Note {{ forloop.counter }}</div>
+                    <div class="cardtxt">
+                        <span>{{ note.content }}</span>
+                    </div>
+                    <i class="fas fa-trash-alt" data-note-id="{{ note.id }}"></i>
+                </div>
+                {% endfor %}
+                {% else %}
+                <!-- Display notes from memory for unauthenticated users -->
+                <!-- This section will be populated by JavaScript -->
+                {% endif %}
+            </div>
         </div>
 
-        <!-- <div class="content-box" id="content-box">
-            <div class="title-cross">
-                <div class="content-title">Note 5</div>
-                <i class="fas fa-times" id="hide"></i>
-            </div>
-            <div class="content-txt">Kite flying has also been done as the tradition of Independence Day celebration, with kites of various sizes, shapes, and colors filling in the sky. Later on, from the year 1974, all the chief ministers of the through respective States unfurled the National flag. Kite flying has also been done as the tradition of Independence Day celebration, with kites of various sizes, shapes, and colors filling in the sky.</div>
-        </div> -->
     </div>
-    {% if user.is_authenticated %}
-    <button id="scrollToTopBtn" aria-label="Scroll to Top"></button>
-    <script src="{% static 'js/scrollToTop.js' %}"></script>
-    {% endif %}
+
     <footer>
         <p>&copy; <span id="currentYear"></span> Whitepaper App. All rights reserved.</p>
     </footer>
@@ -114,8 +120,10 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 
-    <!-- Javascript fire link -->
-    <script src="{% static 'javascript/script.js' %}"></script>
+    <!-- Include the authenticated.js script -->
+    <script src="{% static 'javascript/authenticated.js' %}"></script>
+    <!-- Include auto-save functionality -->
+    <script src="{% static 'javascript/autosave.js' %}"></script>
 
 </body>
 

@@ -1,5 +1,5 @@
 // Clear local storage on page reload
-window.onload = function() {
+window.onload = function () {
     localStorage.clear();
     showNotes();
 };
@@ -178,7 +178,7 @@ search.addEventListener('input', function () {
 document.querySelector('form').addEventListener('submit', function (event) {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
-    const confirmPassword = document.getElementById('confirm_password')?.value.trim(); 
+    const confirmPassword = document.getElementById('confirm_password')?.value.trim();
 
     if (!email || !password || (confirmPassword !== undefined && !confirmPassword)) {
         alert('All fields are required.');
