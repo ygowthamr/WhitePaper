@@ -73,6 +73,7 @@
             <h1>Add a New Note</h1>
             <form>
                 <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
+                <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
                 <input type="text" id="tagInput" placeholder="Add tags (comma separated)">
                 <button type="button" id="addBtn">
                     Add it
@@ -120,6 +121,8 @@
 
     <!-- Include the authenticated.js script -->
     <script src="{% static 'javascript/authenticated.js' %}"></script>
+    <!-- Include auto-save functionality -->
+    <script src="{% static 'javascript/autosave.js' %}"></script>
 
 </body>
 
