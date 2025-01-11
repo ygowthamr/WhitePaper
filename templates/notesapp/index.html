@@ -55,6 +55,7 @@
             <h1>Add a New Notes</h1>
             <textarea name="note" id="addTxt" cols="30" rows="10" name="textarea"
                 placeholder="Please write something to add a note."></textarea>
+            <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
             <button id="addBtn">Add it</button>
         </div>
 
@@ -92,6 +93,8 @@
     </script>
     <!-- Javascript fire link -->
     <script src="{% static 'javascript/script.js' %}"></script>
+    <!-- Include auto-save functionality -->
+    <script src="{% static 'javascript/autosave.js' %}"></script>
 </body>
 
 </html>
