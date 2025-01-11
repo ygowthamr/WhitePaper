@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
               if (data.success) {
                   addTxt.value = "";
                   tagInput.value = "";
+                  localStorage.removeItem('autosaved_note');
                   showNotes();
               }
           });
