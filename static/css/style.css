@@ -124,7 +124,21 @@ header .search-bar input[type="submit"] {
     background-color: rgb(246, 246, 246);
 }
 
-.wrapper .text-input textarea {
+.wrapper .text-input #addTxtHeading {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    font-size: 17px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    padding: 7px 14px;
+    resize: none;
+    height: 40px;
+    color: rgb(37, 37, 37);
+    scrollbar-width: none;
+}
+
+.wrapper .text-input #addTxt {
     width: 90%;
     display: block;
     margin: 0 auto;
@@ -159,6 +173,7 @@ header .search-bar input[type="submit"] {
 .wrapper .notes-container #notes{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 80px;
 }
 
 .wrapper .notes-container .cards {

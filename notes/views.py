@@ -12,6 +12,28 @@ from .models import Tag
 
 @login_required
 def newnote(request):
+	if request.method == "POST":
+		heading = request.POST.get('heading', '')
+		content = request.POST.get('content', '') 
+ 
+		# note = request.POST['note']
+		upload = text(heading=heading,content=content, username = request.user.username)
+		upload.save()
+		data = text.objects.filter(Uname=username)
+		context = {
+			'Uname':username,
+			'data':data,
+		}
+		return render(request, 'notesapp/main.html',context)
+	else:
+		username = request.user.username
+		data = text.objects.filter(username=username)
+		context = {
+			'Uname': username,
+			'data': data,
+		}
+		return render(request,'notesapp/main.html',context)
+
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -69,3 +91,4 @@ def deletenote(request, note_id):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
