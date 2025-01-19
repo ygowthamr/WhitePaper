@@ -1,21 +1,26 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from notesapp.models import text
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 
-def index(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        data = text.objects.filter(Uname=username)
-        context = {
-            'Uname': username,
-            'data': data,
-        }
+# Registration View
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')  # Redirect to the homepage after registration
     else:
-        context = {
-            'Uname': None,
-            'data': None,
-        }
-    if(context['Uname'] is not None):
-        return render(request, 'notesapp/main.html', context)
-    else:
-        return render(request, 'notesapp/index.html', context)
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+# Login View
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+    return render(request, 'login.html')
