@@ -24,3 +24,7 @@ def user_login(request):
             login(request, user)
             return redirect('home')
     return render(request, 'login.html')
+
+def note_list(request):
+    return render(request, 'note_list.html')  # Ensure the template exists
+
