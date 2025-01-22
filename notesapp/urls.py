@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('', views.note_list, name='home'),  # Define root URL
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
-    # Add other routes for your project
+    path('notes/', views.note_list, name='note_list'),
 ]
