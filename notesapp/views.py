@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .models import Note
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
 
@@ -26,5 +27,5 @@ def user_login(request):
     return render(request, 'login.html')
 
 def note_list(request):
-    return render(request, 'note_list.html')  # Ensure the template exists
-
+    notes = Note.objects.filter(user=request.user)  # Filter notes by logged-in user
+    return render(request, 'notepad/note_list.html', {'notes': notes})
