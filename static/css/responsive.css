@@ -1,158 +1,177 @@
-@media(max-width: 1550px){
-    .wrapper{
-        width: 88%;
-    }
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-@media(max-width: 1450px){
-    .wrapper{
-        width: 95%;
-    }
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #DCDDE1;
+    color: #333; /* Text color */
 }
 
-@media(max-width: 1300px){
-    .wrapper{
+/* Header Styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+}
+
+header .logo a {
+    font-size: 24px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+header .search-bar {
+    display: flex;
+    gap: 10px;
+}
+
+header .search-bar input[type="text"] {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    width: 250px;
+}
+
+header .search-bar input[type="submit"] {
+    padding: 5px 15px;
+    font-size: 14px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Main Content */
+.main-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Notes Section */
+.notes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.note {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.note:hover {
+    transform: scale(1.05);
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    font-size: 14px;
+}
+
+/* Responsive Styling */
+@media (max-width: 1024px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    header .search-bar {
+        flex-direction: column;
+        gap: 10px;
         width: 100%;
     }
-}
 
-@media(max-width: 1200px){
-    .wrapper .notes-container #notes{
-        grid-template-columns: repeat(3, 1fr);
+    header .search-bar input[type="text"] {
+        width: 100%;
     }
 
-    header{
-        padding: 8px 100px;
-    }
-}
-
-@media(max-width: 1000px){
-    header{
-        padding: 8px 60px;
-    }
-
-    .wrapper .text-input{
-        width: 75%;
+    .notes-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
     }
 }
 
-@media(max-width: 900px){
-    .wrapper .notes-container .cards{
-        padding: 20px;
-        margin: 5px;
-    }
-}
-
-@media(max-width: 800px){
-    .wrapper .notes-container{
+@media (max-width: 768px) {
+    header {
         padding: 10px;
     }
 
-    .wrapper .text-input button{
-        margin: 10px 30px;
-    }
-}
-
-@media(max-width: 750px){
-    .wrapper .notes-container{
-        padding: 13px;
-        width: 80%;
+    header .logo a {
+        font-size: 20px;
     }
 
-    .wrapper .notes-container #notes{
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    header{
-        padding: 8px 30px;
-    }
-}
-
-@media(max-width: 650px){
-    .wrapper .notes-container{
-        width: 95%;
-    }
-
-    .wrapper .text-input{
-        width: 85%;
-    }
-}
-
-@media(max-width: 540px){
-    .wrapper .notes-container{
+    header .search-bar input[type="text"] {
+        font-size: 12px;
         width: 100%;
     }
 
-    .wrapper .text-input{
-        width: 95%;
+    header .search-bar input[type="submit"] {
+        font-size: 12px;
+    }
+
+    .notes-container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    header .logo a {
+        font-size: 18px;
+    }
+
+    header .search-bar input[type="text"] {
+        font-size: 12px;
         padding: 8px;
     }
 
-    header{
-        padding: 8px 30px;
+    header .search-bar input[type="submit"] {
+        font-size: 12px;
+        padding: 8px 12px;
     }
 
-    header .search-bar i{
-        display: block;
-        font-size: 20px;
-    }
-
-    header .search-bar input{
-        display: none;
+    footer {
+        font-size: 12px;
     }
 }
 
-@media(max-width: 500px){
-    h1{
-        font-size: 30px;
-    }
-
-    .wrapper .text-input textarea{
-        width: 95%;
-    }
-
-    h1:after{
-        height: 5px;
-        width: 60px;
-    }
-
-    .wrapper .custom-message p{
+@media (max-width: 360px) {
+    header .logo a {
         font-size: 16px;
-        font-weight: 500;
     }
 
-    .wrapper .notes-container #notes{
-        grid-template-columns: repeat(1, 1fr);
+    header .search-bar input[type="text"] {
+        font-size: 10px;
+        padding: 6px;
     }
 
-    .wrapper .notes-container{
-        width: 80%;
-        padding: 10px;
+    header .search-bar input[type="submit"] {
+        font-size: 10px;
+        padding: 6px 10px;
     }
 
-    .wrapper .text-input button{
-        margin: 10px;
-    }
-
-    .wrapper .user-logout{
-        padding: 7px 0;
-        font-size: 20px;
-    }
-}
-
-@media(max-width: 400px){
-    .wrapper .notes-container{
-        width: 100%;
-    }
-
-    header{
-        padding: 8px 15px;
-    }
-}
-
-@media(max-width: 350px){
-    .wrapper .notes-container{
-        width: 100%;
-        padding: 10px;
+    footer {
+        font-size: 10px;
     }
 }
