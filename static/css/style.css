@@ -159,6 +159,7 @@ header .search-bar input[type="submit"] {
 .wrapper .notes-container #notes{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 
 .wrapper .notes-container .cards {
@@ -166,9 +167,11 @@ header .search-bar input[type="submit"] {
     margin: 10px;
     background-color: white;
     box-shadow: 0 2px 10px -3px rgba(0, 0, 0, 0.4);
-    height: 310px;
+    height: auto; 
     position: relative;
     border-radius: 5px;
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
 }
 
 .wrapper .notes-container .cards .title {
@@ -178,8 +181,11 @@ header .search-bar input[type="submit"] {
     padding: 0 0 5px 0;
 }
 
-.wrapper .notes-container .cards .cardtxt p{
-    overflow: auto;
+.wrapper .notes-container .cards .cardtxt p {
+    white-space: pre-wrap; /* Ensures line breaks and spaces are preserved */
+    overflow: hidden; /* Prevents text from overflowing out of the card */
+    color: #333; 
+    line-height: 1.5; /* Adjusts line height for readability */
 }
 
 .wrapper .notes-container .cards i {
@@ -191,6 +197,7 @@ header .search-bar input[type="submit"] {
     padding: 20px;
     cursor: pointer;
 }
+
 
 /* Login form styling */
 
