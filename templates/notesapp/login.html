@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load socialaccount %}
 {% load static %}
 <html lang="en">
 
@@ -57,6 +58,13 @@
 
             <p style="color: red;">{{ error }}</p>
             <button><input type="submit" value="Login"></button>
+            <p> 
+                <a href="{% provider_login_url 'github' %}" class="github-btn">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo" class="github-logo">
+                  Login with GitHub
+                </a>
+            </p>
+            
             <!-- <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it here</a></p> -->
             
             <p>Forgot your password? <a href="/accounts/password_reset/">Reset it here</a></p>

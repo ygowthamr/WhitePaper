@@ -72,5 +72,6 @@ urlpatterns = [
     path('verify-otp/', verify_otp, name='verify-otp'),
     path('reset-password/', reset_password, name='verify-otp'),
     path('notes/', include('notes.urls')),
+    path('accounts/', include('allauth.urls')),
     
 ]

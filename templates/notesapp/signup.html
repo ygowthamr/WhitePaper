@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load socialaccount %}
 <html lang="en">
 
 <head>
@@ -72,6 +73,13 @@
             {% endif %}
             
             <button><input type="submit" value="Sign Up"></button>
+            <p>Or sign up with:</p>
+            <p> 
+                <a href="{% provider_login_url 'github' %}" class="github-btn">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub logo" class="github-logo">
+                  Signup with GitHub
+                </a>
+            </p>
             
             <div class="new-user">
                 <p>Already have a account?<a href="/accounts/login/"> Login</a></p>
