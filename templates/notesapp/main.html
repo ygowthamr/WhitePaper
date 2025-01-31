@@ -1,75 +1,304 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS file link -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" type="text/css">
-
-    <!-- google fonts link -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Font awesome CDN -->
-    <script src="https://kit.fontawesome.com/e2afe0d504.js" crossorigin="anonymous"></script>
-
-    <!-- title here -->
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <title>My Notepad</title>
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --secondary: #64748b;
+            --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--surface);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            width: 300px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .note-editor {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .editor-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .note-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .note-textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .tag-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .add-note-btn {
+            background: var(--gradient);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .add-note-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .note-card {
+            background-color: var(--surface);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .note-actions i {
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+            transition: color 0.3s ease;
+        }
+
+        .note-actions i:hover {
+            color: var(--primary);
+        }
+
+        footer {
+            background-color: var(--surface);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Header Section -->
-    <header>
-        <style>
-            header {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                background-color: #222F3E;
-                z-index: 1000;
-            }
-
-            body {
-                margin-top: 60px;
-            }
-        </style>
-        <div class="logo">
-            My Notepad
-        </div>
-        <div class="search-bar">
-            <input type="text" id="searchTxt" placeholder="Type Something...">
-            <input type="submit" value="Search">
-            <i class="fas fa-search"></i>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <i class="fas fa-pen-fancy"></i> My Notepad
+            </a>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchTxt" placeholder="Search notes...">
+            </div>
         </div>
     </header>
 
-    <script>
-        document.querySelector('.logo').addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
-
-    <div class="wrapper">
-
-        <div class="user-logout">
+    <main class="main-container">
+        <div class="user-info">
             <div class="user-name">
-                <i class="fas fa-user"></i>{{Uname}}
+                <i class="fas fa-user"></i>
+                {{Uname}}
             </div>
-            <div class="logout-btn">
-                <a href="/accounts/logout/">Logout<i class="fas fa-sign-out-alt"></i></a>
-            </div>
+            <a href="/accounts/logout/" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
         </div>
 
-        <!-- Note typing Section -->
-        <div class="text-input">
+
+        <div class="note-editor">
+            <h2 class="editor-title">
+                <i class="fas fa-edit"></i> Add a New Note
+            </h2>
+            <textarea id="addTxt" class="note-textarea" placeholder="Type your note here..."></textarea>
+            <div id="charCount" style="font-size: 14px; margin-top: 5px; text-align: left; color: grey;">Characters: 0/500</div>
+            <div id="charWarning" style="font-weight: bold;"></div>
+            <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
+            <input type="text" id="tagInput" class="tag-input" placeholder="Add tags (comma separated)">
+            <button id="addBtn" class="add-note-btn">
+                <i class="fas fa-plus"></i>
+                Add Note
+            </button>
+
+       
+        <!-- <div class="text-input">
             <h1>Add a New Note</h1>
             <form>
                 <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
@@ -77,55 +306,48 @@
                 <div id="charWarning" style="font-weight: bold;"></div>
                 <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
                 <input size="26" type="text" id="tagInput" placeholder="Add tags (comma separated)"> <!-- The placeholder was not fully visible so added size=26. Still adds many. -->
-                <button type="button" id="addBtn">
+                <!-- <button type="button" id="addBtn">
                     Add it
                 </button>
             </form>
-        </div>
 
-        <div class="notes-container">
-            <h1>Your Saved Notes</h1>
+        </div> --> 
+
+        <section class="notes-section">
+            <h2 class="editor-title">
+                <i class="fas fa-book"></i> Your Saved Notes
+            </h2>
             <div class="filter-container">
                 <select id="tagFilter">
                     <option value="">All Notes</option>
                 </select>
             </div>
-            <div id="notes">
+            <div id="notes" class="notes-grid">
                 {% if user.is_authenticated %}
-                <!-- Display notes from the database for authenticated users -->
-                {% for note in data %}
-                <div class="cards">
-                    <div class="title">Note {{ forloop.counter }}</div>
-                    <div class="cardtxt">
-                        <span>{{ note.content }}</span>
+                    {% for note in data %}
+                    <div class="note-card">
+                        <div class="note-content">
+                            <span>{{ note.content }}</span>
+                        </div>
+                        <div class="note-actions">
+                            <i class="fas fa-trash-alt" data-note-id="{{ note.id }}"></i>
+                            <!-- <i class="fas fa-edit" data-note-id="{{ note.id }}"></i> -->
+                        </div>
                     </div>
-                    <i class="fas fa-trash-alt" data-note-id="{{ note.id }}"></i>
-                </div>
-                {% endfor %}
-                {% else %}
-                <!-- Display notes from memory for unauthenticated users -->
-                <!-- This section will be populated by JavaScript -->
+                    {% endfor %}
                 {% endif %}
             </div>
-        </div>
-
-    </div>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; <span id="currentYear"></span> Whitepaper App. All rights reserved.</p>
+        <p>&copy; <span id="currentYear"></span> My Notepad. All rights reserved.</p>
     </footer>
 
-    <!-- Inline JavaScript to add the current year -->
+    <script src="{% static 'javascript/authenticated.js' %}"></script>
+    <script src="{% static 'javascript/autosave.js' %}"></script>
     <script>
-        // JavaScript to dynamically insert the current year into the footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
-
-    <!-- Include the authenticated.js script -->
-    <script src="{% static 'javascript/authenticated.js' %}"></script>
-    <!-- Include auto-save functionality -->
-    <script src="{% static 'javascript/autosave.js' %}"></script>
-
 </body>
-
 </html>
