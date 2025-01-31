@@ -81,6 +81,9 @@
             font-size: 1.5rem;
             font-weight: 700;
             background: var(--gradient);
+            background-clip: text;
+            background-clip: text;
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
@@ -448,7 +451,7 @@
             </button>
         </div>
 
-<<<<<<< HEAD
+
         <section class="notes-section">
             <h2 class="editor-title">
                 <i class="fas fa-notebook"></i> Your Notes
@@ -463,7 +466,7 @@
                         <span class="tag">Meeting</span>
                     </div>
                 </div>
-=======
+
         <!-- Note typing Section -->
         <div class="text-input">
             <h1>Add a New Note</h1>
@@ -488,7 +491,6 @@
                     <option value="creationDate">Creation Date</option>
                     <option value="title">Title (A-Z)</option>
                 </select>
->>>>>>> be7449cd9d19ad28890c15c91c9fea1a2cb6c1da
             </div>
         </section>
 
@@ -674,3 +676,8 @@ initializeTheme();
 renderNotes();
 
         </script>
+
+         <!-- Javascript fire link -->
+    <script src="{% static 'javascript/script.js' %}"></script>
+    <!-- Include auto-save functionality -->
+    <script src="{% static 'javascript/autosave.js' %}"></script>
