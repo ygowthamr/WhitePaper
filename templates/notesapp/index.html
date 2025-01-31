@@ -448,6 +448,7 @@
             </button>
         </div>
 
+<<<<<<< HEAD
         <section class="notes-section">
             <h2 class="editor-title">
                 <i class="fas fa-notebook"></i> Your Notes
@@ -462,6 +463,32 @@
                         <span class="tag">Meeting</span>
                     </div>
                 </div>
+=======
+        <!-- Note typing Section -->
+        <div class="text-input">
+            <h1>Add a New Note</h1>
+            <form>
+                <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
+                <div id="charCount" style="font-size: 14px; margin-top: 5px; text-align: left; color: grey;">Characters: 0/500</div>
+                <div id="charWarning" style="font-weight: bold;"></div>
+                <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
+                <input size="26" type="text" id="tagInput" placeholder="Add tags (comma separated)"> <!-- The placeholder was not fully visible so added size=26. Still adds many. -->
+                <button type="button" id="addBtn">
+                    Add it
+                </button>
+            </form>
+        </div>
+
+        <!-- Notes Showing Section -->
+        <div class="notes-container">
+            <h1>Your Saved Notes</h1>
+            <div class="sort-dropdown">
+                <label for="sortNotes">Sort by:</label>
+                <select id="sortNotes">
+                    <option value="creationDate">Creation Date</option>
+                    <option value="title">Title (A-Z)</option>
+                </select>
+>>>>>>> be7449cd9d19ad28890c15c91c9fea1a2cb6c1da
             </div>
         </section>
 
