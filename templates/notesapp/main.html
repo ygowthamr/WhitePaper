@@ -317,6 +317,11 @@
             <h2 class="editor-title">
                 <i class="fas fa-book"></i> Your Saved Notes
             </h2>
+            <div class="filter-container">
+                <select id="tagFilter">
+                    <option value="">All Notes</option>
+                </select>
+            </div>
             <div id="notes" class="notes-grid">
                 {% if user.is_authenticated %}
                     {% for note in data %}
@@ -326,7 +331,7 @@
                         </div>
                         <div class="note-actions">
                             <i class="fas fa-trash-alt" data-note-id="{{ note.id }}"></i>
-                            <i class="fas fa-edit" data-note-id="{{ note.id }}"></i>
+                            <!-- <i class="fas fa-edit" data-note-id="{{ note.id }}"></i> -->
                         </div>
                     </div>
                     {% endfor %}
