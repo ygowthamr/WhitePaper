@@ -57,6 +57,9 @@
 
             <p style="color: red;">{{ error }}</p>
             <button><input type="submit" value="Login"></button>
+            <!-- <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it here</a></p> -->
+            
+            <p>Forgot your password? <a href="/accounts/password_reset/">Reset it here</a></p>
             
             <div class="new-user">
                 <p>New user? <a href="/accounts/signup/">Create a account</a></p>
