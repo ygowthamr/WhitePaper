@@ -1,6 +1,7 @@
 
 <!-- Signup Template -->
 <!DOCTYPE html>
+{% load socialaccount %}
 {% load static %}
 <html lang="en">
     <head>
@@ -649,9 +650,9 @@
                     <button type="button" class="social-button">
                         <i class="fab fa-google"></i> Google
                     </button>
-                    <button type="button" class="social-button">
+                    <a href="{% provider_login_url 'github' %}" class="social-button" style="text-decoration: none;">
                         <i class="fab fa-github"></i> GitHub
-                    </button>
+                    </a>
                 </div>
             </form>
         </div>
