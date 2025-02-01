@@ -42,7 +42,37 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'notes',
+    'django.contrib.sites', 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github', 
 ]
+
+# Set SITE_ID
+SITE_ID = 3  # Required for allauth
+
+# Add GitHub OAuth credentials
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'Github OAuth': {
+            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
+            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
+            'key': ''  
+        }
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # Allauth backend
+]
+
+LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +83,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'MyNotepad.middleware.SessionValidationMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'MyNotepad.urls'

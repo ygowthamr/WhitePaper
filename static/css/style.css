@@ -21,6 +21,34 @@ h1:after {
     width: 80px;
 }
 
+/* GitHub Login Button Styles */
+.github-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #24292f;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .github-btn:hover {
+    background-color: #444d56; 
+  }
+  
+  .github-logo {
+    width: 20px; 
+    height: 20px; 
+    margin-right: 10px;
+    object-fit: contain; 
+  }
+
 body {
     background-color: #DCDDE1;
 }
