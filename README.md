@@ -20,19 +20,29 @@ White Paper is a web application developed using the Python Django framework. Th
 
 ### Signup page
 
-![White_paper4](https://github.com/user-attachments/assets/a05cfcbb-4161-47c6-b245-59f58b2f946f)
+<img width="947" alt="image" src="https://github.com/user-attachments/assets/4a96887b-49a6-4e66-8be7-1f1563d9ef00" />
+
 
 ### Login Page
 
-![white_paper1](https://github.com/user-attachments/assets/67bc73bf-c72a-45ee-a74d-794de86798d6)
+<img width="701" alt="image" src="https://github.com/user-attachments/assets/b49a9f2b-3443-4b65-a98e-a71fdb623e1e" />
+
 
 ### Home Page
 
-![White_paper2](https://github.com/user-attachments/assets/a8f3d584-dc9b-48fb-80d5-d144f8d7250e)
+<img width="889" alt="image" src="https://github.com/user-attachments/assets/bc1ba22f-f8a5-4dc6-86fa-276add534e6f" />
+
 
 ### Create a new note
 
-![White_paper3](https://github.com/user-attachments/assets/52e57faa-5a3e-407f-b621-157144040343)
+<img width="946" alt="image" src="https://github.com/user-attachments/assets/9560d03a-2f31-4364-b4ef-d4fe24ac1565" />
+
+
+
+### Forget Password
+
+<img width="960" alt="image" src="https://github.com/user-attachments/assets/8dae874d-0db6-4bb6-8c09-70049e761990" />
+
 
 ## Installation
 
