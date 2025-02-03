@@ -1,4 +1,3 @@
-
 # White Paper
 
 ## Description
@@ -22,27 +21,21 @@ White Paper is a web application developed using the Python Django framework. Th
 
 <img width="947" alt="image" src="https://github.com/user-attachments/assets/4a96887b-49a6-4e66-8be7-1f1563d9ef00" />
 
-
 ### Login Page
 
 <img width="701" alt="image" src="https://github.com/user-attachments/assets/b49a9f2b-3443-4b65-a98e-a71fdb623e1e" />
-
 
 ### Home Page
 
 <img width="889" alt="image" src="https://github.com/user-attachments/assets/bc1ba22f-f8a5-4dc6-86fa-276add534e6f" />
 
-
 ### Create a new note
 
 <img width="946" alt="image" src="https://github.com/user-attachments/assets/9560d03a-2f31-4364-b4ef-d4fe24ac1565" />
 
-
-
 ### Forget Password
 
 <img width="960" alt="image" src="https://github.com/user-attachments/assets/8dae874d-0db6-4bb6-8c09-70049e761990" />
-
 
 ## Installation
 
@@ -90,6 +83,64 @@ White Paper is a web application developed using the Python Django framework. Th
    Open your browser and navigate to `http://127.0.0.1:8000`.
 
 ---
+
+## Setting Up GitHub OAuth Login
+
+### Step 1: Create a Superuser
+Run this command in the terminal:
+```sh
+python manage.py createsuperuser
+```
+Enter **username, email, and password** when prompted.
+
+### Step 2: Apply Migrations and Start the Server
+```sh
+python manage.py migrate  
+python manage.py runserver
+```
+
+### Step 3: Access Django Admin
+1. Open **[127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)**.
+2. Log in with the **superuser credentials** you just created.
+
+### Step 4: Configure Sites
+1. Click **Sites → Add Site**.
+2. Enter:
+   - **Domain Name:** `127.0.0.1:8000`
+   - **Display Name:** `WhitePaper`
+3. Click **Save**.
+4. Now, you should see two sites: `example.com` and the one you just created.
+5. Click on your newly created site and check the **address bar**, which should look like:
+   ```
+   http://127.0.0.1:8000/admin/sites/site/5/change/
+   ```
+   The last number (`5` in this case) is your **Site ID**.
+6. **Update `settings.py`** with:
+   ```python
+   SITE_ID = 5  # Replace with your actual site ID
+   ```
+
+### Step 5: Add GitHub Social Application
+1. Go to **Social Applications → Add Social Application**.
+2. Fill in:
+   - **Provider:** `GitHub`
+   - **Name:** `GitHub OAuth`
+   - **Client ID:** `Ov23li0JG2RoWmaOE1CV`
+   - **Secret Key:** `3281a84cae4d4098d78e894bebf1c46fe98fb9fb`
+3. Under **Available Sites**, **double-click** `http://127.0.0.1:8000/` to move it under **Chosen Sites**.
+4. Click **Save**.
+
+### Step 6: Final Setup
+1. Ensure `SITE_ID` is correctly set in `settings.py`.
+2. Run:
+   ```sh
+   python manage.py migrate  
+   python manage.py runserver
+   ```
+3. **Now, GitHub login/signup should work!** 🎉
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
@@ -113,11 +164,8 @@ Contributions are welcome! Please follow these steps:
 
 This project is licensed under the [MIT License](LICENSE).
 
-
-
 ## Collaborators
 We are grateful to the following contributors who have worked on this project
-
 
 <a href="https://github.com/ygowthamr/WhitePaper/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ygowthamr/WhitePaper" />
