@@ -230,6 +230,35 @@
             color: var(--primary);
         }
 
+        /* Tag Styling */
+        .note-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            color: white;
+            padding: 6px 14px; /* Increased padding for better appearance */
+            border-radius: 20px; /* Rounder, pill-like shape */
+            font-size: 14px; /* Slightly larger font for readability */
+            margin-right: 8px; /* Increased margin for spacing */
+            margin-top: 6px; /* Adjusted top margin for better spacing */
+           
+            text-transform: capitalize; /* Capitalize tag text */
+            transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
+        }
+
+        /* Tag Hover Effect */
+        .note-tag:hover {
+            transform: scale(1.05); /* Slightly enlarge the tag on hover */
+        }
+
+        /* Tags Container Styling */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px; /* Add space between tags */
+            margin-top: 10px; /* Add margin for separation from content */
+            padding: 5px 0; /* Vertical padding for tags */
+        }
+
         footer {
             background-color: var(--surface);
             padding: 1.5rem;
