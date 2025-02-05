@@ -24,6 +24,44 @@
             --secondary: #64748b;
             --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
         }
+        /* In the style section, update the :root and add dark-theme */
+:root {
+    /* Light Theme */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --secondary: #64748b;
+    --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+}
+
+:root.dark-theme {
+    --primary: #4f46e5;
+    --primary-dark: #6366f1;
+    --background: #121212;
+    --surface: #1e1e1e;
+    --text: #e2e8f0;
+    --secondary: #a0aec0;
+    --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+}
+
+/* Add theme toggle button styles */
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(180deg);
+}
 
         * {
             margin: 0;
@@ -255,12 +293,33 @@
                 grid-template-columns: 1fr;
             }
         }
+        body {
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s; /* Add this line */
+}
+.note-textarea, .tag-input, .search-input {
+    background-color: var(--surface);
+    color: var(--text);
+    border: 2px solid var(--secondary);
+}
+
+.note-card {
+    background-color: var(--surface);
+    color: var(--text);
+    border-left: 4px solid var(--primary);
+}
     </style>
 </head>
 
 <body>
     <header class="header">
-        <div class="header-content">
+        <button id="themeToggle"  class="theme-toggle" aria-label="Toggle Theme">
+            <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+        <div class="header-content" style="margin: 0px 20px;">
             <a href="/" class="logo">
                 <i class="fas fa-pen-fancy"></i> My Notepad
             </a>
@@ -347,6 +406,45 @@
     <script src="{% static 'javascript/authenticated.js' %}"></script>
     <script src="{% static 'javascript/autosave.js' %}"></script>
     <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+    
+        // Check for saved theme preference or system preference
+        const savedTheme = localStorage.getItem('darkMode');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    
+        function setTheme(theme) {
+            if (theme === 'true') {
+                htmlElement.classList.add('dark-theme');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                htmlElement.classList.remove('dark-theme');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+    
+        // Initial theme setup
+        if (savedTheme === 'true') {
+            setTheme('true');
+        } else if (savedTheme === 'false') {
+            setTheme('false');
+        } else if (systemPrefersDark.matches) {
+            setTheme('true');
+        }
+    
+        // Theme toggle event listener
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.classList.contains('dark-theme') ? 'true' : 'false';
+            setTheme(currentTheme === 'false' ? 'true' : 'false');
+        });
+    
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 </body>
