@@ -1,8 +1,5 @@
-
 <!-- Signup Template -->
 <!DOCTYPE html>
-{% load socialaccount %}
-{% load static %}
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -273,29 +270,6 @@
                 color: var(--secondary);
                 font-size: 0.875rem;
                 line-height: 1.6;
-            }
-    
-            /* Floating Action Button */
-            .fab {
-                position: fixed;
-                bottom: 2rem;
-                right: 2rem;
-                width: 3.5rem;
-                height: 3.5rem;
-                background: var(--gradient);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-                transition: all 0.3s ease;
-            }
-    
-            .fab:hover {
-                transform: scale(1.1);
-                box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
             }
     
             /* Footer */
@@ -603,7 +577,6 @@
         <div class="auth-container">
             <h1>Create Account</h1>
             <form action="/accounts/signup/" method="POST">
-                {% csrf_token %}
                 
                 <div class="form-group">
                     <label class="form-label" for="firstname">First Name</label>
@@ -630,9 +603,7 @@
                     <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Confirm your password" required>
                 </div>
 
-                {% if error %}
-                <div class="form-error">{{ error }}</div>
-                {% endif %}
+                <div class="form-error"></div>
 
                 <button type="submit" class="auth-button">
                     <i class="fas fa-user-plus"></i> Sign Up
