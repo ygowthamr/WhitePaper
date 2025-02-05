@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render , redirect
+from django.shortcuts import render, get_object_or_404
 from notesapp.models import text
 from django.http import JsonResponse
 import json
@@ -69,3 +69,18 @@ def deletenote(request, note_id):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+def share_note(request, note_id):
+    """View for displaying a shared note"""
+    note = get_object_or_404(text, id=note_id)
+    
+    # Create context with minimal data needed for shared view
+    context = {
+        'shared_note': {
+            'content': note.content,
+            'tags': list(note.tags.values_list('name', flat=True)),
+            'author': note.Uname
+        }
+    }
+    
+    return render(request, 'notesapp/shared_note.html', context)

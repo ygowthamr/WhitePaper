@@ -72,6 +72,31 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="note-actions">
                             <button class="edit-btn" data-note-id="${note.id}">Edit</button>
                             <button class="delete-btn" data-note-id="${note.id}">Delete</button>
+                            <button class="share-btn" data-note-id="${note.id}">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <div class="share-popup" id="share-popup-${note.id}">
+                                <div class="share-popup-content">
+                                    <button class="share-option twitter-share" style="background-color: #1DA1F2;" onclick="shareOnSocialMedia('twitter', '${note.content}', ${note.id})">
+                                        <i class="fab fa-twitter"></i>
+                                    </button>
+                                    <button class="share-option linkedin-share" style="background-color: #0A66C2;" onclick="shareOnSocialMedia('linkedin', '${note.content}', ${note.id})">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </button>
+                                    <button class="share-option whatsapp-share" style="background-color: #25D366;" onclick="shareOnSocialMedia('whatsapp', '${note.content}', ${note.id})">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </button>
+                                    <button class="share-option email-share" style="background-color: #EA4335;" onclick="shareOnSocialMedia('email', '${note.content}', ${note.id})">
+                                        <i class="fas fa-envelope"></i>
+                                    </button>
+                                </div>
+                                <div class="share-link-wrapper">
+                                    <input type="text" class="share-link" id="share-link-${note.id}" readonly>
+                                    <button class="copy-link" onclick="copyShareLink(${note.id})">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     `;
 
@@ -138,6 +163,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Share functionality
+    notesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.share-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const noteId = e.target.closest('.share-btn').dataset.noteId;
+            const sharePopup = document.getElementById(`share-popup-${noteId}`);
+            const shareLink = document.getElementById(`share-link-${noteId}`);
+            
+            // Close all other open share popups
+            document.querySelectorAll('.share-popup').forEach(popup => {
+                if (popup !== sharePopup) {
+                    popup.classList.remove('active');
+                }
+            });
+
+            // Toggle current popup
+            sharePopup.classList.toggle('active');
+            
+            if (sharePopup.classList.contains('active')) {
+                const shareUrl = `${window.location.origin}/notes/share/${noteId}/`;
+                shareLink.value = shareUrl;
+                shareLink.select();
+            }
+        }
+    });
+
+    // Handle clicks inside share popup
+    notesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.share-popup')) {
+            e.stopPropagation(); // Prevent popup from closing when clicking inside
+        }
+    });
+
+    // Close share popup when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.share-popup') && !e.target.closest('.share-btn')) {
+            document.querySelectorAll('.share-popup').forEach(popup => {
+                popup.classList.remove('active');
+                popup.style.display = 'none';
+            });
+        }
+    });
+
     // Delete Note Functionality
     notesContainer.addEventListener('click', function(e) {
         if (e.target.classList.contains('delete-btn')) {
@@ -187,3 +257,52 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial notes load
     fetchNotes();
 });
+
+// Toast notification function
+function showToast(message, duration = 3000) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, duration);
+}
+
+// Add these new functions for social media sharing
+function shareOnSocialMedia(platform, content, noteId) {
+    const shareUrl = `${window.location.origin}/notes/share/${noteId}/`;
+    const encodedContent = encodeURIComponent(content.substring(0, 100) + (content.length > 100 ? '...' : ''));
+    const encodedUrl = encodeURIComponent(shareUrl);
+    
+    let shareLink = '';
+    
+    switch (platform) {
+        case 'twitter':
+            shareLink = `https://twitter.com/intent/tweet?text=${encodedContent}&url=${encodedUrl}`;
+            break;
+        case 'linkedin':
+            shareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+            break;
+        case 'whatsapp':
+            shareLink = `https://wa.me/?text=${encodedContent}%20${encodedUrl}`;
+            break;
+        case 'email':
+            shareLink = `mailto:?subject=Check out this note&body=${encodedContent}%0A%0A${encodedUrl}`;
+            break;
+    }
+    
+    // Open in new window/tab
+    window.open(shareLink, '_blank', 'width=600,height=400');
+}
+
+// Add copy link functionality
+function copyShareLink(noteId) {
+    const shareLink = document.getElementById(`share-link-${noteId}`);
+    shareLink.select();
+    document.execCommand('copy');
+    
+    // Show toast notification
+    showToast('Link copied to clipboard!');
+}
