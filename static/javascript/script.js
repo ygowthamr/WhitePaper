@@ -44,13 +44,18 @@ function showNotes() {
     let html = "";
     notesObj.forEach(function (element, index) {
         html +=
-            `<div class="cards">
-                <div class="title">Note ${index + 1}</div>
-                <div class="cardtxt">
-                    <span>${element.text}</span>
-                </div>
-                <i class="fas fa-trash-alt"  id="${index}" onclick="deleteNote(this.id)"></i>
-            </div>`;
+            `<div style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin: 10px 0; background: #f9f9f9; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); position: relative;">
+    <div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px;">
+        Note ${index + 1}
+    </div>
+    <div style="font-size: 16px; color: #555; line-height: 1.5;">
+        <span>${element.text}</span>
+    </div>
+    <i class="fas fa-trash-alt" id="${index}" onclick="deleteNote(this.id)" 
+        style="position: absolute; top: 10px; right: 10px; color: #d9534f; cursor: pointer; font-size: 18px;">
+    </i>
+</div>
+`;
     });
     let notesElm = document.getElementById("notes");
     if (notesObj.length != 0) {
