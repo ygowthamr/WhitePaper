@@ -250,22 +250,10 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
-        .note-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
+       
 
-        .note-actions i {
-            padding: 0.5rem;
-            cursor: pointer;
-            color: var(--secondary);
-            transition: color 0.3s ease;
-        }
+      
 
-        .note-actions i:hover {
-            color: var(--primary);
-        }
 
         footer {
             background-color: var(--surface);
@@ -373,25 +361,22 @@
         </div> --> 
 
         <section class="notes-section">
-            <h2 class="editor-title">
-                <i class="fas fa-book"></i> Your Saved Notes
+            <h2 style="display: flex; align-items: center; font-size: 24px; font-weight: bold; color: #333;">
+                <i class="fas fa-book" style="margin-right: 8px; color: #007bff;"></i> Your Saved Notes
             </h2>
-            <div class="filter-container">
-                <select id="tagFilter">
+            
+            <div style="display: flex; align-items: center; padding: 8px;">
+                <select id="tagFilter" 
+                    style="padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; cursor: pointer;">
                     <option value="">All Notes</option>
                 </select>
             </div>
+            
             <div id="notes" class="notes-grid">
                 {% if user.is_authenticated %}
                     {% for note in data %}
                     <div class="note-card">
-                        <div class="note-content">
-                            <span>{{ note.content }}</span>
-                        </div>
-                        <div class="note-actions">
-                            <i class="fas fa-trash-alt" data-note-id="{{ note.id }}"></i>
-                            <!-- <i class="fas fa-edit" data-note-id="{{ note.id }}"></i> -->
-                        </div>
+                       
                     </div>
                     {% endfor %}
                 {% endif %}

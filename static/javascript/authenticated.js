@@ -61,18 +61,34 @@ document.addEventListener('DOMContentLoaded', function () {
                     ).join('');
 
                     noteCard.innerHTML = `
-                        <div class="note-header">
-                            <i class="fas fa-sticky-note"></i>
-                            Note ${index + 1}
-                            <div class="tags-container">${tagsHtml}</div>
-                        </div>
-                        <div class="note-content">
-                            <p>${note.content}</p>
-                        </div>
-                        <div class="note-actions">
-                            <button class="edit-btn" data-note-id="${note.id}">Edit</button>
-                            <button class="delete-btn" data-note-id="${note.id}">Delete</button>
-                        </div>
+                       <div style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin: 10px 0; background: #fff; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);">
+    
+    <!-- Note Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 18px; font-weight: bold; color: #333; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center;">
+            <i class="fas fa-sticky-note" style="margin-right: 8px; color: #007bff;"></i>
+            Note ${index + 1}
+        </div>
+        <div style="font-size: 14px; color: #555;">${tagsHtml}</div>
+    </div>
+
+    <!-- Note Content -->
+    <div style="font-size: 16px; color: #555; line-height: 1.5; margin-bottom: 10px;">
+        <p>${note.content}</p>
+    </div>
+
+    <!-- Note Actions -->
+    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button style="padding: 6px 12px; font-size: 14px; border: none; border-radius: 5px; background: #007bff; color: white; cursor: pointer;" data-note-id="${note.id}">
+            Edit
+        </button>
+        <button style="padding: 6px 12px; font-size: 14px; border: none; border-radius: 5px; background: #d9534f; color: white; cursor: pointer;" data-note-id="${note.id}">
+            Delete
+        </button>
+    </div>
+
+</div>
+
                     `;
 
                     notesContainer.appendChild(noteCard);
