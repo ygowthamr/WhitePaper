@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Quill Editor Initialization
+    const quill = new Quill('#addTxt', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'font': [] }, { 'size': [] }], // Font & Size
+                ['bold', 'italic', 'underline', 'strike'], // Formatting
+                [{ 'color': [] }, { 'background': [] }], // Text Color & Background
+                [{ 'script': 'sub' }, { 'script': 'super' }], // Subscript/Superscript
+                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'], // Headers, Quote, Code Block
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], // Lists & Indentation
+                [{ 'align': [] }], // Alignment
+                ['link', 'image', 'video'], // Media (Links, Images, Videos)
+                ['clean'] // Remove Formatting
+            ]
+        },
+        placeholder: 'Type your note here...',
+        maxLength: 500
+    });
+
     const addBtn = document.getElementById('addBtn');
     const addTxt = document.getElementById('addTxt');
     const tagInput = document.getElementById('tagInput');
@@ -7,6 +27,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const charWarning = document.getElementById('charWarning');
     const tagFilter = document.getElementById('tagFilter');
 
+
+    // Character Count and Limit
+    quill.on('text-change', function() {
+        const maxChars = 500;
+        const currentLength = quill.getLength() - 1; // Subtract 1 to account for default newline
+        
+        charCount.textContent = `Characters: ${currentLength}/${maxChars}`;
+        
+        if (currentLength > maxChars) {
+            quill.deleteText(maxChars, currentLength);
+            charWarning.textContent = 'Exceeded maximum character limit!';
+            charWarning.style.color = 'red';
+        } else if (currentLength >= maxChars - 50) {
+            charWarning.textContent = 'Approaching character limit!';
+            charWarning.style.color = 'orange';
+        } else {
+            charWarning.textContent = '';
+        }
+    });
     // Character count and limit
     addTxt.addEventListener('input', function() {
         const maxChars = 500;
@@ -67,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <div class="tags-container">${tagsHtml}</div>
                         </div>
                         <div class="note-content">
-                            <p>${note.content}</p>
+                             ${note.content}
                         </div>
                         <div class="note-actions">
                             <button class="edit-btn" data-note-id="${note.id}">Edit</button>
@@ -125,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add Note Functionality
     addBtn.addEventListener('click', function() {
-        const noteContent = addTxt.value.trim();
+        const noteContent = quill.root.innerHTML.trim();
         const tags = tagInput.value.split(',')
             .map(tag => tag.trim())
             .filter(tag => tag.length > 0);
@@ -149,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                addTxt.value = '';
+                quill.root.innerHTML = ''; 
                 tagInput.value = '';
                 charCount.textContent = 'Characters: 0/500';
                 fetchNotes(); // Refresh notes
