@@ -24,6 +24,44 @@
             --secondary: #64748b;
             --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
         }
+        /* In the style section, update the :root and add dark-theme */
+:root {
+    /* Light Theme */
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --secondary: #64748b;
+    --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+}
+
+:root.dark-theme {
+    --primary: #4f46e5;
+    --primary-dark: #6366f1;
+    --background: #121212;
+    --surface: #1e1e1e;
+    --text: #e2e8f0;
+    --secondary: #a0aec0;
+    --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+}
+
+/* Add theme toggle button styles */
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(180deg);
+}
 
         * {
             margin: 0;
@@ -213,21 +251,38 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
-        .note-actions {
+       
+
+      
+
+
+        /* Tag Styling */
+        .note-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            color: white;
+            padding: 6px 14px; /* Increased padding for better appearance */
+            border-radius: 20px; /* Rounder, pill-like shape */
+            font-size: 14px; /* Slightly larger font for readability */
+            margin-right: 8px; /* Increased margin for spacing */
+            margin-top: 6px; /* Adjusted top margin for better spacing */
+           
+            text-transform: capitalize; /* Capitalize tag text */
+            transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
+        }
+
+        /* Tag Hover Effect */
+        .note-tag:hover {
+            transform: scale(1.05); /* Slightly enlarge the tag on hover */
+        }
+
+        /* Tags Container Styling */
+        .tags-container {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .note-actions i {
-            padding: 0.5rem;
-            cursor: pointer;
-            color: var(--secondary);
-            transition: color 0.3s ease;
-        }
-
-        .note-actions i:hover {
-            color: var(--primary);
+            flex-wrap: wrap;
+            gap: 2px; /* Add space between tags */
+            margin-top: 10px; /* Add margin for separation from content */
+            padding: 5px 0; /* Vertical padding for tags */
         }
 
         footer {
@@ -256,6 +311,26 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        body {
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s; /* Add this line */
+}
+.note-textarea, .tag-input, .search-input {
+    background-color: var(--surface);
+    color: var(--text);
+    border: 2px solid var(--secondary);
+}
+
+.note-card {
+    background-color: var(--surface);
+    color: var(--text);
+    border-left: 4px solid var(--primary);
+}
+
 
         .toast {
             position: fixed;
@@ -365,12 +440,16 @@
             background: var(--primary-dark);
             transform: translateY(-1px);
         }
+
     </style>
 </head>
 
 <body>
     <header class="header">
-        <div class="header-content">
+        <button id="themeToggle"  class="theme-toggle" aria-label="Toggle Theme">
+            <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+        <div class="header-content" style="margin: 0px 20px;">
             <a href="/" class="logo">
                 <i class="fas fa-pen-fancy"></i> My Notepad
             </a>
@@ -424,14 +503,17 @@
         </div> --> 
 
         <section class="notes-section">
-            <h2 class="editor-title">
-                <i class="fas fa-book"></i> Your Saved Notes
+            <h2 style="display: flex; align-items: center; font-size: 24px; font-weight: bold; color: #333;">
+                <i class="fas fa-book" style="margin-right: 8px; color: #007bff;"></i> Your Saved Notes
             </h2>
-            <div class="filter-container">
-                <select id="tagFilter">
+            
+            <div style="display: flex; align-items: center; padding: 8px;">
+                <select id="tagFilter" 
+                    style="padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; cursor: pointer;">
                     <option value="">All Notes</option>
                 </select>
             </div>
+            
             <div id="notes" class="notes-grid">
                 {% if user.is_authenticated %}
                     {% for note in data %}
@@ -491,6 +573,45 @@
     <script src="{% static 'javascript/authenticated.js' %}"></script>
     <script src="{% static 'javascript/autosave.js' %}"></script>
     <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+    
+        // Check for saved theme preference or system preference
+        const savedTheme = localStorage.getItem('darkMode');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    
+        function setTheme(theme) {
+            if (theme === 'true') {
+                htmlElement.classList.add('dark-theme');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                htmlElement.classList.remove('dark-theme');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+    
+        // Initial theme setup
+        if (savedTheme === 'true') {
+            setTheme('true');
+        } else if (savedTheme === 'false') {
+            setTheme('false');
+        } else if (systemPrefersDark.matches) {
+            setTheme('true');
+        }
+    
+        // Theme toggle event listener
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.classList.contains('dark-theme') ? 'true' : 'false';
+            setTheme(currentTheme === 'false' ? 'true' : 'false');
+        });
+    
         document.getElementById('currentYear').textContent = new Date().getFullYear();
     </script>
 </body>
