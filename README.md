@@ -8,10 +8,10 @@ White Paper is a web application developed using the Python Django framework. Th
 
 ## Tech Stack
 
-- **Backend**: Python, Django Framework  
-- **Frontend**: HTML, CSS, JavaScript  
-- **Database**: SQLite (default), with options for PostgreSQL/MySQL  
-- **Others**: Django Rest Framework (if applicable), Bootstrap (if applicable)  
+- **Backend**: Python, Django Framework
+- **Frontend**: HTML, CSS, JavaScript
+- **Database**: SQLite (default), with options for PostgreSQL/MySQL
+- **Others**: Django Rest Framework (if applicable), Bootstrap (if applicable)
 
 ---
 
@@ -41,40 +41,46 @@ White Paper is a web application developed using the Python Django framework. Th
 
 ### Prerequisites
 
-1. Python 3.8+ installed on your system.  
-2. Virtual Environment tools such as `venv` or `virtualenv`.  
+1. Python 3.8+ installed on your system.
+2. Virtual Environment tools such as `venv` or `virtualenv`.
 3. SQLite (default) or a preferred database like PostgreSQL/MySQL (optional).
 
 ### Steps to Install and Run Locally
 
-1. **Clone the repository**:  
+1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/ygowthamr/WhitePaper.git
    cd WhitePaper
    ```
 
-2. **Set up a virtual environment**:  
+2. **Set up a virtual environment**:
+
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies**:  
+3. **Install dependencies**:
+
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Configure the database**:  
-   - For the default SQLite database:  
-     No additional configuration is required.  
-   - For PostgreSQL/MySQL, update the `DATABASES` settings in `settings.py`.  
+4. **Configure the database**:
 
-5. **Apply migrations**:  
+   - For the default SQLite database:  
+     No additional configuration is required.
+   - For PostgreSQL/MySQL, update the `DATABASES` settings in `settings.py`.
+
+5. **Apply migrations**:
+
    ```bash
    python manage.py migrate
    ```
 
-6. **Run the development server**:  
+6. **Run the development server**:
+
    ```bash
    python manage.py runserver
    ```
@@ -87,23 +93,29 @@ White Paper is a web application developed using the Python Django framework. Th
 ## Setting Up GitHub OAuth Login
 
 ### Step 1: Create a Superuser
+
 Run this command in the terminal:
+
 ```sh
 python manage.py createsuperuser
 ```
+
 Enter **username, email, and password** when prompted.
 
 ### Step 2: Apply Migrations and Start the Server
+
 ```sh
-python manage.py migrate  
+python manage.py migrate
 python manage.py runserver
 ```
 
 ### Step 3: Access Django Admin
+
 1. Open **[127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)**.
 2. Log in with the **superuser credentials** you just created.
 
 ### Step 4: Configure Sites
+
 1. Click **Sites → Add Site**.
 2. Enter:
    - **Domain Name:** `127.0.0.1:8000`
@@ -121,6 +133,7 @@ python manage.py runserver
    ```
 
 ### Step 5: Add GitHub Social Application
+
 1. Go to **Social Applications → Add Social Application**.
 2. Fill in:
    - **Provider:** `GitHub`
@@ -131,10 +144,11 @@ python manage.py runserver
 4. Click **Save**.
 
 ### Step 6: Final Setup
+
 1. Ensure `SITE_ID` is correctly set in `settings.py`.
 2. Run:
    ```sh
-   python manage.py migrate  
+   python manage.py migrate
    python manage.py runserver
    ```
 3. **Now, GitHub login/signup should work!** 🎉
@@ -145,12 +159,12 @@ python manage.py runserver
 
 Contributions are welcome! Please follow these steps:
 
-1. Fork the repository.  
-2. Create a new branch:  
+1. Fork the repository.
+2. Create a new branch:
    ```bash
    git checkout -b feature-name
    ```
-3. Commit your changes and push:  
+3. Commit your changes and push:
    ```bash
    git add .
    git commit -m "Description of changes"
@@ -165,6 +179,7 @@ Contributions are welcome! Please follow these steps:
 This project is licensed under the [MIT License](LICENSE).
 
 ## Collaborators
+
 We are grateful to the following contributors who have worked on this project
 
 <a href="https://github.com/ygowthamr/WhitePaper/graphs/contributors">
@@ -173,4 +188,5 @@ We are grateful to the following contributors who have worked on this project
 
 ---
 
-Feel free to reach out for any queries or suggestions at [ygowthamr@gmail.com]. 😊
+Feel free to reach out for any queries or suggestions at [ygowthamr@gmail.com]
+changed byNikhil
