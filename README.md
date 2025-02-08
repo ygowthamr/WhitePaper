@@ -67,7 +67,7 @@ White Paper is a web application developed using the Python Django framework. Th
 4. **Configure the database**:  
    - For the default SQLite database:  
      No additional configuration is required.  
-   - For PostgreSQL/MySQL, update the `DATABASES` settings in `settings.py`.  
+   - For PostgreSQL/MySQL, update the `DATABASES` settings in `MyNotepad/settings.py`.  
 
 5. **Apply migrations**:  
    ```bash
@@ -115,7 +115,7 @@ python manage.py runserver
    http://127.0.0.1:8000/admin/sites/site/5/change/
    ```
    The last number (`5` in this case) is your **Site ID**.
-6. **Update `settings.py`** with:
+6. **Update `.env`** with:
    ```python
    SITE_ID = 5  # Replace with your actual site ID
    ```
@@ -131,7 +131,7 @@ python manage.py runserver
 4. Click **Save**.
 
 ### Step 6: Final Setup
-1. Ensure `SITE_ID` is correctly set in `settings.py`.
+1. Ensure `SITE_ID` is correctly set in `.env`.
 2. Run:
    ```sh
    python manage.py migrate  
