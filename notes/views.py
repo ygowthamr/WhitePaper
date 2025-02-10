@@ -15,25 +15,31 @@ def newnote(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            note_content = data.get('note')
-            tags = data.get('tags', [])  # Get tags array from request
+            heading = data.get('heading', '').strip()  
+            note_content = data.get('note', '').strip()
+            tags = data.get('tags', [])  
             username = request.user.username
-            
+
             if not note_content:
                 return JsonResponse({'success': False, 'error': 'Note content is required'}, status=400)
-            
-            # Save the note
-            note = text(Uname=username, content=note_content)
+
+        
+            full_content = f"{heading}|||{note_content}" if heading else note_content
+         
+        
+            note = text(Uname=username, content=full_content)
             note.save()
-            
-            # Save tags
+
+          
             for tag_name in tags:
-                Tag.objects.create(name=tag_name.strip(), note=note)
-            
+                tag_name = tag_name.strip()
+                if tag_name:
+                    Tag.objects.create(name=tag_name, note=note)
+
             return JsonResponse({'success': True, 'note_id': note.id}, status=201)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
-    
+
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
 
@@ -42,17 +48,25 @@ def newnote(request):
 def getnotes(request):
     username = request.user.username
     tag_filter = request.GET.get('tag')
-    
+
     notes = text.objects.filter(Uname=username)
     if tag_filter:
         notes = notes.filter(tags__name=tag_filter)
-    
-    notes_data = [{
-        'id': note.id, 
-        'content': note.content,
-        'tags': list(note.tags.values_list('name', flat=True))
-    } for note in notes]
-    
+
+    notes_data = []
+    for note in notes:
+        if "|||" in note.content:
+            heading, content = note.content.split("|||", 1)  # Split at first occurrence
+        else:
+            heading, content = "Untitled", note.content 
+
+        notes_data.append({
+            'id': note.id,
+            'heading': heading.strip(), 
+            'content': content.strip(),
+            'tags': list(note.tags.values_list('name', flat=True))
+        })
+
     return JsonResponse({'notes': notes_data})
 
 

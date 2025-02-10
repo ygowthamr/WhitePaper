@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addBtn = document.getElementById('addBtn');
     const addTxt = document.getElementById('addTxt');
     const tagInput = document.getElementById('tagInput');
+    const headingInput = document.getElementById('headingInput'); 
     const notesContainer = document.getElementById('notes');
     const charCount = document.getElementById('charCount');
     const charWarning = document.getElementById('charWarning');
@@ -87,6 +88,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (data.notes && data.notes.length > 0) {
                 data.notes.forEach((note, index) => {
+
+                    heading = note.heading;
+                    content = note.content;
                     // Collect all tags
                     note.tags.forEach(tag => allTags.add(tag));
 
@@ -102,11 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     noteCard.innerHTML = `
                         <div class="note-header">
                             <i class="fas fa-sticky-note"></i>
-                            Note ${index + 1}
+                            <strong>${heading.trim()}</strong>
                             <div class="tags-container">${tagsHtml}</div>
                         </div>
                         <div class="note-content">
-                             ${note.content}
+                            <p>${content.trim()}</p>
                         </div>
                         <div class="note-actions">
                             <button class="edit-btn" data-note-id="${note.id}">Edit</button>
@@ -164,15 +168,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add Note Functionality
     addBtn.addEventListener('click', function() {
+        const noteHeading = headingInput.value.trim();
         const noteContent = quill.root.innerHTML.trim();
         const tags = tagInput.value.split(',')
             .map(tag => tag.trim())
             .filter(tag => tag.length > 0);
 
-        if (!noteContent) {
-            charWarning.textContent = 'Note cannot be empty!';
+        if (!noteContent || !noteHeading) {
+            alert("Heading and note content cannot be empty!");
             return;
         }
+        
+        // Combine heading and note content with "|||"
+        const combinedContent = `${noteHeading}|||${noteContent}`;
 
         fetch('/notes/newnote/', {
             method: 'POST',
@@ -181,13 +189,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-CSRFToken': getCookie('csrftoken')
             },
             body: JSON.stringify({ 
-                note: noteContent,
+                note: combinedContent,
                 tags: tags
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                headingInput.value = '';
                 quill.root.innerHTML = ''; 
                 tagInput.value = '';
                 charCount.textContent = 'Characters: 0/500';
