@@ -176,6 +176,21 @@
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+        .heading-input {
+            width: 100%;                     /* Full width for responsiveness */
+            padding: 10px 15px;              /* Adequate padding for comfortable typing */
+            font-size: 18px;                 /* Larger font size for emphasis */
+            border: 2px solid #ccc;          /* Light gray border */
+            border-radius: 8px;              /* Rounded corners */
+            margin-bottom: 12px;             /* Spacing below the input */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;  /* Smooth transition on focus */
+        }
+
+        .heading-input:focus {
+            border-color: var(--primary);    /* Change border color on focus (using your primary variable) */
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle shadow for focus state */
+            outline: none;                  /* Remove default outline */
+        }
 
         .editor-title {
             font-size: 1.5rem;
@@ -479,6 +494,7 @@
             <h2 class="editor-title">
                 <i class="fas fa-edit"></i> Add a New Note
             </h2>
+            <input type="text" id="headingInput" class="heading-input" placeholder="Enter Note Title">
             <div id="addTxt" class="note-textarea"></div>
             <div id="charCount" style="font-size: 14px; margin-top: 5px; text-align: left; color: grey;">Characters: 0/500</div>
             <div id="charWarning" style="font-weight: bold;"></div>
@@ -523,7 +539,7 @@
                     <div class="note-card">
                         <div class="note-header">
                             <i class="fas fa-sticky-note"></i>
-                            Note {{ forloop.counter }}
+                            <strong>{{ note.heading }}</strong>
                             <div class="tags-container">
                                 {% for tag in note.tags.all %}
                                     <span class="tag">{{ tag.name }}</span>
