@@ -109,6 +109,10 @@ document.addEventListener('DOMContentLoaded', function () {
                              ${note.content}
                         </div>
                         <div class="note-actions">
+                        
+                            <button class="copy-btn" data-note-id="${note.id}">
+                                <i class="fas fa-copy"></i>
+                            </button>
                             <button class="edit-btn" data-note-id="${note.id}">Edit</button>
                             <button class="delete-btn" data-note-id="${note.id}">Delete</button>
                             <button class="share-btn" data-note-id="${note.id}">
@@ -201,7 +205,19 @@ document.addEventListener('DOMContentLoaded', function () {
             charWarning.textContent = 'Network error. Please try again.';
         });
     });
+    // Copy Note to Clipboard
+    notesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.copy-btn')) {
+            const noteCard = e.target.closest('.note-card');
+            //const heading = noteCard.querySelector('.note-header strong').textContent;
+            const content = noteCard.querySelector('.note-content p').textContent;
+            //const textToCopy = `${heading}\n\n${content}`;
 
+            navigator.clipboard.writeText(content)
+                .then(() => showToast('Note copied to clipboard!'))
+                .catch(err => showToast('Failed to copy note!', 3000));
+        }
+    });
     // Share functionality
     notesContainer.addEventListener('click', function(e) {
         if (e.target.closest('.share-btn')) {
