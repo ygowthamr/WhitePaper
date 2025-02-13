@@ -84,6 +84,37 @@ def deletenote(request, note_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
+
+@login_required
+def updatenote(request, note_id):
+    if request.method == "PUT":
+        try:
+            note = text.objects.get(id=note_id, Uname=request.user.username)
+            data = json.loads(request.body)
+            
+            # Update content
+            heading = data.get('heading', '').strip()
+            note_content = data.get('note', '').strip()
+            note.content = f"{heading}|||{note_content}" if heading else note_content
+            
+            # Update tags
+            note.tags.all().delete()
+            for tag_name in data.get('tags', []):
+                tag_name = tag_name.strip()
+                if tag_name:
+                    Tag.objects.create(name=tag_name, note=note)
+            
+            note.save()
+            return JsonResponse({'success': True})
+            
+        except text.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Note not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
 def share_note(request, note_id):
     """View for displaying a shared note"""
     note = get_object_or_404(text, id=note_id)
