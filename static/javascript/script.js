@@ -71,6 +71,37 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('darkMode', isDarkMode.toString());
     }
 
+
+    function printNote(note) {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Print Note</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h2 { text-align: center; }
+                    .note-content { white-space: pre-wrap; margin-top: 20px; }
+                    .tags { margin-top: 10px; font-size: 0.9em; color: gray; }
+                    .tags span { background: #f0f0f0; padding: 3px 8px; margin-right: 5px; border-radius: 5px; }
+                </style>
+            </head>
+            <body>
+                <h2>${note.title || 'Untitled Note'}</h2>
+                <div class="note-content">${note.content}</div>
+                ${note.tags?.length ? `
+                <div class="tags">
+                    Tags: ${note.tags.map(tag => `<span>${tag}</span>`).join('')}
+                </div>` : ''}
+                <script>
+                    window.onload = function() { window.print(); setTimeout(() => window.close(), 100); };
+                </script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+    
     // Save note function
     function saveNote() {
         const content = quill.root.innerHTML.trim();
@@ -121,6 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
+            <button class="btn btn-outline print-btn" data-id="${note.id}">
+                <i class="fas fa-print"></i> Print
+            </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
                     <i class="fas fa-edit"></i>
                 </button>
@@ -202,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elements.notesContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
         const editBtn = e.target.closest('.edit-btn');
+        const printBtn = e.target.closest('.print-btn'); // New print button
         
         if (deleteBtn) {
             const id = Number(deleteBtn.dataset.id);
@@ -223,6 +258,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 notes = notes.filter(n => n.id !== id);
                 localStorage.setItem('notes', JSON.stringify(notes));
                 renderNotes();
+            }
+        }
+        else if (printBtn) {
+            const id = Number(printBtn.dataset.id);
+            const note = notes.find(note => note.id === id);
+            if (note) {
+                printNote(note);
             }
         }
     });

@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
                              ${note.content}
                         </div>
                         <div class="note-actions">
+                        <button class="btn btn-outline print-btn" data-id="${note.id}"><i class="fas fa-print"></i> Print</button>
                             <button class="edit-btn" data-note-id="${note.id}">Edit</button>
                             <button class="delete-btn" data-note-id="${note.id}">Delete</button>
                             <button class="share-btn" data-note-id="${note.id}">
@@ -235,7 +236,130 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.closest('.share-popup')) {
             e.stopPropagation(); // Prevent popup from closing when clicking inside
         }
+
     });
+     // Separate event listener for print functionality
+     notesContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.print-btn')) {
+            const printBtn = e.target.closest('.print-btn');
+            const noteId = printBtn.dataset.id;
+            
+            // Fetch the specific note content before printing
+            fetch(`/notes/printnote/${noteId}/`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                // if (!response.ok) {
+                //     throw new Error('Network response was not ok');
+                // }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.note) {
+                    const note = data.note;
+                    // Open a new print window
+                    const printWindow = window.open('', '', 'width=800,height=600');
+                    
+                    // Write the note content into the new window
+                    printWindow.document.write(`
+                        <html>
+                            <head>
+                                <title>Print Note</title>
+                                <style>
+                                    body { 
+                                        font-family: Arial, sans-serif; 
+                                        padding: 30px;
+                                        max-width: 800px;
+                                        margin: 0 auto;
+                                        line-height: 1.6;
+                                    }
+                                    
+                                    .note-header {
+                                        text-align: center;
+                                        margin-bottom: 25px;
+                                        padding-bottom: 15px;
+                                        border-bottom: 2px solid #eaeaea;
+                                    }
+                                    
+                                    h2 { 
+                                        margin: 0;
+                                        color: #2c3e50;
+                                        font-size: 24px;
+                                    }
+                                    
+                                    .timestamp {
+                                        color: #7f8c8d;
+                                        font-size: 14px;
+                                        margin-top: 5px;
+                                    }
+                                    
+                                    .note-content { 
+                                        background: #fff;
+                                        padding: 20px;
+                                        margin: 20px 0;
+                                    }
+                                    
+                                    .tags-container {
+                                        margin-top: 20px;
+                                        padding-top: 15px;
+                                        border-top: 1px solid #eaeaea;
+                                    }
+                                    
+                                    .tag {
+                                        background: #f0f2f5;
+                                        padding: 5px 12px;
+                                        border-radius: 15px;
+                                        font-size: 13px;
+                                        color: #516175;
+                                        display: inline-block;
+                                        margin: 0 5px 5px 0;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="note-header">
+                                    <h2>Note</h2>
+                                    <div class="timestamp">
+                                        Created by: ${note.author || 'Anonymous'}<br>
+                                        Printed on: ${new Date().toLocaleDateString()}
+                                    </div>
+                                </div>
+                                
+                                <div class="note-content">${note.content}</div>
+                                
+                                ${note.tags && note.tags.length ? `
+                                    <div class="tags-container">
+                                        <div>Tags:</div>
+                                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                    </div>
+                                ` : ''}
+                            </body>
+                        </html>
+                    `);
+
+                    // Close document stream
+                    printWindow.document.close();
+                    
+                    // Print after content is loaded
+                    printWindow.onload = function() {
+                        printWindow.print();
+                        // Close the print window after a short delay
+                        setTimeout(() => printWindow.close(), 500);
+                    };
+                } else {
+                    throw new Error('Note data not found in response');
+                }
+            })
+            .catch(error => {
+                console.error('Error printing note:', error);
+                showToast('Error: Failed to print note. Please try again.');
+            });
+        }
+    });
+
 
     // Close share popup when clicking outside
     document.addEventListener('click', function(e) {
