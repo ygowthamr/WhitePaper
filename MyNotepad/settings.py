@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 # Set SITE_ID
-SITE_ID = 4  # Required for allauth
+SITE_ID = 5  # Required for allauth
 
 # Add GitHub OAuth credentials
 SOCIALACCOUNT_PROVIDERS = {
