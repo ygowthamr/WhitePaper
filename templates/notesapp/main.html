@@ -603,7 +603,20 @@
         // Check for saved theme preference or system preference
         const savedTheme = localStorage.getItem('darkMode');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    
+        // Initialize Quill editor
+        const quill = new Quill('#addTxt', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Type your note content here...'
+        });
         function setTheme(theme) {
             if (theme === 'true') {
                 htmlElement.classList.add('dark-theme');

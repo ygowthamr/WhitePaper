@@ -18,8 +18,10 @@ document.addEventListener('DOMContentLoaded', function () {
         placeholder: 'Type your note here...',
         maxLength: 500
     });
-
+    // Remove any existing click listeners first
+    document.getElementById('addBtn').replaceWith(document.getElementById('addBtn').cloneNode(true));
     const addBtn = document.getElementById('addBtn');
+
     const addTxt = document.getElementById('addTxt');
     const tagInput = document.getElementById('tagInput');
     const headingInput = document.getElementById('headingInput'); 
@@ -175,49 +177,65 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Add Note Functionality
-    addBtn.addEventListener('click', function() {
-        const noteHeading = headingInput.value.trim();
-        const noteContent = quill.root.innerHTML.trim();
-        const tags = tagInput.value.split(',')
-            .map(tag => tag.trim())
-            .filter(tag => tag.length > 0);
+    // Single event listener with conditional logic
+    addBtn.addEventListener('click', function handleNoteAction() {
+        if (this.dataset.editingNoteId) {
+            // Update existing note logic
+            const noteId = this.dataset.editingNoteId;
+            const noteData = {
+                heading: document.getElementById('headingInput').value.trim(),
+                note: quill.root.innerHTML,
+                tags: document.getElementById('tagInput').value.split(',').map(t => t.trim())
+            };
 
-        if (!noteContent || !noteHeading) {
-            alert("Heading and note content cannot be empty!");
-            return;
-        }
-        
-        // Combine heading and note content with "|||"
-        const combinedContent = `${noteHeading}|||${noteContent}`;
-
-        fetch('/notes/newnote/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({ 
-                note: combinedContent,
-                tags: tags
+            fetch(`/notes/updatenote/${noteId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(noteData)
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                headingInput.value = '';
-                quill.root.innerHTML = ''; 
-                tagInput.value = '';
-                charCount.textContent = 'Characters: 0/500';
-                fetchNotes(); // Refresh notes
-            } else {
-                charWarning.textContent = data.error || 'Failed to add note';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            charWarning.textContent = 'Network error. Please try again.';
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resetForm();
+                    fetchNotes();
+                }
+            });
+        } else {
+            // Original add note logic
+            const noteData = {
+                heading: document.getElementById('headingInput').value.trim(),
+                note: quill.root.innerHTML,
+                tags: document.getElementById('tagInput').value.split(',').map(t => t.trim())
+            };
+
+            fetch('/notes/newnote/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(noteData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    resetForm();
+                    fetchNotes();
+                }
+            });
+        }
     });
+
+    function resetForm() {
+        document.getElementById('headingInput').value = '';
+        quill.root.innerHTML = ''; // Reset Quill editor properly
+        document.getElementById('tagInput').value = '';
+        delete addBtn.dataset.editingNoteId;
+        addBtn.innerHTML = `<i class="fas fa-plus"></i> Add Note`;
+    }
     // Copy Note to Clipboard
     notesContainer.addEventListener('click', function(e) {
         if (e.target.closest('.copy-btn')) {
@@ -423,6 +441,35 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+   // Edit Note Functionality
+   notesContainer.addEventListener('click', function (e) {
+    if (e.target.closest('.edit-btn')) {
+        const noteId = e.target.closest('.edit-btn').dataset.noteId;
+        const noteCard = e.target.closest('.note-card');
+        let paragraphs;
+        // Retrieve content
+        const heading = noteCard.querySelector('.note-header strong').textContent;
+        const contentElement = noteCard.querySelector('.note-content');
+        if (contentElement) {
+            // Select all <p> elements, remove empty ones, and join their innerHTML
+            paragraphs = Array.from(contentElement.querySelectorAll('p'))
+                .map(p => p.innerHTML.trim()) // Get innerHTML and trim whitespace
+                .filter(text => text.length > 0) // Remove empty paragraphs
+                .join('<br>'); // Keep paragraph spacing
+        }
+        const tags = Array.from(noteCard.querySelectorAll('.note-tag')).map(tag => tag.textContent);
+
+        // Populate editor fields
+        headingInput.value = heading;
+        tagInput.value = tags.join(', ');
+        quill.clipboard.dangerouslyPasteHTML(`<p>${paragraphs}</p>`);
+
+        // Change button to update mode
+        addBtn.innerHTML = `<i class="fas fa-save"></i> Update Note`;
+        addBtn.dataset.editingNoteId = noteId;
+    }
+});
 
     // Tag Filter Change Event
     tagFilter.addEventListener('change', function() {
