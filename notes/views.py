@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone  # Add this import
 from notesapp.models import text
 from django.http import JsonResponse
 import json
@@ -70,6 +71,48 @@ def deletenote(request, note_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
+
+
+
+@login_required
+def printnote(request, note_id):
+    """
+    Endpoint to fetch a specific note for printing
+    """
+    if request.method == "GET":
+        try:
+            # Get the note and verify ownership
+            note = text.objects.get(id=note_id, Uname=request.user.username)
+            
+            # Prepare note data for printing
+            note_data = {
+                'id': note.id,
+                'content': note.content,
+                'tags': list(note.tags.values_list('name', flat=True)),
+                'created_at': note.created_at.isoformat() if hasattr(note, 'created_at') else timezone.now().isoformat(),
+                'author': note.Uname
+            }
+            
+            return JsonResponse({
+                'success': True,
+                'note': note_data
+            })
+            
+        except text.DoesNotExist:
+            return JsonResponse({
+                'success': False, 
+                'error': 'Note not found'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+            
+    return JsonResponse({
+        'success': False,
+        'error': 'Invalid request method'
+    }, status=405)
 def share_note(request, note_id):
     """View for displaying a shared note"""
     note = get_object_or_404(text, id=note_id)

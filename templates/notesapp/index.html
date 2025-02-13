@@ -366,6 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCharCount();
         clearAutosave();
     }
+    
 
     // Create note card
     function createNoteCard(note) {
@@ -380,6 +381,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
+                <button class="btn btn-outline print-btn" data-id="${note.id}">
+                <i class="fas fa-print"></i> Print
+            </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
                     <i class="fas fa-edit"></i>
                 </button>
@@ -460,6 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     elements.notesContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
+        const printBtn = e.target.closest('.print-btn'); // New print button
         const editBtn = e.target.closest('.edit-btn');
         
         if (deleteBtn) {
@@ -483,7 +488,135 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('notes', JSON.stringify(notes));
                 renderNotes();
             }
+        }else if (printBtn) {
+        const id = Number(printBtn.dataset.id);
+        const note = notes.find(note => note.id === id);
+        if (note) {
+                // Open a new print window
+                const printWindow = window.open('', '', 'width=800,height=600');
+
+// Write the note content into the new window
+printWindow.document.write(`
+    <html>
+        <head>
+            <title>Print Note</title>
+            <style>
+                body { 
+                    font-family: Arial, sans-serif; 
+                    padding: 30px;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    line-height: 1.6;
+                }
+                
+                .note-header {
+                    text-align: center;
+                    margin-bottom: 25px;
+                    padding-bottom: 15px;
+                    border-bottom: 2px solid #eaeaea;
+                }
+                
+                h2 { 
+                    margin: 0;
+                    color: #2c3e50;
+                    font-size: 24px;
+                }
+                
+                .timestamp {
+                    color: #7f8c8d;
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+                
+                .note-content { 
+                    background: #fff;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin: 20px 0;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                }
+                
+                .tags-container {
+                    margin-top: 20px;
+                    padding-top: 15px;
+                    border-top: 1px solid #eaeaea;
+                }
+                
+                .tags-title {
+                    font-weight: bold;
+                    color: #34495e;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+                
+                .tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .tag {
+                    background: #f0f2f5;
+                    padding: 5px 12px;
+                    border-radius: 15px;
+                    font-size: 13px;
+                    color: #516175;
+                }
+                
+                @media print {
+                    body {
+                        padding: 20px;
+                    }
+                    
+                    .note-content {
+                        border: none;
+                        box-shadow: none;
+                        padding: 0;
+                    }
+                    
+                    .tags-container {
+                        break-inside: avoid;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="note-header">
+                <h2>${note.title || 'Untitled Note'}</h2>
+                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</div>
+            </div>
+            
+            <div class="note-content">${note.content}</div>
+            
+            ${note.tags && note.tags.length ? `
+                <div class="tags-container">
+                    <div class="tags-title">Tags</div>
+                    <div class="tags">
+                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            <\/script>
+        </body>
+    </html>
+`);
+// Close document stream
+printWindow.document.close();
         }
+    }
     });
 
     // Scroll to top button functionality
@@ -549,6 +682,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
     </script>
     <!-- Your custom script -->
-    <script src="../../static/javascript/script.js"></script>
+    <!-- <script src="../../static/javascript/script.js"></script> -->
+     <script>
+        
+     </script>
 </body>
 </html>
