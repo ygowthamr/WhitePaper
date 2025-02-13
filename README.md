@@ -159,6 +159,77 @@ Contributions are welcome! Please follow these steps:
 4. Submit a pull request.
 
 ---
+## Project Structure
+```bash
+WhitePaper/
+    .gitignore
+    accounts/
+        __init__.py
+        admin.py
+        apps.py
+        migrations/
+            __init__.py
+        models.py
+        tests.py
+        urls.py
+        views.py
+    CODE_OF_CONDUCT.md
+    LICENSE
+    manage.py
+    MyNotepad/
+        __init__.py
+        asgi.py
+        middleware.py
+        settings.py
+        urls.py
+        wsgi.py
+    notes/
+        __init__.py
+        admin.py
+        apps.py
+        migrations/
+            0001_initial.py
+            __init__.py
+        models.py
+        tests.py
+        urls.py
+        views.py
+    notesapp/
+        __init__.py
+        admin.py
+        apps.py
+        migrations/
+            0001_initial.py
+            0002_auto_20210905_1347.py
+            __init__.py
+        models.py
+        tests.py
+        urls.py
+        views.py
+    README.md
+    requirements.txt
+    static/
+        css/
+            NewStyle.css
+            responsive.css
+            style.css
+        images/
+        javascript/
+            Theme.js
+            authenticated.js
+            autosave.js
+            script.js
+    templates/
+        notesapp/
+            index.html
+            login.html
+            main.html
+            password_reset.html
+            reset_password.html
+            shared_note.html
+            signup.html
+
+```
 
 ## License
 
