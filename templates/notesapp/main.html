@@ -1,511 +1,886 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">\ -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> -->
+<!-- <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script> -->
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
     <title>My Notepad</title>
-    
+
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --background: #f8fafc;
-            --surface: #ffffff;
-            --text: #0f172a;
-            --secondary: #64748b;
-            --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
-        }
-        /* In the style section, update the :root and add dark-theme */
-:root {
-    /* Light Theme */
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --background: #f8fafc;
-    --surface: #ffffff;
-    --text: #0f172a;
-    --secondary: #64748b;
-    --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
-}
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --secondary: #64748b;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+      }
+      /* In the style section, update the :root and add dark-theme */
+      :root {
+        /* Light Theme */
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --secondary: #64748b;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+      }
 
-:root.dark-theme {
-    --primary: #4f46e5;
-    --primary-dark: #6366f1;
-    --background: #121212;
-    --surface: #1e1e1e;
-    --text: #e2e8f0;
-    --secondary: #a0aec0;
-    --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
-}
+      :root.dark-theme {
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --background: #121212;
+        --surface: #1e1e1e;
+        --text: #e2e8f0;
+        --secondary: #a0aec0;
+        --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+      }
 
-/* Add theme toggle button styles */
-.theme-toggle {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
+      /* Add theme toggle button styles */
+      .theme-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
 
-.theme-toggle:hover {
-    transform: rotate(180deg);
-}
+      .theme-toggle:hover {
+        transform: rotate(180deg);
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
 
-        body {
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.5;
-            min-height: 100vh;
-        }
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+      }
 
-        /* Header Styles */
-        .header {
-            background-color: var(--surface);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+      /* Header Styles */
+      .header {
+        background-color: var(--surface);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
 
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .search-container {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .search-input {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        width: 300px;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .search-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .main-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      .user-info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .user-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text);
+      }
+
+      .logout-btn {
+        padding: 0.5rem 1rem;
+        background: var(--gradient);
+        color: white;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .note-editor {
+        background-color: var(--surface);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .heading-input {
+        width: 100%; /* Full width for responsiveness */
+        padding: 10px 15px; /* Adequate padding for comfortable typing */
+        font-size: 18px; /* Larger font size for emphasis */
+        border: 2px solid #ccc; /* Light gray border */
+        border-radius: 8px; /* Rounded corners */
+        margin-bottom: 12px; /* Spacing below the input */
+        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus */
+      }
+
+      .heading-input:focus {
+        border-color: var(
+          --primary
+        ); /* Change border color on focus (using your primary variable) */
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle shadow for focus state */
+        outline: none; /* Remove default outline */
+      }
+
+      .editor-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .note-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        resize: vertical;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+      }
+
+      .note-textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .tag-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+      }
+
+      .add-note-btn {
+        background: var(--gradient);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .add-note-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .note-card {
+        background-color: var(--surface);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 4px solid var(--primary);
+        position: relative;
+      }
+
+      .note-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Tag Styling */
+      .note-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #2563eb, #60a5fa);
+        color: white;
+        padding: 6px 14px; /* Increased padding for better appearance */
+        border-radius: 20px; /* Rounder, pill-like shape */
+        font-size: 14px; /* Slightly larger font for readability */
+        margin-right: 8px; /* Increased margin for spacing */
+        margin-top: 6px; /* Adjusted top margin for better spacing */
+
+        text-transform: capitalize; /* Capitalize tag text */
+        transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
+      }
+
+      /* Tag Hover Effect */
+      .note-tag:hover {
+        transform: scale(1.05); /* Slightly enlarge the tag on hover */
+      }
+
+      /* Tags Container Styling */
+      .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px; /* Add space between tags */
+        margin-top: 10px; /* Add margin for separation from content */
+        padding: 5px 0; /* Vertical padding for tags */
+      }
+
+      footer {
+        background-color: var(--surface);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 4rem;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      @media (max-width: 768px) {
         .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .search-container {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
+          flex-direction: column;
+          gap: 1rem;
         }
 
         .search-input {
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
-            width: 300px;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+          width: 100%;
         }
 
         .main-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .user-info {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .user-name {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text);
-        }
-
-        .logout-btn {
-            padding: 0.5rem 1rem;
-            background: var(--gradient);
-            color: white;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .note-editor {
-            background-color: var(--surface);
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .heading-input {
-            width: 100%;                     /* Full width for responsiveness */
-            padding: 10px 15px;              /* Adequate padding for comfortable typing */
-            font-size: 18px;                 /* Larger font size for emphasis */
-            border: 2px solid #ccc;          /* Light gray border */
-            border-radius: 8px;              /* Rounded corners */
-            margin-bottom: 12px;             /* Spacing below the input */
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;  /* Smooth transition on focus */
-        }
-
-        .heading-input:focus {
-            border-color: var(--primary);    /* Change border color on focus (using your primary variable) */
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle shadow for focus state */
-            outline: none;                  /* Remove default outline */
-        }
-
-        .editor-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .note-textarea {
-            width: 100%;
-            min-height: 200px;
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
-            resize: vertical;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-
-        .note-textarea:focus {
-            border-color: var(--primary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .tag-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
-
-        .add-note-btn {
-            background: var(--gradient);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .add-note-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+          padding: 0 1rem;
         }
 
         .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+          grid-template-columns: 1fr;
         }
+      }
 
-        .note-card {
-            background-color: var(--surface);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 4px solid var(--primary);
-            position: relative;
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+        transition: background-color 0.3s, color 0.3s; /* Add this line */
+      }
+      .note-textarea,
+      .tag-input,
+      .search-input {
+        background-color: var(--surface);
+        color: var(--text);
+        border: 2px solid var(--secondary);
+      }
+
+      .note-card {
+        background-color: var(--surface);
+        color: var(--text);
+        border-left: 4px solid var(--primary);
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, 1rem);
         }
-
-        .note-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0);
         }
+      }
 
-       
+      .share-popup {
+        position: absolute;
+        bottom: 30%;
+        right: 0;
+        background: var(--surface);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem;
+        z-index: 100;
+        width: 320px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
 
-      
+      .share-popup.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
 
+      .share-popup-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
 
-        /* Tag Styling */
-        .note-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, #2563eb, #60a5fa);
-            color: white;
-            padding: 6px 14px; /* Increased padding for better appearance */
-            border-radius: 20px; /* Rounder, pill-like shape */
-            font-size: 14px; /* Slightly larger font for readability */
-            margin-right: 8px; /* Increased margin for spacing */
-            margin-top: 6px; /* Adjusted top margin for better spacing */
-           
-            text-transform: capitalize; /* Capitalize tag text */
-            transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
-        }
+      .share-option {
+        width: 56px;
+        height: 56px;
+        border-radius: 0.75rem;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: white;
+        font-size: 1.5rem;
+      }
 
-        /* Tag Hover Effect */
-        .note-tag:hover {
-            transform: scale(1.05); /* Slightly enlarge the tag on hover */
-        }
+      .share-option:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
 
-        /* Tags Container Styling */
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px; /* Add space between tags */
-            margin-top: 10px; /* Add margin for separation from content */
-            padding: 5px 0; /* Vertical padding for tags */
-        }
+      .share-link-wrapper {
+        background: var(--background);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
 
-        footer {
-            background-color: var(--surface);
-            padding: 1.5rem;
-            text-align: center;
-            margin-top: 4rem;
-            border-top: 1px solid #e2e8f0;
-        }
+      .share-link {
+        flex: 1;
+        border: none;
+        background: none;
+        font-size: 0.875rem;
+        padding: 0.25rem;
+        color: var(--text);
+        width: 100%;
+      }
 
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
+      .copy-link {
+        background: var(--primary);
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
 
-            .search-input {
-                width: 100%;
-            }
+      .copy-link:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+      .share-popup {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        z-index: 1000;
+        width: 320px;
+      }
 
-            .main-container {
-                padding: 0 1rem;
-            }
+      .share-popup.active {
+        display: block;
+      }
 
-            .notes-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      .share-popup-content {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
 
-        body {
-    background-color: var(--background);
-    color: var(--text);
-    line-height: 1.5;
-    min-height: 100vh;
-    transition: background-color 0.3s, color 0.3s; /* Add this line */
-}
-.note-textarea, .tag-input, .search-input {
-    background-color: var(--surface);
-    color: var(--text);
-    border: 2px solid var(--secondary);
-}
+      .share-option {
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
 
-.note-card {
-    background-color: var(--surface);
-    color: var(--text);
-    border-left: 4px solid var(--primary);
-}
+      .share-option:hover {
+        opacity: 0.8;
+      }
 
+      .share-url-section {
+        margin-bottom: 1rem;
+      }
 
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
-        }
+      .share-url-section h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.875rem;
+        color: #666;
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translate(-50%, 1rem); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
+      .share-link-wrapper {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
 
-        .share-popup {
-            position: absolute;
-            bottom: 30%;
-            right: 0;
-            background: var(--surface);
-            border-radius: 1rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-            padding: 1.5rem;
-            z-index: 100;
-            width: 320px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
+      .share-link {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 0.875rem;
+      }
 
-        .share-popup.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
+      .copy-link {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        background: #2563eb;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
 
-        .share-popup-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+      .copy-link:hover {
+        background: #1d4ed8;
+      }
 
-        .share-option {
-            width: 56px;
-            height: 56px;
-            border-radius: 0.75rem;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
-            font-size: 1.5rem;
-        }
+      .qr-code-section {
+        text-align: center;
+        padding: 1rem;
+        border-top: 1px solid #e2e8f0;
+      }
 
-        .share-option:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
+      .qr-code-section img {
+        margin-bottom: 0.5rem;
+      }
 
-        .share-link-wrapper {
-            background: var(--background);
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
+      .download-qr {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: background-color 0.2s;
+      }
 
-        .share-link {
-            flex: 1;
-            border: none;
-            background: none;
-            font-size: 0.875rem;
-            padding: 0.25rem;
-            color: var(--text);
-            width: 100%;
-        }
-
-        .copy-link {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 0.375rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .copy-link:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
+      .download-qr:hover {
+        background: #059669;
+      }
     </style>
-</head>
+     <style>
+        /* Existing styles remain... */
+        
+        /* Chatbot Styles */
+        .chat-widget {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 360px;
+          height: 500px;
+          background-color: var(--surface);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          display: flex;
+          flex-direction: column;
+          z-index: 1000;
+          transition: transform 0.3s ease;
+          transform: translateY(430px);
+        }
+  
+        .chat-widget.expanded {
+          transform: translateY(0);
+        }
+  
+        .chat-header {
+          padding: 16px;
+          background: var(--gradient);
+          color: white;
+          border-radius: 12px 12px 0 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+  
+        .chat-header h3 {
+          margin: 0;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+  
+        .chat-messages {
+          flex: 1;
+          padding: 16px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+  
+        .message {
+          max-width: 80%;
+          padding: 10px 14px;
+          border-radius: 14px;
+          font-size: 14px;
+          line-height: 1.4;
+        }
+  
+        .user-message {
+          background: var(--primary);
+          color: white;
+          align-self: flex-end;
+          border-bottom-right-radius: 4px;
+        }
+  
+        .bot-message {
+          background: var(--background);
+          color: var(--text);
+          align-self: flex-start;
+          border-bottom-left-radius: 4px;
+        }
+  
+        .chat-input {
+          padding: 16px;
+          border-top: 1px solid var(--secondary);
+          display: flex;
+          gap: 8px;
+        }
+  
+        .chat-input input {
+          flex: 1;
+          padding: 10px 14px;
+          border: 1px solid var(--secondary);
+          border-radius: 20px;
+          font-size: 14px;
+          background: var(--background);
+          color: var(--text);
+        }
+  
+        .chat-input button {
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 20px;
+          padding: 10px 20px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+  
+        .chat-input button:hover {
+          background: var(--primary-dark);
+        }
+  
+        .typing-indicator {
+          display: flex;
+          gap: 4px;
+          padding: 8px 14px;
+          background: var(--background);
+          border-radius: 14px;
+          align-self: flex-start;
+        }
+  
+        .typing-dot {
+          width: 8px;
+          height: 8px;
+          background: var(--secondary);
+          border-radius: 50%;
+          animation: typing 1s infinite;
+        }
+  
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  
+        @keyframes typing {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+      </style>
+        <style>
+            /* Previous styles remain... */
+            
+            /* Enhanced Message Formatting Styles */
+            .message {
+              max-width: 85%;
+              padding: 12px 16px;
+              border-radius: 14px;
+              font-size: 14px;
+              line-height: 1.5;
+            }
+      
+            .message h1 {
+              font-size: 1.4em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message h2 {
+              font-size: 1.2em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message h3 {
+              font-size: 1.1em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message p {
+              margin: 0.5em 0;
+            }
+      
+            .message ul, .message ol {
+              margin: 0.5em 0;
+              padding-left: 1.5em;
+            }
+      
+            .message li {
+              margin: 0.25em 0;
+            }
+      
+            .message code {
+              background: rgba(0, 0, 0, 0.1);
+              padding: 2px 4px;
+              border-radius: 4px;
+              font-family: monospace;
+            }
+      
+            .message pre {
+              background: rgba(0, 0, 0, 0.1);
+              padding: 8px;
+              border-radius: 8px;
+              overflow-x: auto;
+              margin: 0.5em 0;
+            }
+      
+            .message em {
+              font-style: italic;
+            }
+      
+            .message strong {
+              font-weight: bold;
+            }
+      
+            .bot-message {
+              background: var(--background);
+              color: var(--text);
+              align-self: flex-start;
+              border-bottom-left-radius: 4px;
+            }
+      
+            .bot-message ul {
+              list-style-type: disc;
+            }
+      
+            .bot-message ol {
+              list-style-type: decimal;
+            }
+      
+            .bot-message * + * {
+              margin-top: 0.5em;
+            }
+      
+            /* Enhance scrollbar styling */
+            .chat-messages::-webkit-scrollbar {
+              width: 6px;
+            }
+      
+            .chat-messages::-webkit-scrollbar-track {
+              background: var(--background);
+            }
+      
+            .chat-messages::-webkit-scrollbar-thumb {
+              background: var(--secondary);
+              border-radius: 3px;
+            }
+          </style>
+  </head>
 
-<body>
+  <body>
     <header class="header">
-        <button id="themeToggle"  class="theme-toggle" aria-label="Toggle Theme">
-            <i id="themeIcon" class="fas fa-moon"></i>
-        </button>
-        <div class="header-content" style="margin: 0px 20px;">
-            <a href="/" class="logo">
-                <i class="fas fa-pen-fancy"></i> My Notepad
-            </a>
-            <div class="search-container">
-                <input type="text" class="search-input" id="searchTxt" placeholder="Search notes...">
-            </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+        <i id="themeIcon" class="fas fa-moon"></i>
+      </button>
+      <div class="header-content" style="margin: 0px 20px">
+        <a href="/" class="logo">
+          <i class="fas fa-pen-fancy"></i> My Notepad
+        </a>
+        <div class="search-container">
+          <input
+            type="text"
+            class="search-input"
+            id="searchTxt"
+            placeholder="Search notes..."
+          />
         </div>
+      </div>
     </header>
 
     <main class="main-container">
-        <div class="user-info">
-            <div class="user-name">
-                <i class="fas fa-user"></i>
-                {{Uname}}
-            </div>
-            <a href="/accounts/logout/" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </a>
+      <div class="user-info">
+        <div class="user-name">
+          <i class="fas fa-user"></i>
+          {{Uname}}
         </div>
+        <a href="/accounts/logout/" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </a>
+      </div>
 
+      <div class="note-editor">
+        <h2 class="editor-title"><i class="fas fa-edit"></i> Add a New Note</h2>
+        <input
+          type="text"
+          id="headingInput"
+          class="heading-input"
+          placeholder="Enter Note Title"
+        />
+        <div id="addTxt" class="note-textarea"></div>
+        <div
+          id="charCount"
+          style="
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: left;
+            color: grey;
+          "
+        >
+          Characters: 0/500
+        </div>
+        <div id="charWarning" style="font-weight: bold"></div>
+        <div
+          id="save-status"
+          style="
+            font-size: 14px;
+            color: rgb(15, 130, 7);
+            margin-top: 5px;
+            text-align: right;
+          "
+        ></div>
+        <input
+          type="text"
+          id="tagInput"
+          class="tag-input"
+          placeholder="Add tags (comma separated)"
+        />
+        <button id="addBtn" class="add-note-btn">
+          <i class="fas fa-plus"></i>
+          Add Note
+        </button>
 
-        <div class="note-editor">
-            <h2 class="editor-title">
-                <i class="fas fa-edit"></i> Add a New Note
-            </h2>
-            <input type="text" id="headingInput" class="heading-input" placeholder="Enter Note Title">
-            <div id="addTxt" class="note-textarea"></div>
-            <div id="charCount" style="font-size: 14px; margin-top: 5px; text-align: left; color: grey;">Characters: 0/500</div>
-            <div id="charWarning" style="font-weight: bold;"></div>
-            <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
-            <input type="text" id="tagInput" class="tag-input" placeholder="Add tags (comma separated)">
-            <button id="addBtn" class="add-note-btn">
-                <i class="fas fa-plus"></i>
-                Add Note
-            </button>
-
-       
         <!-- <div class="text-input">
             <h1>Add a New Note</h1>
             <form>
@@ -514,137 +889,355 @@
                 <div id="charWarning" style="font-weight: bold;"></div>
                 <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
                 <input size="26" type="text" id="tagInput" placeholder="Add tags (comma separated)"> <!-- The placeholder was not fully visible so added size=26. Still adds many. -->
-                <!-- <button type="button" id="addBtn">
+        <!-- <button type="button" id="addBtn">
                     Add it
                 </button>
-            </form> --> 
+            </form> -->
+      </div>
 
+      <section class="notes-section">
+        <h2
+          style="
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+          "
+        >
+          <i class="fas fa-book" style="margin-right: 8px; color: #007bff"></i>
+          Your Saved Notes
+        </h2>
+
+        <div style="display: flex; align-items: center; padding: 8px">
+          <select
+            id="tagFilter"
+            style="
+              padding: 8px;
+              font-size: 16px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              background-color: #fff;
+              cursor: pointer;
+            "
+          >
+            <option value="">All Notes</option>
+          </select>
         </div>
 
-        <section class="notes-section">
-            <h2 style="display: flex; align-items: center; font-size: 24px; font-weight: bold; color: #333;">
-                <i class="fas fa-book" style="margin-right: 8px; color: #007bff;"></i> Your Saved Notes
-            </h2>
-            
-            <div style="display: flex; align-items: center; padding: 8px;">
-                <select id="tagFilter" 
-                    style="padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; background-color: #fff; cursor: pointer;">
-                    <option value="">All Notes</option>
-                </select>
+        <div id="notes" class="notes-grid">
+          {% if user.is_authenticated %} {% for note in data %}
+          <div class="note-card" style="overflow: hidden;">
+            <div class="note-header">
+              <i class="fas fa-sticky-note"></i>
+              <strong>{{ note.heading }}</strong>
+              <div class="tags-container">
+                {% for tag in note.tags.all %}
+                <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
             </div>
-            
-            <div id="notes" class="notes-grid">
-                {% if user.is_authenticated %}
-                    {% for note in data %}
-                    <div class="note-card">
-                        <div class="note-header">
-                            <i class="fas fa-sticky-note"></i>
-                            <strong>{{ note.heading }}</strong>
-                            <div class="tags-container">
-                                {% for tag in note.tags.all %}
-                                    <span class="tag">{{ tag.name }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="note-content">
-                            <p>{{ note.content }}</p>
-                        </div>
-                        <div class="note-actions">
-                            <button class="edit-btn" data-note-id="{{ note.id }}">Edit</button>
-                            <button class="delete-btn" data-note-id="{{ note.id }}">Delete</button>
-                            <button class="share-btn" data-note-id="{{ note.id }}">
-                                <i class="fas fa-share-alt"></i> Share
-                            </button>
-                            <div class="share-popup" id="share-popup-{{ note.id }}">
-                                <div class="share-popup-content">
-                                    <button class="share-option twitter-share">
-                                        <i class="fab fa-twitter"></i> Twitter
-                                    </button>
-                                    <button class="share-option linkedin-share">
-                                        <i class="fab fa-linkedin"></i> LinkedIn
-                                    </button>
-                                    <button class="share-option whatsapp-share">
-                                        <i class="fab fa-whatsapp"></i> WhatsApp
-                                    </button>
-                                    <button class="share-option email-share">
-                                        <i class="fas fa-envelope"></i> Email
-                                    </button>
-                                    <div class="share-link-wrapper">
-                                        <input type="text" class="share-link" id="share-link-{{ note.id }}" readonly>
-                                        <button class="copy-link">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="note-content">
+              <p>{{ note.content }}</p>
+            </div>
+            <div class="note-actions">
+              <button class="edit-btn" data-note-id="{{ note.id }}">
+                Edit
+              </button>
+              <button class="delete-btn" data-note-id="{{ note.id }}">
+                Delete
+              </button>
+              <button class="share-btn" data-note-id="{{ note.id }}">
+                <i class="fas fa-share-alt"></i> Share
+              </button>
+              <div class="share-popup" id="share-popup-{{ note.id }}">
+                <div class="share-popup-content">
+                  <button class="share-option twitter-share">
+                    <i class="fab fa-twitter"></i> Twitter
+                  </button>
+                  <button class="share-option linkedin-share">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                  </button>
+                  <button class="share-option whatsapp-share">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                  </button>
+                  <button class="share-option email-share">
+                    <i class="fas fa-envelope"></i> Email
+                  </button>
+                  <div class="share-url-section">
+                    <h4>Long URL</h4>
+                    <div class="share-link-wrapper">
+                      <input
+                        type="text"
+                        class="share-link"
+                        id="long-url-${note.id}"
+                        readonly
+                      />
+                      <button
+                        class="copy-link"
+                        onclick="copyShareLink({{ note.id }}, 'long-url')"
+                      >
+                        <i class="fas fa-copy"></i>
+                      </button>
                     </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </section>
-    </main>
 
+                    <h4>Short URL</h4>
+                    <div class="share-link-wrapper">
+                      <input
+                        type="text"
+                        class="share-link"
+                        id="short-url-${note.id}"
+                        readonly
+                      />
+                      <button
+                        class="copy-link"
+                        onclick="copyShareLink(${note.id}, 'short-url')"
+                      >
+                        <i class="fas fa-copy"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="qr-code-section">
+                    <img
+                      id="qr-code-${note.id}"
+                      alt="QR Code"
+                      width="150"
+                      height="150"
+                    />
+                    <button
+                      class="download-qr"
+                      onclick="downloadQRCode({{ note.id }})"
+                    >
+                      <i class="fas fa-download"></i> Download QR Code
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% endif %}
+        </div>
+      </section>
+    </main>
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" id="chatHeader">
+          <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+          <i class="fas fa-chevron-up" id="chatToggle"></i>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot-message">Hello! How can I help you today?</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Type your message..." />
+          <button id="sendMessage">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
     <footer>
-        <p>&copy; <span id="currentYear"></span> My Notepad. All rights reserved.</p>
+      <p>
+        &copy; <span id="currentYear"></span> My Notepad. All rights reserved.
+      </p>
     </footer>
 
     <script src="{% static 'javascript/authenticated.js' %}"></script>
     <script src="{% static 'javascript/autosave.js' %}"></script>
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
     </script>
     <script>
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-    
-        // Check for saved theme preference or system preference
-        const savedTheme = localStorage.getItem('darkMode');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        // Initialize Quill editor
-        const quill = new Quill('#addTxt', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline'],
-                    ['blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link'],
-                    ['clean']
-                ]
-            },
-            placeholder: 'Type your note content here...'
-        });
-        function setTheme(theme) {
-            if (theme === 'true') {
-                htmlElement.classList.add('dark-theme');
-                themeIcon.classList.replace('fa-moon', 'fa-sun');
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                htmlElement.classList.remove('dark-theme');
-                themeIcon.classList.replace('fa-sun', 'fa-moon');
-                localStorage.setItem('darkMode', 'false');
-            }
+      // Theme Toggle Functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      const htmlElement = document.documentElement;
+
+      // Check for saved theme preference or system preference
+      const savedTheme = localStorage.getItem("darkMode");
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      );
+      // Initialize Quill editor
+      const quill = new Quill("#addTxt", {
+        theme: "snow",
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline"],
+            ["blockquote", "code-block"],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link"],
+            ["clean"],
+          ],
+        },
+        placeholder: "Type your note content here...",
+      });
+      function setTheme(theme) {
+        if (theme === "true") {
+          htmlElement.classList.add("dark-theme");
+          themeIcon.classList.replace("fa-moon", "fa-sun");
+          localStorage.setItem("darkMode", "true");
+        } else {
+          htmlElement.classList.remove("dark-theme");
+          themeIcon.classList.replace("fa-sun", "fa-moon");
+          localStorage.setItem("darkMode", "false");
         }
-    
-        // Initial theme setup
-        if (savedTheme === 'true') {
-            setTheme('true');
-        } else if (savedTheme === 'false') {
-            setTheme('false');
-        } else if (systemPrefersDark.matches) {
-            setTheme('true');
-        }
-    
-        // Theme toggle event listener
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = htmlElement.classList.contains('dark-theme') ? 'true' : 'false';
-            setTheme(currentTheme === 'false' ? 'true' : 'false');
-        });
-    
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+      }
+
+      // Initial theme setup
+      if (savedTheme === "true") {
+        setTheme("true");
+      } else if (savedTheme === "false") {
+        setTheme("false");
+      } else if (systemPrefersDark.matches) {
+        setTheme("true");
+      }
+
+      // Theme toggle event listener
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = htmlElement.classList.contains("dark-theme")
+          ? "true"
+          : "false";
+        setTheme(currentTheme === "false" ? "true" : "false");
+      });
+
+      document.getElementById("currentYear").textContent =
+        new Date().getFullYear();
     </script>
-</body>
+      <script>
+        marked.setOptions({
+        breaks: true,
+        gfm: true,
+        headerIds: false,
+        sanitize: false
+      });
+        // Gemini API Integration
+        const GEMINI_API_KEY = 'AIzaSyCD4SkgWZ2StFJLw52SGkNKozWgzgByXOA';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+  
+        // Chat Widget Functionality
+        const chatWidget = document.getElementById('chatWidget');
+        const chatHeader = document.getElementById('chatHeader');
+        const chatToggle = document.getElementById('chatToggle');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendMessage');
+  
+        // Toggle chat expansion
+        chatHeader.addEventListener('click', () => {
+          chatWidget.classList.toggle('expanded');
+          chatToggle.classList.toggle('fa-chevron-up');
+          chatToggle.classList.toggle('fa-chevron-down');
+        });
+  
+             // Updated sendMessage function
+      async function sendMessage(message) {
+        // Add user message to chat
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'message user-message';
+        userMessageDiv.textContent = message;
+        chatMessages.appendChild(userMessageDiv);
+
+        // Show typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'typing-indicator';
+        typingIndicator.innerHTML = `
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        `;
+        chatMessages.appendChild(typingIndicator);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+          // Call Gemini API
+          const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              contents: [{
+                parts: [{
+                  text: message
+                }]
+              }]
+            })
+          });
+
+          const data = await response.json();
+          
+          // Remove typing indicator
+          typingIndicator.remove();
+
+          // Add bot response to chat with Markdown parsing
+          if (data.candidates && data.candidates[0].content.parts[0].text) {
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot-message';
+            
+            // Parse and render the markdown content
+            const rawText = data.candidates[0].content.parts[0].text;
+            const formattedContent = marked.parse(rawText);
+            
+            // Create a wrapper for the formatted content
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'formatted-content';
+            contentWrapper.innerHTML = formattedContent;
+            
+            // Add the formatted content to the message
+            botMessageDiv.appendChild(contentWrapper);
+            chatMessages.appendChild(botMessageDiv);
+          } else {
+            throw new Error('Invalid response from API');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          typingIndicator.remove();
+          
+          const errorMessageDiv = document.createElement('div');
+          errorMessageDiv.className = 'message bot-message';
+          errorMessageDiv.textContent = 'Sorry, I encountered an error. Please try again.';
+          chatMessages.appendChild(errorMessageDiv);
+        }
+
+        // Scroll to bottom after adding new content
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Handle clipboard operations for code blocks
+      document.addEventListener('click', function(e) {
+        if (e.target.matches('.copy-code-btn')) {
+          const codeBlock = e.target.nextElementSibling;
+          navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+            e.target.textContent = 'Copied!';
+            setTimeout(() => {
+              e.target.textContent = 'Copy';
+            }, 2000);
+          });
+        }
+      });
+
+        // Handle send button click
+        sendButton.addEventListener('click', () => {
+          const message = chatInput.value.trim();
+          if (message) {
+            sendMessage(message);
+            chatInput.value = '';
+          }
+        });
+  
+        // Handle enter key press
+        chatInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const message = chatInput.value.trim();
+            if (message) {
+              sendMessage(message);
+              chatInput.value = '';
+            }
+          }
+        });
+      </script>
+  </body>
 </html>

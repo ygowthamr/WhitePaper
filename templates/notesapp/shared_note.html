@@ -150,8 +150,9 @@
                 </div>
             </div>
             <div class="note-content">
-                {{ shared_note.content }}
+                {{ shared_note.content|safe }}
             </div>
+            
             <div class="tags-container">
                 {% for tag in shared_note.tags %}
                     <p class="note-tag">{{ tag }}</p>
