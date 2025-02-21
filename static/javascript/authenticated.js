@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Quill Editor Initialization
-  const quill = new Quill("#addTxt", {
+    // Get references to key elements
+    const quill = new Quill("#addTxt", {
     theme: "snow",
     modules: {
       toolbar: [
@@ -23,6 +24,73 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: "Type your note here...",
     maxLength: 500,
   });
+  // Voice recognition functionality
+  const voiceBtn = document.getElementById('voice-btn');
+  const statusSpan = document.getElementById('status');
+  let recognition;
+  let isListening = false;
+  
+  // Check if browser supports SpeechRecognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    // Initialize speech recognition
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    
+    // Configure recognition
+    recognition.lang = 'en-US'; // Change this to your preferred language
+    
+    // Handle results
+    recognition.onresult = function(event) {
+      const results = event.results;
+      const transcript = results[results.length - 1][0].transcript;
+      
+      // Get current selection to determine where to insert text
+      const range = quill.getSelection() || { index: quill.getLength(), length: 0 };
+      
+      if (results[results.length - 1].isFinal) {
+        // Insert the final transcript at the current position
+        quill.deleteText(range.index, range.length);
+        quill.insertText(range.index, transcript + ' ', 'api');
+        quill.setSelection(range.index + transcript.length + 1, 0);
+      }
+    };
+    
+    // Event handlers
+    recognition.onstart = function() {
+      statusSpan.textContent = 'Listening...';
+      voiceBtn.textContent = 'Stop Voice Input';
+      isListening = true;
+    };
+    
+    recognition.onend = function() {
+      statusSpan.textContent = '';
+      voiceBtn.textContent = 'Start Voice Input';
+      isListening = false;
+    };
+    
+    recognition.onerror = function(event) {
+      console.error('Speech recognition error:', event.error);
+      statusSpan.textContent = 'Error: ' + event.error;
+      voiceBtn.textContent = 'Start Voice Input';
+      isListening = false;
+    };
+    
+    // Toggle voice recognition
+    voiceBtn.addEventListener('click', function() {
+      if (isListening) {
+        recognition.stop();
+      } else {
+        // Focus the editor before starting recognition
+        quill.focus();
+        recognition.start();
+      }
+    });
+  } else {
+    // Browser doesn't support speech recognition
+    voiceBtn.disabled = true;
+    statusSpan.textContent = 'Speech recognition not supported in this browser.';
+  }
   // Remove any existing click listeners first
   document
     .getElementById("addBtn")
