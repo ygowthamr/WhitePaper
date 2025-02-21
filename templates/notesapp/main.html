@@ -1239,5 +1239,572 @@
           }
         });
       </script>
+      <script>
+        // Keyboard Shortcuts for My Notepad
+document.addEventListener('DOMContentLoaded', function() {
+  // Get references to key elements
+  const quillEditor = Quill.find(document.getElementById('addTxt'));
+  const headingInput = document.getElementById('headingInput');
+  const tagInput = document.getElementById('tagInput');
+  const addBtn = document.getElementById('addBtn');
+  const searchInput = document.getElementById('searchTxt');
+  const themeToggle = document.getElementById('themeToggle');
+  const chatInput = document.getElementById('chatInput');
+  const chatWidget = document.getElementById('chatWidget');
+  const sendMessage = document.getElementById('sendMessage');
+  const protectionToggle = document.getElementById('protectionToggle');
+  const notePasswordField = document.getElementById('notePassword');
+  
+  // Shortcut mappings and descriptions for help modal
+  const shortcuts = {
+    // General application shortcuts
+    'Ctrl+/': 'Show keyboard shortcuts help',
+    'Ctrl+Shift+D': 'Toggle dark/light theme',
+    'Ctrl+Shift+S': 'Save current note',
+    'Ctrl+Shift+F': 'Focus search box',
+    'Escape': 'Clear current selection or focus',
+    'Alt+C': 'Toggle chat widget',
+    
+    // Editor focus and navigation
+    'Ctrl+1': 'Focus note title',
+    'Ctrl+2': 'Focus note content editor',
+    'Ctrl+3': 'Focus tags input',
+    'Ctrl+Enter': 'Save note',
+    
+    // Text formatting (using Quill's built-in shortcuts)
+    'Ctrl+B': 'Bold text',
+    'Ctrl+I': 'Italic text',
+    'Ctrl+U': 'Underline text',
+    'Ctrl+Shift+7': 'Numbered list',
+    'Ctrl+Shift+8': 'Bullet list',
+    'Ctrl+Shift+9': 'Blockquote',
+    'Ctrl+Shift+0': 'Code block',
+    
+    // Custom formatting shortcuts
+    'Ctrl+H': 'Add heading format to selection',
+    'Ctrl+L': 'Insert link',
+    'Ctrl+Shift+C': 'Clear formatting',
+    
+    // Navigation between notes
+    'Alt+ArrowUp': 'Navigate to previous note',
+    'Alt+ArrowDown': 'Navigate to next note',
+    
+    // Note actions
+    'Ctrl+Alt+E': 'Edit selected note',
+    'Ctrl+Alt+D': 'Delete selected note',
+    'Ctrl+Alt+P': 'Toggle password protection',
+    'Ctrl+Alt+S': 'Share selected note',
+    
+    // Search and filter
+    'Ctrl+F': 'Search notes',
+    'Ctrl+Alt+F': 'Clear search/filters',
+    'Ctrl+Alt+T': 'Focus tag filter dropdown',
+    
+    // Security shortcuts
+    'Ctrl+Alt+L': 'Lock/Unlock note'
+  };
+
+  // Track current note selection for navigation
+  let currentlySelectedNote = null;
+  
+  // Create help modal
+  createShortcutsHelpModal();
+  
+  // Main keyboard shortcut handler
+  document.addEventListener('keydown', function(e) {
+    // Skip if user is typing in text inputs (except for specific shortcuts)
+    const isTagInput = e.target === tagInput;
+    const isHeadingInput = e.target === headingInput;
+    const isChatInput = e.target === chatInput;
+    const isSearchInput = e.target === searchInput;
+    const isPasswordInput = e.target === notePasswordField;
+    const isQuillEditor = e.target.closest('.ql-editor') !== null;
+    const isInputField = isTagInput || isHeadingInput || isChatInput || isSearchInput || isPasswordInput;
+    
+    // Show help dialog - works from anywhere
+    if (e.ctrlKey && e.key === '/') {
+      e.preventDefault();
+      toggleShortcutsHelp();
+      return;
+    }
+    
+    // Escape to clear selection or close modals
+    if (e.key === 'Escape') {
+      if (document.querySelector('.help-modal').style.display === 'flex') {
+        document.querySelector('.help-modal').style.display = 'none';
+        return;
+      }
+      
+      if (document.querySelector('.share-popup.active')) {
+        document.querySelector('.share-popup.active').classList.remove('active');
+        return;
+      }
+      
+      if (quillEditor.getSelection()) {
+        quillEditor.setSelection(null);
+        return;
+      }
+      
+      // Focus out of any field
+      if (document.activeElement && document.activeElement !== document.body) {
+        document.activeElement.blur();
+        return;
+      }
+    }
+    
+    // Handle global shortcuts (that work regardless of focus)
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      e.preventDefault();
+      themeToggle.click();
+      return;
+    }
+    
+    if (e.altKey && e.key === 'c') {
+      e.preventDefault();
+      toggleChatWidget();
+      return;
+    }
+    
+    if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+      e.preventDefault();
+      searchInput.focus();
+      return;
+    }
+    
+    // Shortcuts that should work when in input fields
+    if (isInputField || isQuillEditor) {
+      // Allow Ctrl+Enter to save note from any input field
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        addBtn.click();
+        return;
+      }
+      
+      // If in an input field other than the editor, don't process editor shortcuts
+      if (!isQuillEditor) {
+        return;
+      }
+    }
+    
+    // Focus shortcuts
+    if (e.ctrlKey && e.key === '1') {
+      e.preventDefault();
+      headingInput.focus();
+      return;
+    }
+    
+    if (e.ctrlKey && e.key === '2') {
+      e.preventDefault();
+      document.querySelector('.ql-editor').focus();
+      return;
+    }
+    
+    if (e.ctrlKey && e.key === '3') {
+      e.preventDefault();
+      tagInput.focus();
+      return;
+    }
+    
+    // Search shortcut
+    if (e.ctrlKey && e.key === 'f') {
+      e.preventDefault();
+      searchInput.focus();
+      return;
+    }
+    
+    // Custom formatting shortcuts (when in editor)
+    if (isQuillEditor) {
+      // Add heading
+      if (e.ctrlKey && e.key === 'h') {
+        e.preventDefault();
+        formatAsHeading();
+        return;
+      }
+      
+      // Insert link
+      if (e.ctrlKey && e.key === 'l') {
+        e.preventDefault();
+        insertLink();
+        return;
+      }
+      
+      // Clear formatting
+      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        clearFormatting();
+        return;
+      }
+    }
+    
+    // Note navigation
+    if (e.altKey && e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigateNotes('prev');
+      return;
+    }
+    
+    if (e.altKey && e.key === 'ArrowDown') {
+      e.preventDefault();
+      navigateNotes('next');
+      return;
+    }
+    
+    // Note actions (only if not in an input field)
+    if (!isInputField && !isQuillEditor) {
+      // Edit selected note
+      if (e.ctrlKey && e.altKey && e.key === 'e') {
+        e.preventDefault();
+        if (currentlySelectedNote) {
+          editNote(currentlySelectedNote);
+        }
+        return;
+      }
+      
+      // Delete selected note
+      if (e.ctrlKey && e.altKey && e.key === 'd') {
+        e.preventDefault();
+        if (currentlySelectedNote) {
+          deleteNote(currentlySelectedNote);
+        }
+        return;
+      }
+      
+      // Share selected note
+      if (e.ctrlKey && e.altKey && e.key === 's') {
+        e.preventDefault();
+        if (currentlySelectedNote) {
+          shareNote(currentlySelectedNote);
+        }
+        return;
+      }
+      
+      // Toggle password protection
+      if (e.ctrlKey && e.altKey && e.key === 'p') {
+        e.preventDefault();
+        protectionToggle.click();
+        return;
+      }
+      
+      // Focus tag filter
+      if (e.ctrlKey && e.altKey && e.key === 't') {
+        e.preventDefault();
+        document.getElementById('tagFilter').focus();
+        return;
+      }
+      
+      // Clear filters
+      if (e.ctrlKey && e.altKey && e.key === 'f') {
+        e.preventDefault();
+        clearFilters();
+        return;
+      }
+    }
+  });
+  
+  // Mark note cards as selectable and track current selection
+  setupNoteSelection();
+  
+  // Utility functions
+  function toggleShortcutsHelp() {
+    const helpModal = document.querySelector('.help-modal');
+    if (helpModal.style.display === 'flex') {
+      helpModal.style.display = 'none';
+    } else {
+      helpModal.style.display = 'flex';
+    }
+  }
+  
+  function toggleChatWidget() {
+    chatWidget.classList.toggle('expanded');
+    const chatToggle = document.getElementById('chatToggle');
+    chatToggle.classList.toggle('fa-chevron-up');
+    chatToggle.classList.toggle('fa-chevron-down');
+    
+    if (chatWidget.classList.contains('expanded')) {
+      chatInput.focus();
+    }
+  }
+  
+  function setupNoteSelection() {
+    const noteCards = document.querySelectorAll('.note-card');
+    noteCards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Don't select if clicking on a button
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+          return;
+        }
+        
+        // Remove selection from all notes
+        noteCards.forEach(c => c.classList.remove('selected-note'));
+        
+        // Add selection to this note
+        card.classList.add('selected-note');
+        currentlySelectedNote = card;
+      });
+    });
+    
+    // Add selection styling
+    const style = document.createElement('style');
+    style.textContent = `
+      .note-card.selected-note {
+        border-left: 4px solid #f59e0b !important;
+        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  function navigateNotes(direction) {
+    const noteCards = Array.from(document.querySelectorAll('.note-card'));
+    if (!noteCards.length) return;
+    
+    let index = -1;
+    if (currentlySelectedNote) {
+      index = noteCards.indexOf(currentlySelectedNote);
+    }
+    
+    if (direction === 'next') {
+      index = (index + 1) % noteCards.length;
+    } else {
+      index = index <= 0 ? noteCards.length - 1 : index - 1;
+    }
+    
+    // Remove selection from all notes
+    noteCards.forEach(card => card.classList.remove('selected-note'));
+    
+    // Select the new note
+    noteCards[index].classList.add('selected-note');
+    currentlySelectedNote = noteCards[index];
+    
+    // Scroll to the selected note
+    noteCards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  
+  function editNote(noteCard) {
+    const editBtn = noteCard.querySelector('.edit-btn');
+    if (editBtn) editBtn.click();
+  }
+  
+  function deleteNote(noteCard) {
+    if (confirm('Are you sure you want to delete this note?')) {
+      const deleteBtn = noteCard.querySelector('.delete-btn');
+      if (deleteBtn) deleteBtn.click();
+    }
+  }
+  
+  function shareNote(noteCard) {
+    const shareBtn = noteCard.querySelector('.share-btn');
+    if (shareBtn) shareBtn.click();
+  }
+  
+  function clearFilters() {
+    searchInput.value = '';
+    document.getElementById('tagFilter').value = '';
+    const event = new Event('input');
+    searchInput.dispatchEvent(event);
+  }
+  
+  // Editor formatting functions
+  function formatAsHeading() {
+    const selection = quillEditor.getSelection();
+    if (selection) {
+      // Toggle between heading levels (1-3) or remove heading
+      const format = quillEditor.getFormat(selection);
+      let newHeader = 1;
+      
+      if (format.header) {
+        if (format.header < 3) {
+          newHeader = format.header + 1;
+        } else {
+          newHeader = false; // Remove header formatting
+        }
+      }
+      
+      quillEditor.format('header', newHeader);
+    }
+  }
+  
+  function insertLink() {
+    const selection = quillEditor.getSelection();
+    if (selection) {
+      const text = quillEditor.getText(selection.index, selection.length);
+      const url = prompt('Enter the URL for link:', 'http://');
+      
+      if (url) {
+        quillEditor.deleteText(selection.index, selection.length);
+        quillEditor.insertText(selection.index, text, {
+          'link': url
+        });
+        quillEditor.setSelection(selection.index + text.length, 0);
+      }
+    } else {
+      const url = prompt('Enter the URL for link:', 'http://');
+      const linkText = prompt('Enter the text to display:', 'Link text');
+      
+      if (url && linkText) {
+        const range = quillEditor.getSelection() || { index: quillEditor.getLength(), length: 0 };
+        quillEditor.insertText(range.index, linkText, {
+          'link': url
+        });
+        quillEditor.setSelection(range.index + linkText.length, 0);
+      }
+    }
+  }
+  
+  function clearFormatting() {
+    const selection = quillEditor.getSelection();
+    if (selection) {
+      const formats = quillEditor.getFormat(selection);
+      
+      Object.keys(formats).forEach(format => {
+        quillEditor.removeFormat(selection.index, selection.length);
+      });
+    }
+  }
+  
+  // Create help modal for keyboard shortcuts
+  function createShortcutsHelpModal() {
+    const modal = document.createElement('div');
+    modal.className = 'help-modal';
+    modal.style.display = 'none';
+    
+    // Generate shortcuts HTML
+    const shortcutsHtml = Object.entries(shortcuts).map(([key, description]) => {
+      return `<div class="shortcut-item">
+        <span class="shortcut-key">${key}</span>
+        <span class="shortcut-description">${description}</span>
+      </div>`;
+    }).join('');
+    
+    // Create modal content
+    modal.innerHTML = `
+      <div class="help-modal-content">
+        <div class="help-modal-header">
+          <h2>Keyboard Shortcuts</h2>
+          <button class="help-close-btn">&times;</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="shortcuts-list">
+            ${shortcutsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Add modal styles
+    const modalStyle = document.createElement('style');
+    modalStyle.textContent = `
+      .help-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+      
+      .help-modal-content {
+        background-color: var(--surface);
+        border-radius: 12px;
+        width: 800px;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      
+      .help-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      .help-modal-header h2 {
+        margin: 0;
+        color: var(--text);
+        font-size: 1.5rem;
+      }
+      
+      .help-close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+        opacity: 0.7;
+        transition: opacity 0.2s;
+      }
+      
+      .help-close-btn:hover {
+        opacity: 1;
+      }
+      
+      .help-modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: calc(90vh - 60px);
+      }
+      
+      .shortcuts-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1rem;
+      }
+      
+      .shortcut-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+      }
+      
+      .shortcut-key {
+        background-color: var(--background);
+        color: var(--text);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        margin-right: 1rem;
+        font-family: monospace;
+        min-width: 100px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .shortcut-description {
+        color: var(--text);
+        font-size: 0.9rem;
+      }
+      
+      @media (max-width: 600px) {
+        .shortcuts-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    `;
+    
+    document.head.appendChild(modalStyle);
+    document.body.appendChild(modal);
+    
+    // Add event listener for close button
+    const closeBtn = modal.querySelector('.help-close-btn');
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  }
+});
+      </script>
   </body>
 </html>
