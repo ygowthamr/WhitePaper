@@ -172,21 +172,6 @@
             color: var(--secondary);
         }
 
-        #scrollToTopBtn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: none;
-            z-index: 1000;
-        }
-
         .char-count {
             color: var(--secondary);
             font-size: 0.875rem;
@@ -246,7 +231,16 @@
             <div id="notes" class="notes-grid"></div>
         </section>
 
-        <button id="scrollToTopBtn">↑</button>
+        <!-- Top scroll button -->
+    <div id="scrollButton" class="hidden">
+        <div class="outer-circle">
+            <div class="inner-circle">
+                <div class="arrow"><i class="fa-solid fa-arrow-up"></i></div>
+            </div>
+        </div>
+    </div>
+
+
     </main>
 
     <div class="toast" id="toast"></div>
@@ -297,7 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toast: document.getElementById('toast'),
         charCount: document.querySelector('.char-count'),
         themeToggle: document.querySelector('.theme-toggle'),
-        scrollToTopBtn: document.getElementById('scrollToTopBtn')
     };
 
     // Verify all elements exist
@@ -485,7 +478,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.tagInput.value = note.tags.join(', ');
                 elements.saveNoteBtn.textContent = 'Update Note';
                 elements.saveNoteBtn.dataset.editId = id;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
                 notes = notes.filter(n => n.id !== id);
                 localStorage.setItem('notes', JSON.stringify(notes));
                 renderNotes();
@@ -619,28 +611,6 @@ printWindow.document.write(`
 printWindow.document.close();
         }
     }
-    });
-
-    // Scroll to top button functionality
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 200) {
-            elements.scrollToTopBtn.style.display = 'block';
-            elements.scrollToTopBtn.classList.add('fade-in');
-            elements.scrollToTopBtn.classList.remove('fade-out');
-        } else {
-            elements.scrollToTopBtn.classList.add('fade-out');
-            elements.scrollToTopBtn.classList.remove('fade-in');
-            setTimeout(() => {
-                elements.scrollToTopBtn.style.display = 'none';
-            }, 300);
-        }
-    });
-
-    elements.scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
     });
 
     // Keyboard shortcuts
