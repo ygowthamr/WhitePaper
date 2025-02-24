@@ -131,8 +131,9 @@ body {
     position: absolute;
     left: 1rem;
     color: var(--secondary);
-    left:7px;
+    left:14px;
 }
+
 
 /* Main Container */
 .main-container {
