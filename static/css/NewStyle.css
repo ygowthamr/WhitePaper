@@ -464,8 +464,8 @@ body {
 /* Scroll */
 #scrollButton {
     position: fixed;
-    bottom: 40px;
-    left: 15px;
+    bottom: 75px;
+    right: 15px;
     width: 60px;
     height: 60px;
     display: flex;
@@ -490,8 +490,8 @@ body {
     height: 46px;
     border-radius: 50%;
     background: conic-gradient(
-        #80d0c7 0deg,
-        #13547a var(--scroll-progress, 0deg),
+        #0075f4 0deg,
+        #004bee var(--scroll-progress, 0deg),
         #e9363600 var(--scroll-progress, 0deg),
         #b3575700 360deg
     );
