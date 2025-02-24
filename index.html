@@ -13,9 +13,9 @@
     
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <link href="static/css/NewStyle.css" rel="stylesheet">
+    
     <title>Whitepaper - Smart Notes</title>
-     <style>
+    <style>
         :root {
             --background: #f8fafc;
             --surface: #ffffff;
@@ -245,16 +245,9 @@
             <div id="notes" class="notes-grid"></div>
         </section>
 
-        <!-- Top scroll button -->
-    <div id="scrollButton" class="hidden">
-        <div class="outer-circle">
-            <div class="inner-circle">
-                <div class="arrow"><i class="fa-solid fa-arrow-up"></i></div>
-            </div>
-        </div>
-    </div>
+        <button id="scrollToTopBtn">↑</button>
     </main>
-    
+
     <div class="toast" id="toast"></div>
 
     <footer class="footer">
@@ -263,9 +256,7 @@
 
     <!-- Quill Editor -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script src="static/javascript/script.js"></script>
     <script>
-         <script>
         // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Check if editor element exists
@@ -503,8 +494,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (note) {
                 // Open a new print window
                 const printWindow = window.open('', '', 'width=800,height=600');
-            
-        // Write the note content into the new window
+
+// Write the note content into the new window
 printWindow.document.write(`
     <html>
         <head>
@@ -627,8 +618,73 @@ printWindow.document.close();
         }
     }
     });
-    
-    </script>
 
+    // Scroll to top button functionality
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+            elements.scrollToTopBtn.style.display = 'block';
+            elements.scrollToTopBtn.classList.add('fade-in');
+            elements.scrollToTopBtn.classList.remove('fade-out');
+        } else {
+            elements.scrollToTopBtn.classList.add('fade-out');
+            elements.scrollToTopBtn.classList.remove('fade-in');
+            setTimeout(() => {
+                elements.scrollToTopBtn.style.display = 'none';
+            }, 300);
+        }
+    });
+
+    elements.scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            saveNote();
+        }
+    });
+
+    // Auto-save functionality
+    let autoSaveTimeout;
+    quill.on('text-change', () => {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(() => {
+            const content = quill.getText().trim();
+            if (content) {
+                localStorage.setItem('autosave', JSON.stringify({
+                    content: quill.root.innerHTML,
+                    tags: elements.tagInput.value
+                }));
+            }
+        }, 1000);
+    });
+
+    // Restore auto-saved content if exists
+    const autosaved = localStorage.getItem('autosave');
+    if (autosaved) {
+        const { content, tags } = JSON.parse(autosaved);
+        quill.root.innerHTML = content;
+        elements.tagInput.value = tags;
+        updateCharCount();
+    }
+
+    // Set current year in footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Initialize
+    updateTheme();
+    renderNotes();
+    updateCharCount();
+});
+    </script>
+    <!-- Your custom script -->
+    <!-- <script src="../../static/javascript/script.js"></script> -->
+     <script>
+        
+     </script>
 </body>
 </html>
