@@ -68,12 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Verify all elements exist
-    for (const [key, element] of Object.entries(elements)) {
+    /*for (const [key, element] of Object.entries(elements)) {
         if (!element) {
             console.error(`${key} element not found`);
             return;
         }
-    }
+    }*/
 
     // Initialize notes array
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
