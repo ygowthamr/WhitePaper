@@ -106,13 +106,12 @@ body {
 /* Search Bar */
 .search-container {
     display: flex;
-    gap: 1rem;
     align-items: center;
     position: relative;
 }
 
 .search-input {
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    padding-left: 10px;
     border: 2px solid var(--border-color);
     border-radius: 1rem;
     width: 300px;
@@ -130,8 +129,9 @@ body {
 
 .search-icon {
     position: absolute;
-    left: 0.75rem;
+    left: 1rem;
     color: var(--secondary);
+    left:7px;
 }
 
 /* Main Container */
