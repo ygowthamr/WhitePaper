@@ -191,6 +191,9 @@
               <p>{{ note.content }}</p>
             </div>
             <div class="note-actions">
+              <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
+                <i class="fas fa-thumbtack"></i>
+              </button>
               <button class="edit-btn" data-note-id="{{ note.id }}">
                 Edit
               </button>
@@ -1294,6 +1297,216 @@ document.addEventListener('DOMContentLoaded', function() {
   addDrawingButton.addEventListener('click', function() {
     drawingContainer.style.display = 'flex';
     initCanvas();
+  });
+});
+      </script>
+      <script>
+        // Text-to-Speech Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Get reference to Quill editor
+  const quillEditor = Quill.find(document.getElementById('addTxt'));
+  
+  // Create the speaker button
+  const speakerButton = document.createElement('button');
+  speakerButton.id = 'speakerButton';
+  speakerButton.className = 'speak-btn';
+  speakerButton.title = 'Read note aloud';
+  speakerButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+  speakerButton.style.marginRight = '10px';
+  
+  // Add styling for the button
+  const style = document.createElement('style');
+  style.textContent = `
+    .speak-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .speak-btn:hover {
+      background-color: var(--primary-dark, #0056b3);
+    }
+    
+    .speak-btn.speaking {
+      background-color: #e74c3c;
+    }
+    
+    .speak-btn.speaking i {
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .tts-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .tts-rate-control {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+    
+    .tts-rate-control label {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+    
+    .tts-rate-control select {
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Insert button before the Add Note button
+  const addNoteBtn = document.getElementById('addBtn');
+  addNoteBtn.parentNode.insertBefore(speakerButton, addNoteBtn);
+  
+  // Create speech rate control
+  const rateControl = document.createElement('div');
+  rateControl.className = 'tts-controls';
+  rateControl.innerHTML = `
+    <div class="tts-rate-control">
+      <label for="speechRate">Speed:</label>
+      <select id="speechRate">
+        <option value="0.5">0.5x</option>
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    </div>
+  `;
+  speakerButton.parentNode.insertBefore(rateControl, addNoteBtn);
+  
+  // Initialize speech synthesis variables
+  let speechSynthesis = window.speechSynthesis;
+  let utterance = null;
+  let isSpeaking = false;
+  
+  // Function to speak text
+  function speakText() {
+    // If already speaking, stop current speech
+    if (isSpeaking) {
+      stopSpeaking();
+      return;
+    }
+    
+    // Get text from Quill editor
+    const editorContent = quillEditor.getText();
+    
+    if (!editorContent.trim()) {
+      // Show alert if there's no text to read
+      alert('There is no text to read.');
+      return;
+    }
+    
+    // Create speech utterance
+    utterance = new SpeechSynthesisUtterance(editorContent);
+    
+    // Get selected rate
+    const rate = parseFloat(document.getElementById('speechRate').value);
+    utterance.rate = rate;
+    
+    // Set default voice (first available)
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      // Prefer a native voice if available
+      const nativeVoice = voices.find(voice => voice.localService);
+      utterance.voice = nativeVoice || voices[0];
+    }
+    
+    // Set up events
+    utterance.onstart = function() {
+      isSpeaking = true;
+      speakerButton.classList.add('speaking');
+    };
+    
+    utterance.onend = function() {
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+    };
+    
+    utterance.onerror = function(event) {
+      console.error('SpeechSynthesis Error:', event.error);
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+      alert('Speech synthesis error: ' + event.error);
+    };
+    
+    // Start speaking
+    speechSynthesis.speak(utterance);
+  }
+  
+  // Function to stop speaking
+  function stopSpeaking() {
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+    }
+  }
+  
+  // Add click event to speaker button
+  speakerButton.addEventListener('click', speakText);
+  
+  // Handle page visibility changes (pause speech when tab is hidden)
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden && isSpeaking) {
+      speechSynthesis.pause();
+    } else if (isSpeaking) {
+      speechSynthesis.resume();
+    }
+  });
+  
+  // Clean up resources when page is unloaded
+  window.addEventListener('beforeunload', function() {
+    if (isSpeaking) {
+      stopSpeaking();
+    }
+  });
+  
+  // Add keyboard shortcut for text-to-speech (Alt+S)
+  document.addEventListener('keydown', function(e) {
+    if (e.altKey && e.key === 's') {
+      e.preventDefault();
+      speakText();
+    }
+  });
+  
+  // Ensure voices are loaded (sometimes needed for Chrome)
+  function loadVoices() {
+    return new Promise(function(resolve) {
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        resolve(voices);
+      } else {
+        speechSynthesis.onvoiceschanged = function() {
+          resolve(speechSynthesis.getVoices());
+        };
+      }
+    });
+  }
+  
+  // Initialize voices when available
+  loadVoices().then(function(voices) {
+    console.log(`${voices.length} speech synthesis voices loaded.`);
   });
 });
       </script>
