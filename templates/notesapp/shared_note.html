@@ -11,7 +11,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <title>Shared Note - My Notepad</title>
+    <title>{{ shared_note.heading }} - My Notepad</title>
     
     <style>
         :root {
@@ -22,6 +22,8 @@
             --text: #0f172a;
             --secondary: #64748b;
             --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+            --success: #10b981;
+            --error: #ef4444;
         }
 
         * {
@@ -80,24 +82,68 @@
 
         .note-header {
             margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .note-author {
             color: var(--secondary);
             font-size: 0.875rem;
-            margin-bottom: 0.5rem;
+        }
+
+        .note-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .note-title-input {
+            width: 100%;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 0.5rem;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .note-title-input:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         .note-content {
             font-size: 1.125rem;
             line-height: 1.7;
             margin-bottom: 1.5rem;
+            white-space: pre-wrap;
+        }
+
+        .note-content-textarea {
+            width: 100%;
+            font-size: 1.125rem;
+            line-height: 1.7;
+            padding: 0.75rem;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 200px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .note-content-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         .tags-container {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
 
         .note-tag {
@@ -105,6 +151,21 @@
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
             font-size: 0.875rem;
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .tags-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .tags-input:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         .sign-up-prompt {
@@ -116,20 +177,72 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .sign-up-btn {
+        .btn {
             display: inline-block;
-            background: var(--gradient);
-            color: white;
             text-decoration: none;
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
             margin-top: 1rem;
             transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
         }
 
-        .sign-up-btn:hover {
+        .primary-btn {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .primary-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .secondary-btn:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .edit-mode-toggle {
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .save-indicator {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-indicator.success {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            opacity: 1;
+        }
+
+        .save-indicator.error {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+            opacity: 1;
+        }
+
+        .actions-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -148,23 +261,174 @@
                 <div class="note-author">
                     <i class="fas fa-user"></i> Shared by {{ shared_note.author }}
                 </div>
-            </div>
-            <div class="note-content">
-                {{ shared_note.content|safe }}
+                
+                {% if shared_note.can_edit %}
+                <div class="edit-mode-toggle" id="editToggle">
+                    <i class="fas fa-edit"></i> Edit Mode
+                </div>
+                {% endif %}
             </div>
             
-            <div class="tags-container">
-                {% for tag in shared_note.tags %}
-                    <p class="note-tag">{{ tag }}</p>
-                {% endfor %}
+            <!-- View Mode -->
+            <div id="viewMode">
+                <h2 class="note-title">{{ shared_note.heading }}</h2>
+                <div class="note-content">{{ shared_note.content }}</div>
+                
+                <div class="tags-container">
+                    {% for tag in shared_note.tags %}
+                        <p class="note-tag">{{ tag }}</p>
+                    {% endfor %}
+                </div>
             </div>
+            
+            <!-- Edit Mode (initially hidden) -->
+            {% if shared_note.can_edit %}
+            <div id="editMode" style="display: none;">
+                <input type="text" class="note-title-input" id="noteTitle" value="{{ shared_note.heading }}" placeholder="Note title">
+                <textarea class="note-content-textarea" id="noteContent" placeholder="Write your note here...">{{ shared_note.content }}</textarea>
+                
+                <input type="text" class="tags-input" id="noteTags" value="{{ shared_note.tags|join:", " }}" placeholder="Add tags separated by commas">
+                
+                <div class="actions-container">
+                    <span class="save-indicator" id="saveIndicator"></span>
+                    <button class="btn secondary-btn" id="cancelEdit">Cancel</button>
+                    <button class="btn primary-btn" id="saveNote">Save Changes</button>
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <div class="sign-up-prompt">
             <h3>Want to create your own notes?</h3>
             <p>Sign up for My Notepad and start organizing your thoughts today!</p>
-            <a href="/accounts/signup/" class="sign-up-btn">Sign Up Now</a>
+            <a href="/accounts/signup/" class="btn primary-btn">Sign Up Now</a>
         </div>
     </main>
+
+    {% if shared_note.can_edit %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const viewMode = document.getElementById('viewMode');
+            const editMode = document.getElementById('editMode');
+            const editToggle = document.getElementById('editToggle');
+            const cancelEdit = document.getElementById('cancelEdit');
+            const saveNote = document.getElementById('saveNote');
+            const saveIndicator = document.getElementById('saveIndicator');
+            
+            // Initial values for comparison
+            const initialTitle = "{{ shared_note.heading }}";
+            const initialContent = "{{ shared_note.content }}";
+            
+            // Toggle between view and edit modes
+            editToggle.addEventListener('click', function() {
+                viewMode.style.display = 'none';
+                editMode.style.display = 'block';
+            });
+            
+            // Cancel editing and return to view mode
+            cancelEdit.addEventListener('click', function() {
+                // Reset form values to initial state
+                document.getElementById('noteTitle').value = initialTitle;
+                document.getElementById('noteContent').value = initialContent;
+                document.getElementById('noteTags').value = initialTags;
+                
+                // Switch back to view mode
+                editMode.style.display = 'none';
+                viewMode.style.display = 'block';
+            });
+            
+            // Save changes
+            saveNote.addEventListener('click', function() {
+                const noteId = "{{ shared_note.id }}";
+                const heading = document.getElementById('noteTitle').value;
+                const content = document.getElementById('noteContent').value;
+                const tagsInput = document.getElementById('noteTags').value;
+                
+                // Parse tags from comma-separated input
+                const tags = tagsInput.split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+                
+                // Get the token from URL if present
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
+                
+                // Prepare URL with token if available
+                let updateUrl = `/notes/shared/update/${noteId}/`;
+                if (token) {
+                    updateUrl += `?token=${token}`;
+                }
+                
+                // Send update request
+                fetch(updateUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        heading: heading,
+                        note: content,
+                        tags: tags
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the viewed content
+                        document.querySelector('.note-title').textContent = heading;
+                        document.querySelector('.note-content').textContent = content;
+                        
+                        // Update tags container
+                        const tagsContainer = document.querySelector('.tags-container');
+                        tagsContainer.innerHTML = '';
+                        tags.forEach(tag => {
+                            const tagElement = document.createElement('p');
+                            tagElement.className = 'note-tag';
+                            tagElement.textContent = tag;
+                            tagsContainer.appendChild(tagElement);
+                        });
+                        
+                        // Show success message
+                        saveIndicator.textContent = 'Changes saved successfully!';
+                        saveIndicator.className = 'save-indicator success';
+                        
+                        // Switch back to view mode after a delay
+                        setTimeout(() => {
+                            editMode.style.display = 'none';
+                            viewMode.style.display = 'block';
+                            saveIndicator.className = 'save-indicator';
+                        }, 1500);
+                    } else {
+                        // Show error message
+                        saveIndicator.textContent = data.error || 'Error saving changes';
+                        saveIndicator.className = 'save-indicator error';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    saveIndicator.textContent = 'Error saving changes';
+                    saveIndicator.className = 'save-indicator error';
+                });
+            });
+            
+            // Helper function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+    {% endif %}
 </body>
-</html> 
+</html>
