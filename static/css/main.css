@@ -867,3 +867,113 @@
   .dark-theme .pin-btn.pinned:hover {
     background-color: rgba(245, 158, 11, 0.2);
   }
+
+
+  .drawing-tool-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 850px;
+    max-width: 95vw;
+    max-height: 95vh;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .drawing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .drawing-header h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .drawing-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  #drawingCanvas {
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 8px;
+    cursor: crosshair;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .drawing-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  
+  .tool-btn, .close-btn {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  
+  .tool-btn:hover, .close-btn:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .primary-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .primary-btn:hover {
+    background-color: #0069d9;
+  }
+  
+  .secondary-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .secondary-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  #colorPicker {
+    width: 30px;
+    height: 30px;
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+  }
+  
+  #brushSize {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .tool-active {
+    background-color: #e9ecef;
+    border-color: #007bff;
+  }

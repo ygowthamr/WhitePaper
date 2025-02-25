@@ -122,6 +122,28 @@
                 </button>
             </form> -->
       </div>
+      <div class="drawing-tool-container" id="drawingToolContainer" style="display: none;">
+        <div class="drawing-header">
+          <h3><i class="fas fa-paint-brush"></i> Drawing Tool</h3>
+          <div class="drawing-controls">
+            <input type="color" id="colorPicker" value="#000000" aria-label="Color picker">
+            <select id="brushSize" aria-label="Brush size">
+              <option value="1">Small</option>
+              <option value="3" selected>Medium</option>
+              <option value="5">Large</option>
+              <option value="10">Extra Large</option>
+            </select>
+            <button id="eraserTool" class="tool-btn"><i class="fas fa-eraser"></i></button>
+            <button id="clearCanvas" class="tool-btn"><i class="fas fa-trash-alt"></i></button>
+          </div>
+          <button id="closeDrawing" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <canvas id="drawingCanvas" width="800" height="400"></canvas>
+        <div class="drawing-actions">
+          <button id="insertDrawing" class="primary-btn">Insert into Note</button>
+          <button id="cancelDrawing" class="secondary-btn">Cancel</button>
+        </div>
+      </div>
 
       <section class="notes-section">
         <h2
@@ -203,7 +225,7 @@
                       />
                       <button
                         class="copy-link"
-                        onclick="copyShareLink({{ note.id }}, 'long-url')"
+                        onclick="copyShareLink('{{ note.id }}', 'long-url')"
                       >
                         <i class="fas fa-copy"></i>
                       </button>
@@ -219,7 +241,7 @@
                       />
                       <button
                         class="copy-link"
-                        onclick="copyShareLink(${note.id}, 'short-url')"
+                        onclick="copyShareLink('{{ note.id }}', 'short-url')"
                       >
                         <i class="fas fa-copy"></i>
                       </button>
@@ -235,7 +257,7 @@
                     />
                     <button
                       class="download-qr"
-                      onclick="downloadQRCode({{ note.id }})"
+                      onclick="downloadQRCode('{{ note.id }}')"
                     >
                       <i class="fas fa-download"></i> Download QR Code
                     </button>
@@ -297,9 +319,22 @@
             ["link"],
             ["clean"],
           ],
+          handlers: {
+        drawing: function() {
+          document.getElementById('drawingToolContainer').style.display = 'flex';
+        }
+      }
         },
         placeholder: "Type your note content here...",
       });
+      // Add custom drawing button to Quill toolbar
+const toolbar = quill.getModule('toolbar');
+toolbar.addHandler('drawing', function() {
+  document.getElementById('drawingToolContainer').style.display = 'flex';
+});
+
+// Add drawing icon to Quill toolbar
+document.querySelector('.ql-drawing').innerHTML = '<i class="fas fa-paint-brush"></i>';
       function setTheme(theme) {
         if (theme === "true") {
           htmlElement.classList.add("dark-theme");
@@ -1032,6 +1067,234 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+});
+      </script>
+      <script>
+        // Canvas Drawing Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Canvas elements
+  const canvas = document.getElementById('drawingCanvas');
+  const ctx = canvas.getContext('2d');
+  const colorPicker = document.getElementById('colorPicker');
+  const brushSize = document.getElementById('brushSize');
+  const eraserTool = document.getElementById('eraserTool');
+  const clearCanvas = document.getElementById('clearCanvas');
+  const closeDrawing = document.getElementById('closeDrawing');
+  const insertDrawing = document.getElementById('insertDrawing');
+  const cancelDrawing = document.getElementById('cancelDrawing');
+  const drawingContainer = document.getElementById('drawingToolContainer');
+  
+  // Drawing state
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let currentColor = '#000000';
+  let currentSize = 3;
+  let isEraser = false;
+  
+  // Adjust canvas size to container
+  function resizeCanvas() {
+    // Get the width of the container
+    const containerWidth = drawingContainer.clientWidth - 32; // account for padding
+    
+    // Set canvas dimensions while maintaining aspect ratio
+    canvas.width = Math.min(containerWidth, 800);
+    canvas.height = canvas.width * 0.5; // Maintain 2:1 aspect ratio
+    
+    // Clear and reset canvas after resize
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Initialize canvas
+  function initCanvas() {
+    resizeCanvas();
+    
+    // Set initial canvas background to white
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Drawing functions
+  function startDrawing(e) {
+    isDrawing = true;
+    
+    // Get mouse position relative to canvas
+    const rect = canvas.getBoundingClientRect();
+    lastX = e.clientX - rect.left;
+    lastY = e.clientY - rect.top;
+  }
+  
+  function draw(e) {
+    if (!isDrawing) return;
+    
+    // Get current mouse position
+    const rect = canvas.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    
+    // Set drawing properties
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = currentSize;
+    
+    if (isEraser) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = currentColor;
+    }
+    
+    // Draw line
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(currentX, currentY);
+    ctx.stroke();
+    
+    // Update last position
+    lastX = currentX;
+    lastY = currentY;
+  }
+  
+  function stopDrawing() {
+    isDrawing = false;
+  }
+  
+  // Tool functions
+  function setColor(color) {
+    currentColor = color;
+    isEraser = false;
+    eraserTool.classList.remove('tool-active');
+  }
+  
+  function setBrushSize(size) {
+    currentSize = size;
+  }
+  
+  function toggleEraser() {
+    isEraser = !isEraser;
+    
+    if (isEraser) {
+      eraserTool.classList.add('tool-active');
+    } else {
+      eraserTool.classList.remove('tool-active');
+    }
+  }
+  
+  function clearCanvasFunc() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Insert drawing into Quill editor
+  function insertDrawingIntoEditor() {
+    // Convert canvas to image data URL
+    const imageData = canvas.toDataURL('image/png');
+    
+    // Get current Quill editor instance
+    const quillEditor = Quill.find(document.getElementById('addTxt'));
+    
+    // Get current cursor position
+    const range = quillEditor.getSelection() || { index: quillEditor.getLength(), length: 0 };
+    
+    // Insert image at cursor position
+    quillEditor.insertEmbed(range.index, 'image', imageData);
+    
+    // Move cursor after the image
+    quillEditor.setSelection(range.index + 1, 0);
+    
+    // Close drawing tool
+    drawingContainer.style.display = 'none';
+  }
+  
+  // Event listeners
+  window.addEventListener('resize', resizeCanvas);
+  
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  
+  // Touch support for mobile
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousedown', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousemove', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  canvas.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    const mouseEvent = new MouseEvent('mouseup');
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  colorPicker.addEventListener('change', function() {
+    setColor(this.value);
+  });
+  
+  brushSize.addEventListener('change', function() {
+    setBrushSize(this.value);
+  });
+  
+  eraserTool.addEventListener('click', toggleEraser);
+  clearCanvas.addEventListener('click', clearCanvasFunc);
+  
+  insertDrawing.addEventListener('click', insertDrawingIntoEditor);
+  
+  closeDrawing.addEventListener('click', function() {
+    drawingContainer.style.display = 'none';
+  });
+  
+  cancelDrawing.addEventListener('click', function() {
+    drawingContainer.style.display = 'none';
+  });
+  
+  // Add keyboard shortcut for drawing tool (Ctrl+D)
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'd') {
+      e.preventDefault();
+      drawingContainer.style.display = drawingContainer.style.display === 'flex' ? 'none' : 'flex';
+      
+      if (drawingContainer.style.display === 'flex') {
+        initCanvas();
+      }
+    }
+  });
+  
+  // Initialize canvas on first load
+  initCanvas();
+  
+  // Add drawing button to document for testing/alternate access
+  const addDrawingButton = document.createElement('button');
+  addDrawingButton.id = 'openDrawingTool';
+  addDrawingButton.className = 'add-note-btn';
+  addDrawingButton.style.marginRight = '10px';
+  addDrawingButton.innerHTML = '<i class="fas fa-paint-brush"></i> Draw';
+  
+  // Insert before the Add Note button
+  const addNoteBtn = document.getElementById('addBtn');
+  addNoteBtn.parentNode.insertBefore(addDrawingButton, addNoteBtn);
+  
+  // Event listener for the drawing button
+  addDrawingButton.addEventListener('click', function() {
+    drawingContainer.style.display = 'flex';
+    initCanvas();
+  });
 });
       </script>
   </body>
