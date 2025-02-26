@@ -28,784 +28,8 @@
     />
 
     <title>My Notepad</title>
-
-    <style>
-      :root {
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --background: #f8fafc;
-        --surface: #ffffff;
-        --text: #0f172a;
-        --secondary: #64748b;
-        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
-      }
-      /* In the style section, update the :root and add dark-theme */
-      :root {
-        /* Light Theme */
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --background: #f8fafc;
-        --surface: #ffffff;
-        --text: #0f172a;
-        --secondary: #64748b;
-        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
-      }
-
-      :root.dark-theme {
-        --primary: #4f46e5;
-        --primary-dark: #6366f1;
-        --background: #121212;
-        --surface: #1e1e1e;
-        --text: #e2e8f0;
-        --secondary: #a0aec0;
-        --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
-      }
-
-      /* Add theme toggle button styles */
-      .theme-toggle {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: none;
-        border: none;
-        color: var(--text);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-      }
-
-      .theme-toggle:hover {
-        transform: rotate(180deg);
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Inter", sans-serif;
-      }
-
-      body {
-        background-color: var(--background);
-        color: var(--text);
-        line-height: 1.5;
-        min-height: 100vh;
-      }
-
-      /* Header Styles */
-      .header {
-        background-color: var(--surface);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        padding: 1rem 2rem;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .logo {
-        font-size: 1.5rem;
-        font-weight: 700;
-        background: var(--gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .search-container {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-
-      .search-input {
-        padding: 0.75rem 1rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 0.5rem;
-        width: 300px;
-        font-size: 0.875rem;
-        transition: all 0.3s ease;
-      }
-
-      .search-input:focus {
-        border-color: var(--primary);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-
-      .main-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 2rem;
-      }
-
-      .user-info {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 2rem;
-      }
-
-      .user-name {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--text);
-      }
-
-      .logout-btn {
-        padding: 0.5rem 1rem;
-        background: var(--gradient);
-        color: white;
-        border-radius: 0.5rem;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-      }
-
-      .logout-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-      }
-
-      .note-editor {
-        background-color: var(--surface);
-        border-radius: 1rem;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      .heading-input {
-        width: 100%; /* Full width for responsiveness */
-        padding: 10px 15px; /* Adequate padding for comfortable typing */
-        font-size: 18px; /* Larger font size for emphasis */
-        border: 2px solid #ccc; /* Light gray border */
-        border-radius: 8px; /* Rounded corners */
-        margin-bottom: 12px; /* Spacing below the input */
-        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus */
-      }
-
-      .heading-input:focus {
-        border-color: var(
-          --primary
-        ); /* Change border color on focus (using your primary variable) */
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle shadow for focus state */
-        outline: none; /* Remove default outline */
-      }
-
-      .editor-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: var(--text);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .note-textarea {
-        width: 100%;
-        min-height: 200px;
-        padding: 1rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 0.5rem;
-        resize: vertical;
-        margin-bottom: 1rem;
-        font-size: 1rem;
-      }
-
-      .note-textarea:focus {
-        border-color: var(--primary);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-
-      .tag-input {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-        font-size: 0.875rem;
-      }
-
-      .add-note-btn {
-        background: var(--gradient);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-      }
-
-      .add-note-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-      }
-
-      .notes-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
-      }
-
-      .note-card {
-        background-color: var(--surface);
-        border-radius: 0.5rem;
-        padding: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-left: 4px solid var(--primary);
-        position: relative;
-      }
-
-      .note-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Tag Styling */
-      .note-tag {
-        display: inline-block;
-        background: linear-gradient(135deg, #2563eb, #60a5fa);
-        color: white;
-        padding: 6px 14px; /* Increased padding for better appearance */
-        border-radius: 20px; /* Rounder, pill-like shape */
-        font-size: 14px; /* Slightly larger font for readability */
-        margin-right: 8px; /* Increased margin for spacing */
-        margin-top: 6px; /* Adjusted top margin for better spacing */
-
-        text-transform: capitalize; /* Capitalize tag text */
-        transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
-      }
-
-      /* Tag Hover Effect */
-      .note-tag:hover {
-        transform: scale(1.05); /* Slightly enlarge the tag on hover */
-      }
-
-      /* Tags Container Styling */
-      .tags-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2px; /* Add space between tags */
-        margin-top: 10px; /* Add margin for separation from content */
-        padding: 5px 0; /* Vertical padding for tags */
-      }
-
-      footer {
-        background-color: var(--surface);
-        padding: 1.5rem;
-        text-align: center;
-        margin-top: 4rem;
-        border-top: 1px solid #e2e8f0;
-      }
-
-      @media (max-width: 768px) {
-        .header-content {
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .search-input {
-          width: 100%;
-        }
-
-        .main-container {
-          padding: 0 1rem;
-        }
-
-        .notes-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      body {
-        background-color: var(--background);
-        color: var(--text);
-        line-height: 1.5;
-        min-height: 100vh;
-        transition: background-color 0.3s, color 0.3s; /* Add this line */
-      }
-      .note-textarea,
-      .tag-input,
-      .search-input {
-        background-color: var(--surface);
-        color: var(--text);
-        border: 2px solid var(--secondary);
-      }
-
-      .note-card {
-        background-color: var(--surface);
-        color: var(--text);
-        border-left: 4px solid var(--primary);
-      }
-
-      .toast {
-        position: fixed;
-        bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--primary);
-        color: white;
-        padding: 1rem 2rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        animation: fadeIn 0.3s ease-out;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translate(-50%, 1rem);
-        }
-        to {
-          opacity: 1;
-          transform: translate(-50%, 0);
-        }
-      }
-
-      .share-popup {
-        position: absolute;
-        bottom: 30%;
-        right: 0;
-        background: var(--surface);
-        border-radius: 1rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        padding: 1.5rem;
-        z-index: 100;
-        width: 320px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: none;
-      }
-
-      .share-popup.active {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-        pointer-events: auto;
-      }
-
-      .share-popup-content {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .share-option {
-        width: 56px;
-        height: 56px;
-        border-radius: 0.75rem;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        color: white;
-        font-size: 1.5rem;
-      }
-
-      .share-option:hover {
-        transform: translateY(-3px);
-        filter: brightness(1.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .share-link-wrapper {
-        background: var(--background);
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-      }
-
-      .share-link {
-        flex: 1;
-        border: none;
-        background: none;
-        font-size: 0.875rem;
-        padding: 0.25rem;
-        color: var(--text);
-        width: 100%;
-      }
-
-      .copy-link {
-        background: var(--primary);
-        color: white;
-        border: none;
-        width: 32px;
-        height: 32px;
-        border-radius: 0.375rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-      }
-
-      .copy-link:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-      }
-      .share-popup {
-        display: none;
-        position: absolute;
-        bottom: 100%;
-        right: 0;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 1rem;
-        z-index: 1000;
-        width: 320px;
-      }
-
-      .share-popup.active {
-        display: block;
-      }
-
-      .share-popup-content {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .share-option {
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        cursor: pointer;
-        transition: opacity 0.2s;
-      }
-
-      .share-option:hover {
-        opacity: 0.8;
-      }
-
-      .share-url-section {
-        margin-bottom: 1rem;
-      }
-
-      .share-url-section h4 {
-        margin: 0 0 0.5rem 0;
-        font-size: 0.875rem;
-        color: #666;
-      }
-
-      .share-link-wrapper {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .share-link {
-        flex: 1;
-        padding: 0.5rem;
-        border: 1px solid #e2e8f0;
-        border-radius: 4px;
-        font-size: 0.875rem;
-      }
-
-      .copy-link {
-        padding: 0.5rem;
-        border: none;
-        border-radius: 4px;
-        background: #2563eb;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-
-      .copy-link:hover {
-        background: #1d4ed8;
-      }
-
-      .qr-code-section {
-        text-align: center;
-        padding: 1rem;
-        border-top: 1px solid #e2e8f0;
-      }
-
-      .qr-code-section img {
-        margin-bottom: 0.5rem;
-      }
-
-      .download-qr {
-        background: #10b981;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.875rem;
-        transition: background-color 0.2s;
-      }
-
-      .download-qr:hover {
-        background: #059669;
-      }
-    </style>
-     <style>
-        /* Existing styles remain... */
-        
-        /* Chatbot Styles */
-        .chat-widget {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 360px;
-          height: 500px;
-          background-color: var(--surface);
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-          display: flex;
-          flex-direction: column;
-          z-index: 1000;
-          transition: transform 0.3s ease;
-          transform: translateY(430px);
-        }
-  
-        .chat-widget.expanded {
-          transform: translateY(0);
-        }
-  
-        .chat-header {
-          padding: 16px;
-          background: var(--gradient);
-          color: white;
-          border-radius: 12px 12px 0 0;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-  
-        .chat-header h3 {
-          margin: 0;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-  
-        .chat-messages {
-          flex: 1;
-          padding: 16px;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-  
-        .message {
-          max-width: 80%;
-          padding: 10px 14px;
-          border-radius: 14px;
-          font-size: 14px;
-          line-height: 1.4;
-        }
-  
-        .user-message {
-          background: var(--primary);
-          color: white;
-          align-self: flex-end;
-          border-bottom-right-radius: 4px;
-        }
-  
-        .bot-message {
-          background: var(--background);
-          color: var(--text);
-          align-self: flex-start;
-          border-bottom-left-radius: 4px;
-        }
-  
-        .chat-input {
-          padding: 16px;
-          border-top: 1px solid var(--secondary);
-          display: flex;
-          gap: 8px;
-        }
-  
-        .chat-input input {
-          flex: 1;
-          padding: 10px 14px;
-          border: 1px solid var(--secondary);
-          border-radius: 20px;
-          font-size: 14px;
-          background: var(--background);
-          color: var(--text);
-        }
-  
-        .chat-input button {
-          background: var(--primary);
-          color: white;
-          border: none;
-          border-radius: 20px;
-          padding: 10px 20px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-  
-        .chat-input button:hover {
-          background: var(--primary-dark);
-        }
-  
-        .typing-indicator {
-          display: flex;
-          gap: 4px;
-          padding: 8px 14px;
-          background: var(--background);
-          border-radius: 14px;
-          align-self: flex-start;
-        }
-  
-        .typing-dot {
-          width: 8px;
-          height: 8px;
-          background: var(--secondary);
-          border-radius: 50%;
-          animation: typing 1s infinite;
-        }
-  
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-  
-        @keyframes typing {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
-        }
-      </style>
-        <style>
-            /* Previous styles remain... */
-            
-            /* Enhanced Message Formatting Styles */
-            .message {
-              max-width: 85%;
-              padding: 12px 16px;
-              border-radius: 14px;
-              font-size: 14px;
-              line-height: 1.5;
-            }
-      
-            .message h1 {
-              font-size: 1.4em;
-              margin: 0.5em 0;
-              font-weight: bold;
-            }
-      
-            .message h2 {
-              font-size: 1.2em;
-              margin: 0.5em 0;
-              font-weight: bold;
-            }
-      
-            .message h3 {
-              font-size: 1.1em;
-              margin: 0.5em 0;
-              font-weight: bold;
-            }
-      
-            .message p {
-              margin: 0.5em 0;
-            }
-      
-            .message ul, .message ol {
-              margin: 0.5em 0;
-              padding-left: 1.5em;
-            }
-      
-            .message li {
-              margin: 0.25em 0;
-            }
-      
-            .message code {
-              background: rgba(0, 0, 0, 0.1);
-              padding: 2px 4px;
-              border-radius: 4px;
-              font-family: monospace;
-            }
-      
-            .message pre {
-              background: rgba(0, 0, 0, 0.1);
-              padding: 8px;
-              border-radius: 8px;
-              overflow-x: auto;
-              margin: 0.5em 0;
-            }
-      
-            .message em {
-              font-style: italic;
-            }
-      
-            .message strong {
-              font-weight: bold;
-            }
-      
-            .bot-message {
-              background: var(--background);
-              color: var(--text);
-              align-self: flex-start;
-              border-bottom-left-radius: 4px;
-            }
-      
-            .bot-message ul {
-              list-style-type: disc;
-            }
-      
-            .bot-message ol {
-              list-style-type: decimal;
-            }
-      
-            .bot-message * + * {
-              margin-top: 0.5em;
-            }
-      
-            /* Enhance scrollbar styling */
-            .chat-messages::-webkit-scrollbar {
-              width: 6px;
-            }
-      
-            .chat-messages::-webkit-scrollbar-track {
-              background: var(--background);
-            }
-      
-            .chat-messages::-webkit-scrollbar-thumb {
-              background: var(--secondary);
-              border-radius: 3px;
-            }
-          </style>
+<link rel="stylesheet" href="../../static/css/main.css">
+    
   </head>
 
   <body>
@@ -898,6 +122,28 @@
                 </button>
             </form> -->
       </div>
+      <div class="drawing-tool-container" id="drawingToolContainer" style="display: none;">
+        <div class="drawing-header">
+          <h3><i class="fas fa-paint-brush"></i> Drawing Tool</h3>
+          <div class="drawing-controls">
+            <input type="color" id="colorPicker" value="#000000" aria-label="Color picker">
+            <select id="brushSize" aria-label="Brush size">
+              <option value="1">Small</option>
+              <option value="3" selected>Medium</option>
+              <option value="5">Large</option>
+              <option value="10">Extra Large</option>
+            </select>
+            <button id="eraserTool" class="tool-btn"><i class="fas fa-eraser"></i></button>
+            <button id="clearCanvas" class="tool-btn"><i class="fas fa-trash-alt"></i></button>
+          </div>
+          <button id="closeDrawing" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <canvas id="drawingCanvas" width="800" height="400"></canvas>
+        <div class="drawing-actions">
+          <button id="insertDrawing" class="primary-btn">Insert into Note</button>
+          <button id="cancelDrawing" class="secondary-btn">Cancel</button>
+        </div>
+      </div>
 
       <section class="notes-section">
         <h2
@@ -945,6 +191,9 @@
               <p>{{ note.content }}</p>
             </div>
             <div class="note-actions">
+              <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
+                <i class="fas fa-thumbtack"></i>
+              </button>
               <button class="edit-btn" data-note-id="{{ note.id }}">
                 Edit
               </button>
@@ -979,7 +228,7 @@
                       />
                       <button
                         class="copy-link"
-                        onclick="copyShareLink({{ note.id }}, 'long-url')"
+                        onclick="copyShareLink('{{ note.id }}', 'long-url')"
                       >
                         <i class="fas fa-copy"></i>
                       </button>
@@ -995,7 +244,7 @@
                       />
                       <button
                         class="copy-link"
-                        onclick="copyShareLink(${note.id}, 'short-url')"
+                        onclick="copyShareLink('{{ note.id }}', 'short-url')"
                       >
                         <i class="fas fa-copy"></i>
                       </button>
@@ -1011,7 +260,7 @@
                     />
                     <button
                       class="download-qr"
-                      onclick="downloadQRCode({{ note.id }})"
+                      onclick="downloadQRCode('{{ note.id }}')"
                     >
                       <i class="fas fa-download"></i> Download QR Code
                     </button>
@@ -1073,9 +322,22 @@
             ["link"],
             ["clean"],
           ],
+          handlers: {
+        drawing: function() {
+          document.getElementById('drawingToolContainer').style.display = 'flex';
+        }
+      }
         },
         placeholder: "Type your note content here...",
       });
+      // Add custom drawing button to Quill toolbar
+const toolbar = quill.getModule('toolbar');
+toolbar.addHandler('drawing', function() {
+  document.getElementById('drawingToolContainer').style.display = 'flex';
+});
+
+// Add drawing icon to Quill toolbar
+document.querySelector('.ql-drawing').innerHTML = '<i class="fas fa-paint-brush"></i>';
       function setTheme(theme) {
         if (theme === "true") {
           htmlElement.classList.add("dark-theme");
@@ -1808,6 +1070,444 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+});
+      </script>
+      <script>
+        // Canvas Drawing Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Canvas elements
+  const canvas = document.getElementById('drawingCanvas');
+  const ctx = canvas.getContext('2d');
+  const colorPicker = document.getElementById('colorPicker');
+  const brushSize = document.getElementById('brushSize');
+  const eraserTool = document.getElementById('eraserTool');
+  const clearCanvas = document.getElementById('clearCanvas');
+  const closeDrawing = document.getElementById('closeDrawing');
+  const insertDrawing = document.getElementById('insertDrawing');
+  const cancelDrawing = document.getElementById('cancelDrawing');
+  const drawingContainer = document.getElementById('drawingToolContainer');
+  
+  // Drawing state
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let currentColor = '#000000';
+  let currentSize = 3;
+  let isEraser = false;
+  
+  // Adjust canvas size to container
+  function resizeCanvas() {
+    // Get the width of the container
+    const containerWidth = drawingContainer.clientWidth - 32; // account for padding
+    
+    // Set canvas dimensions while maintaining aspect ratio
+    canvas.width = Math.min(containerWidth, 800);
+    canvas.height = canvas.width * 0.5; // Maintain 2:1 aspect ratio
+    
+    // Clear and reset canvas after resize
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Initialize canvas
+  function initCanvas() {
+    resizeCanvas();
+    
+    // Set initial canvas background to white
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Drawing functions
+  function startDrawing(e) {
+    isDrawing = true;
+    
+    // Get mouse position relative to canvas
+    const rect = canvas.getBoundingClientRect();
+    lastX = e.clientX - rect.left;
+    lastY = e.clientY - rect.top;
+  }
+  
+  function draw(e) {
+    if (!isDrawing) return;
+    
+    // Get current mouse position
+    const rect = canvas.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    
+    // Set drawing properties
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = currentSize;
+    
+    if (isEraser) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.strokeStyle = 'rgba(0,0,0,1)';
+    } else {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.strokeStyle = currentColor;
+    }
+    
+    // Draw line
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(currentX, currentY);
+    ctx.stroke();
+    
+    // Update last position
+    lastX = currentX;
+    lastY = currentY;
+  }
+  
+  function stopDrawing() {
+    isDrawing = false;
+  }
+  
+  // Tool functions
+  function setColor(color) {
+    currentColor = color;
+    isEraser = false;
+    eraserTool.classList.remove('tool-active');
+  }
+  
+  function setBrushSize(size) {
+    currentSize = size;
+  }
+  
+  function toggleEraser() {
+    isEraser = !isEraser;
+    
+    if (isEraser) {
+      eraserTool.classList.add('tool-active');
+    } else {
+      eraserTool.classList.remove('tool-active');
+    }
+  }
+  
+  function clearCanvasFunc() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  // Insert drawing into Quill editor
+  function insertDrawingIntoEditor() {
+    // Convert canvas to image data URL
+    const imageData = canvas.toDataURL('image/png');
+    
+    // Get current Quill editor instance
+    const quillEditor = Quill.find(document.getElementById('addTxt'));
+    
+    // Get current cursor position
+    const range = quillEditor.getSelection() || { index: quillEditor.getLength(), length: 0 };
+    
+    // Insert image at cursor position
+    quillEditor.insertEmbed(range.index, 'image', imageData);
+    
+    // Move cursor after the image
+    quillEditor.setSelection(range.index + 1, 0);
+    
+    // Close drawing tool
+    drawingContainer.style.display = 'none';
+  }
+  
+  // Event listeners
+  window.addEventListener('resize', resizeCanvas);
+  
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+  
+  // Touch support for mobile
+  canvas.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousedown', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  canvas.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent('mousemove', {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    });
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  canvas.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    const mouseEvent = new MouseEvent('mouseup');
+    canvas.dispatchEvent(mouseEvent);
+  });
+  
+  colorPicker.addEventListener('change', function() {
+    setColor(this.value);
+  });
+  
+  brushSize.addEventListener('change', function() {
+    setBrushSize(this.value);
+  });
+  
+  eraserTool.addEventListener('click', toggleEraser);
+  clearCanvas.addEventListener('click', clearCanvasFunc);
+  
+  insertDrawing.addEventListener('click', insertDrawingIntoEditor);
+  
+  closeDrawing.addEventListener('click', function() {
+    drawingContainer.style.display = 'none';
+  });
+  
+  cancelDrawing.addEventListener('click', function() {
+    drawingContainer.style.display = 'none';
+  });
+  
+  // Add keyboard shortcut for drawing tool (Ctrl+D)
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'd') {
+      e.preventDefault();
+      drawingContainer.style.display = drawingContainer.style.display === 'flex' ? 'none' : 'flex';
+      
+      if (drawingContainer.style.display === 'flex') {
+        initCanvas();
+      }
+    }
+  });
+  
+  // Initialize canvas on first load
+  initCanvas();
+  
+  // Add drawing button to document for testing/alternate access
+  const addDrawingButton = document.createElement('button');
+  addDrawingButton.id = 'openDrawingTool';
+  addDrawingButton.className = 'add-note-btn';
+  addDrawingButton.style.marginRight = '10px';
+  addDrawingButton.innerHTML = '<i class="fas fa-paint-brush"></i> Draw';
+  
+  // Insert before the Add Note button
+  const addNoteBtn = document.getElementById('addBtn');
+  addNoteBtn.parentNode.insertBefore(addDrawingButton, addNoteBtn);
+  
+  // Event listener for the drawing button
+  addDrawingButton.addEventListener('click', function() {
+    drawingContainer.style.display = 'flex';
+    initCanvas();
+  });
+});
+      </script>
+      <script>
+        // Text-to-Speech Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Get reference to Quill editor
+  const quillEditor = Quill.find(document.getElementById('addTxt'));
+  
+  // Create the speaker button
+  const speakerButton = document.createElement('button');
+  speakerButton.id = 'speakerButton';
+  speakerButton.className = 'speak-btn';
+  speakerButton.title = 'Read note aloud';
+  speakerButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+  speakerButton.style.marginRight = '10px';
+  
+  // Add styling for the button
+  const style = document.createElement('style');
+  style.textContent = `
+    .speak-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .speak-btn:hover {
+      background-color: var(--primary-dark, #0056b3);
+    }
+    
+    .speak-btn.speaking {
+      background-color: #e74c3c;
+    }
+    
+    .speak-btn.speaking i {
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .tts-controls {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .tts-rate-control {
+      display: flex;
+      align-items: center;
+      margin-left: 15px;
+    }
+    
+    .tts-rate-control label {
+      margin-right: 8px;
+      font-size: 14px;
+    }
+    
+    .tts-rate-control select {
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Insert button before the Add Note button
+  const addNoteBtn = document.getElementById('addBtn');
+  addNoteBtn.parentNode.insertBefore(speakerButton, addNoteBtn);
+  
+  // Create speech rate control
+  const rateControl = document.createElement('div');
+  rateControl.className = 'tts-controls';
+  rateControl.innerHTML = `
+    <div class="tts-rate-control">
+      <label for="speechRate">Speed:</label>
+      <select id="speechRate">
+        <option value="0.5">0.5x</option>
+        <option value="0.75">0.75x</option>
+        <option value="1" selected>1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    </div>
+  `;
+  speakerButton.parentNode.insertBefore(rateControl, addNoteBtn);
+  
+  // Initialize speech synthesis variables
+  let speechSynthesis = window.speechSynthesis;
+  let utterance = null;
+  let isSpeaking = false;
+  
+  // Function to speak text
+  function speakText() {
+    // If already speaking, stop current speech
+    if (isSpeaking) {
+      stopSpeaking();
+      return;
+    }
+    
+    // Get text from Quill editor
+    const editorContent = quillEditor.getText();
+    
+    if (!editorContent.trim()) {
+      // Show alert if there's no text to read
+      alert('There is no text to read.');
+      return;
+    }
+    
+    // Create speech utterance
+    utterance = new SpeechSynthesisUtterance(editorContent);
+    
+    // Get selected rate
+    const rate = parseFloat(document.getElementById('speechRate').value);
+    utterance.rate = rate;
+    
+    // Set default voice (first available)
+    const voices = speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      // Prefer a native voice if available
+      const nativeVoice = voices.find(voice => voice.localService);
+      utterance.voice = nativeVoice || voices[0];
+    }
+    
+    // Set up events
+    utterance.onstart = function() {
+      isSpeaking = true;
+      speakerButton.classList.add('speaking');
+    };
+    
+    utterance.onend = function() {
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+    };
+    
+    utterance.onerror = function(event) {
+      console.error('SpeechSynthesis Error:', event.error);
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+      alert('Speech synthesis error: ' + event.error);
+    };
+    
+    // Start speaking
+    speechSynthesis.speak(utterance);
+  }
+  
+  // Function to stop speaking
+  function stopSpeaking() {
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+      isSpeaking = false;
+      speakerButton.classList.remove('speaking');
+    }
+  }
+  
+  // Add click event to speaker button
+  speakerButton.addEventListener('click', speakText);
+  
+  // Handle page visibility changes (pause speech when tab is hidden)
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden && isSpeaking) {
+      speechSynthesis.pause();
+    } else if (isSpeaking) {
+      speechSynthesis.resume();
+    }
+  });
+  
+  // Clean up resources when page is unloaded
+  window.addEventListener('beforeunload', function() {
+    if (isSpeaking) {
+      stopSpeaking();
+    }
+  });
+  
+  // Add keyboard shortcut for text-to-speech (Alt+S)
+  document.addEventListener('keydown', function(e) {
+    if (e.altKey && e.key === 's') {
+      e.preventDefault();
+      speakText();
+    }
+  });
+  
+  // Ensure voices are loaded (sometimes needed for Chrome)
+  function loadVoices() {
+    return new Promise(function(resolve) {
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        resolve(voices);
+      } else {
+        speechSynthesis.onvoiceschanged = function() {
+          resolve(speechSynthesis.getVoices());
+        };
+      }
+    });
+  }
+  
+  // Initialize voices when available
+  loadVoices().then(function(voices) {
+    console.log(`${voices.length} speech synthesis voices loaded.`);
+  });
 });
       </script>
   </body>

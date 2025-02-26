@@ -1,0 +1,979 @@
+
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --secondary: #64748b;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+      }
+      /* In the style section, update the :root and add dark-theme */
+      :root {
+        /* Light Theme */
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --secondary: #64748b;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+      }
+
+      :root.dark-theme {
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --background: #121212;
+        --surface: #1e1e1e;
+        --text: #e2e8f0;
+        --secondary: #a0aec0;
+        --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+      }
+
+      /* Add theme toggle button styles */
+      .theme-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .theme-toggle:hover {
+        transform: rotate(180deg);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+
+      /* Header Styles */
+      .header {
+        background-color: var(--surface);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .search-container {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .search-input {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        width: 300px;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+      }
+
+      .search-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .main-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      .user-info {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .user-name {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text);
+      }
+
+      .logout-btn {
+        padding: 0.5rem 1rem;
+        background: var(--gradient);
+        color: white;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .note-editor {
+        background-color: var(--surface);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .heading-input {
+        width: 100%; /* Full width for responsiveness */
+        padding: 10px 15px; /* Adequate padding for comfortable typing */
+        font-size: 18px; /* Larger font size for emphasis */
+        border: 2px solid #ccc; /* Light gray border */
+        border-radius: 8px; /* Rounded corners */
+        margin-bottom: 12px; /* Spacing below the input */
+        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on focus */
+      }
+
+      .heading-input:focus {
+        border-color: var(
+          --primary
+        ); /* Change border color on focus (using your primary variable) */
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); /* Subtle shadow for focus state */
+        outline: none; /* Remove default outline */
+      }
+
+      .editor-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .note-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        resize: vertical;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+      }
+
+      .note-textarea:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .tag-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+      }
+
+      .add-note-btn {
+        background: var(--gradient);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .add-note-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .note-card {
+        background-color: var(--surface);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 4px solid var(--primary);
+        position: relative;
+      }
+
+      .note-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Tag Styling */
+      .note-tag {
+        display: inline-block;
+        background: linear-gradient(135deg, #2563eb, #60a5fa);
+        color: white;
+        padding: 6px 14px; /* Increased padding for better appearance */
+        border-radius: 20px; /* Rounder, pill-like shape */
+        font-size: 14px; /* Slightly larger font for readability */
+        margin-right: 8px; /* Increased margin for spacing */
+        margin-top: 6px; /* Adjusted top margin for better spacing */
+
+        text-transform: capitalize; /* Capitalize tag text */
+        transition: background-color 0.3s, transform 0.2s ease-in-out; /* Smooth transitions for hover effects */
+      }
+
+      /* Tag Hover Effect */
+      .note-tag:hover {
+        transform: scale(1.05); /* Slightly enlarge the tag on hover */
+      }
+
+      /* Tags Container Styling */
+      .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px; /* Add space between tags */
+        margin-top: 10px; /* Add margin for separation from content */
+        padding: 5px 0; /* Vertical padding for tags */
+      }
+
+      footer {
+        background-color: var(--surface);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 4rem;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      @media (max-width: 768px) {
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .search-input {
+          width: 100%;
+        }
+
+        .main-container {
+          padding: 0 1rem;
+        }
+
+        .notes-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      body {
+        background-color: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+        transition: background-color 0.3s, color 0.3s; /* Add this line */
+      }
+      .note-textarea,
+      .tag-input,
+      .search-input {
+        background-color: var(--surface);
+        color: var(--text);
+        border: 2px solid var(--secondary);
+      }
+
+      .note-card {
+        background-color: var(--surface);
+        color: var(--text);
+        border-left: 4px solid var(--primary);
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, 1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+      }
+
+      .share-popup {
+        position: absolute;
+        bottom: 30%;
+        right: 0;
+        background: var(--surface);
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        padding: 1.5rem;
+        z-index: 100;
+        width: 320px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
+
+      .share-popup.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .share-popup-content {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .share-option {
+        width: 56px;
+        height: 56px;
+        border-radius: 0.75rem;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .share-option:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .share-link-wrapper {
+        background: var(--background);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .share-link {
+        flex: 1;
+        border: none;
+        background: none;
+        font-size: 0.875rem;
+        padding: 0.25rem;
+        color: var(--text);
+        width: 100%;
+      }
+
+      .copy-link {
+        background: var(--primary);
+        color: white;
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .copy-link:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+      .share-popup {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        z-index: 1000;
+        width: 320px;
+      }
+
+      .share-popup.active {
+        display: block;
+      }
+
+      .share-popup-content {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .share-option {
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .share-option:hover {
+        opacity: 0.8;
+      }
+
+      .share-url-section {
+        margin-bottom: 1rem;
+      }
+
+      .share-url-section h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.875rem;
+        color: #666;
+      }
+
+      .share-link-wrapper {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .share-link {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 0.875rem;
+      }
+
+      .copy-link {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 4px;
+        background: #2563eb;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .copy-link:hover {
+        background: #1d4ed8;
+      }
+
+      .qr-code-section {
+        text-align: center;
+        padding: 1rem;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .qr-code-section img {
+        margin-bottom: 0.5rem;
+      }
+
+      .download-qr {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: background-color 0.2s;
+      }
+
+      .download-qr:hover {
+        background: #059669;
+      }
+    
+        /* Existing styles remain... */
+        
+        /* Chatbot Styles */
+        .chat-widget {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 360px;
+          height: 500px;
+          background-color: var(--surface);
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          display: flex;
+          flex-direction: column;
+          z-index: 1000;
+          transition: transform 0.3s ease;
+          transform: translateY(430px);
+        }
+  
+        .chat-widget.expanded {
+          transform: translateY(0);
+        }
+  
+        .chat-header {
+          padding: 16px;
+          background: var(--gradient);
+          color: white;
+          border-radius: 12px 12px 0 0;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+  
+        .chat-header h3 {
+          margin: 0;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+  
+        .chat-messages {
+          flex: 1;
+          padding: 16px;
+          overflow-y: auto;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+  
+        .message {
+          max-width: 80%;
+          padding: 10px 14px;
+          border-radius: 14px;
+          font-size: 14px;
+          line-height: 1.4;
+        }
+  
+        .user-message {
+          background: var(--primary);
+          color: white;
+          align-self: flex-end;
+          border-bottom-right-radius: 4px;
+        }
+  
+        .bot-message {
+          background: var(--background);
+          color: var(--text);
+          align-self: flex-start;
+          border-bottom-left-radius: 4px;
+        }
+  
+        .chat-input {
+          padding: 16px;
+          border-top: 1px solid var(--secondary);
+          display: flex;
+          gap: 8px;
+        }
+  
+        .chat-input input {
+          flex: 1;
+          padding: 10px 14px;
+          border: 1px solid var(--secondary);
+          border-radius: 20px;
+          font-size: 14px;
+          background: var(--background);
+          color: var(--text);
+        }
+  
+        .chat-input button {
+          background: var(--primary);
+          color: white;
+          border: none;
+          border-radius: 20px;
+          padding: 10px 20px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+  
+        .chat-input button:hover {
+          background: var(--primary-dark);
+        }
+  
+        .typing-indicator {
+          display: flex;
+          gap: 4px;
+          padding: 8px 14px;
+          background: var(--background);
+          border-radius: 14px;
+          align-self: flex-start;
+        }
+  
+        .typing-dot {
+          width: 8px;
+          height: 8px;
+          background: var(--secondary);
+          border-radius: 50%;
+          animation: typing 1s infinite;
+        }
+  
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  
+        @keyframes typing {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+    
+            /* Previous styles remain... */
+            
+            /* Enhanced Message Formatting Styles */
+            .message {
+              max-width: 85%;
+              padding: 12px 16px;
+              border-radius: 14px;
+              font-size: 14px;
+              line-height: 1.5;
+            }
+      
+            .message h1 {
+              font-size: 1.4em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message h2 {
+              font-size: 1.2em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message h3 {
+              font-size: 1.1em;
+              margin: 0.5em 0;
+              font-weight: bold;
+            }
+      
+            .message p {
+              margin: 0.5em 0;
+            }
+      
+            .message ul, .message ol {
+              margin: 0.5em 0;
+              padding-left: 1.5em;
+            }
+      
+            .message li {
+              margin: 0.25em 0;
+            }
+      
+            .message code {
+              background: rgba(0, 0, 0, 0.1);
+              padding: 2px 4px;
+              border-radius: 4px;
+              font-family: monospace;
+            }
+      
+            .message pre {
+              background: rgba(0, 0, 0, 0.1);
+              padding: 8px;
+              border-radius: 8px;
+              overflow-x: auto;
+              margin: 0.5em 0;
+            }
+      
+            .message em {
+              font-style: italic;
+            }
+      
+            .message strong {
+              font-weight: bold;
+            }
+      
+            .bot-message {
+              background: var(--background);
+              color: var(--text);
+              align-self: flex-start;
+              border-bottom-left-radius: 4px;
+            }
+      
+            .bot-message ul {
+              list-style-type: disc;
+            }
+      
+            .bot-message ol {
+              list-style-type: decimal;
+            }
+      
+            .bot-message * + * {
+              margin-top: 0.5em;
+            }
+      
+            /* Enhance scrollbar styling */
+            .chat-messages::-webkit-scrollbar {
+              width: 6px;
+            }
+      
+            .chat-messages::-webkit-scrollbar-track {
+              background: var(--background);
+            }
+      
+            .chat-messages::-webkit-scrollbar-thumb {
+              background: var(--secondary);
+              border-radius: 3px;
+            }
+          
+
+
+            /* Pin Notes CSS for main.css */
+
+/* Pin indicator styling */
+.note-card.pinned-note {
+    border-top: 3px solid #f59e0b !important;
+    box-shadow: 0 3px 10px rgba(245, 158, 11, 0.2);
+  }
+  
+  /* Pin button styling */
+  .pin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 5px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    margin-right: 4px;
+  }
+  
+  .pin-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+  }
+  
+  .pin-btn.pinned {
+    color: #f59e0b;
+  }
+  
+  .pin-btn.pinned:hover {
+    background-color: rgba(245, 158, 11, 0.1);
+  }
+  
+  /* Pin animation */
+  @keyframes pin-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  
+  .note-card.pinned-note {
+    animation: pin-bounce 0.5s ease;
+  }
+  
+  /* Pin header decoration */
+  .note-card.pinned-note .note-header {
+    position: relative;
+  }
+  
+  .note-card.pinned-note .note-header::before {
+    content: "Pinned";
+    position: absolute;
+    top: -20px;
+    right: 5px;
+    font-size: 10px;
+    background-color: #f59e0b;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    opacity: 0.8;
+  }
+  
+  /* Responsive adjustments for pin button */
+  @media (max-width: 768px) {
+    .note-actions {
+      flex-wrap: wrap;
+    }
+    
+    .pin-btn {
+      padding: 4px 6px;
+    }
+  }
+  
+  /* Dark theme adjustments */
+  .dark-theme .pin-btn {
+    color: #aaa;
+  }
+  
+  .dark-theme .pin-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ddd;
+  }
+  
+  .dark-theme .pin-btn.pinned {
+    color: #f59e0b;
+  }
+  
+  .dark-theme .pin-btn.pinned:hover {
+    background-color: rgba(245, 158, 11, 0.2);
+  }
+
+
+  .drawing-tool-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 850px;
+    max-width: 95vw;
+    max-height: 95vh;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .drawing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .drawing-header h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .drawing-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  #drawingCanvas {
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 8px;
+    cursor: crosshair;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .drawing-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  
+  .tool-btn, .close-btn {
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  
+  .tool-btn:hover, .close-btn:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .primary-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .primary-btn:hover {
+    background-color: #0069d9;
+  }
+  
+  .secondary-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .secondary-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  #colorPicker {
+    width: 30px;
+    height: 30px;
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+  }
+  
+  #brushSize {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .tool-active {
+    background-color: #e9ecef;
+    border-color: #007bff;
+  }
