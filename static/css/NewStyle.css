@@ -106,13 +106,12 @@ body {
 /* Search Bar */
 .search-container {
     display: flex;
-    gap: 1rem;
     align-items: center;
     position: relative;
 }
 
 .search-input {
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    padding-left: 10px;
     border: 2px solid var(--border-color);
     border-radius: 1rem;
     width: 300px;
@@ -130,9 +129,11 @@ body {
 
 .search-icon {
     position: absolute;
-    left: 0.75rem;
+    left: 1rem;
     color: var(--secondary);
+    left:14px;
 }
+
 
 /* Main Container */
 .main-container {
@@ -459,4 +460,64 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Scroll */
+#scrollButton {
+    position: fixed;
+    bottom: 19px;
+    right: 15px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: opacity 0.7s ease; /* Smooth fade-in effect */
+}
+
+
+#scrollButton.visible {
+    opacity: 1; /* Fully visible */
+    pointer-events: auto; /* Enable interaction */
+}
+
+.outer-circle {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #60a5fa 0deg,
+        #3b82f6 var(--scroll-progress, 0deg),
+        #e9363600 var(--scroll-progress, 0deg),
+        #b3575700 360deg
+    );
+    transform: rotate(-90deg); /* Start animation from top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.inner-circle {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgb(0 0 0 / 66%);
+}
+
+.arrow {
+    font-size: 18px;
+    color: #0075f4;
+    font-weight: 1000; /* Extreme weight for more boldness */
+    text-shadow: 2px 2px 4px rgb(0 0 0 / 45%); /* Add shadow to make it appear thicker */
+    transform: rotate(90deg); /* Fixed direction to the right */
 }
