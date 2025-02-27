@@ -1,3 +1,31 @@
+<!-- Scroll to Top Button -->
+
+const scrollButton = document.getElementById('scrollButton');
+const outerCircle = document.querySelector('.outer-circle');
+const arrow = document.querySelector('.arrow');
+
+// Function to handle scroll behavior
+window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollProgress = (scrollTop / scrollHeight) * 360;
+
+    // Show button after scrolling 7-8 lines (~100px)
+    if (scrollTop > 100) {
+        scrollButton.classList.add('visible');
+    } else {
+        scrollButton.classList.remove('visible');
+    }
+
+    // Update the circular progress
+    outerCircle.style.setProperty('--scroll-progress', `${scrollProgress}deg`);
+});
+
+// Scroll-to-top functionality
+scrollButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Check if editor element exists
@@ -40,12 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Verify all elements exist
-    for (const [key, element] of Object.entries(elements)) {
+    /*for (const [key, element] of Object.entries(elements)) {
         if (!element) {
             console.error(`${key} element not found`);
             return;
         }
-    }
+    }*/
 
     // Initialize notes array
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
@@ -71,37 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('darkMode', isDarkMode.toString());
     }
 
-
-    function printNote(note) {
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Print Note</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 20px; }
-                    h2 { text-align: center; }
-                    .note-content { white-space: pre-wrap; margin-top: 20px; }
-                    .tags { margin-top: 10px; font-size: 0.9em; color: gray; }
-                    .tags span { background: #f0f0f0; padding: 3px 8px; margin-right: 5px; border-radius: 5px; }
-                </style>
-            </head>
-            <body>
-                <h2>${note.title || 'Untitled Note'}</h2>
-                <div class="note-content">${note.content}</div>
-                ${note.tags?.length ? `
-                <div class="tags">
-                    Tags: ${note.tags.map(tag => `<span>${tag}</span>`).join('')}
-                </div>` : ''}
-                <script>
-                    window.onload = function() { window.print(); setTimeout(() => window.close(), 100); };
-                </script>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-    }
-    
     // Save note function
     function saveNote() {
         const content = quill.root.innerHTML.trim();
@@ -138,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCharCount();
         clearAutosave();
     }
+    
 
     // Create note card
     function createNoteCard(note) {
@@ -152,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
-            <button class="btn btn-outline print-btn" data-id="${note.id}">
+                <button class="btn btn-outline print-btn" data-id="${note.id}">
                 <i class="fas fa-print"></i> Print
             </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
@@ -235,8 +233,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     elements.notesContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
-        const editBtn = e.target.closest('.edit-btn');
         const printBtn = e.target.closest('.print-btn'); // New print button
+        const editBtn = e.target.closest('.edit-btn');
         
         if (deleteBtn) {
             const id = Number(deleteBtn.dataset.id);
@@ -259,14 +257,135 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('notes', JSON.stringify(notes));
                 renderNotes();
             }
+        }else if (printBtn) {
+        const id = Number(printBtn.dataset.id);
+        const note = notes.find(note => note.id === id);
+        if (note) {
+                // Open a new print window
+                const printWindow = window.open('', '', 'width=800,height=600');
+
+// Write the note content into the new window
+printWindow.document.write(`
+    <html>
+        <head>
+            <title>Print Note</title>
+            <style>
+                body { 
+                    font-family: Arial, sans-serif; 
+                    padding: 30px;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    line-height: 1.6;
+                }
+                
+                .note-header {
+                    text-align: center;
+                    margin-bottom: 25px;
+                    padding-bottom: 15px;
+                    border-bottom: 2px solid #eaeaea;
+                }
+                
+                h2 { 
+                    margin: 0;
+                    color: #2c3e50;
+                    font-size: 24px;
+                }
+                
+                .timestamp {
+                    color: #7f8c8d;
+                    font-size: 14px;
+                    margin-top: 5px;
+                }
+                
+                .note-content { 
+                    background: #fff;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin: 20px 0;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                }
+                
+                .tags-container {
+                    margin-top: 20px;
+                    padding-top: 15px;
+                    border-top: 1px solid #eaeaea;
+                }
+                
+                .tags-title {
+                    font-weight: bold;
+                    color: #34495e;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+                
+                .tags {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .tag {
+                    background: #f0f2f5;
+                    padding: 5px 12px;
+                    border-radius: 15px;
+                    font-size: 13px;
+                    color: #516175;
+                }
+                
+                @media print {
+                    body {
+                        padding: 20px;
+                    }
+                    
+                    .note-content {
+                        border: none;
+                        box-shadow: none;
+                        padding: 0;
+                    }
+                    
+                    .tags-container {
+                        break-inside: avoid;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="note-header">
+                <h2>${note.title || 'Untitled Note'}</h2>
+                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })}</div>
+            </div>
+            
+            <div class="note-content">${note.content}</div>
+            
+            ${note.tags && note.tags.length ? `
+                <div class="tags-container">
+                    <div class="tags-title">Tags</div>
+                    <div class="tags">
+                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            ` : ''}
+            
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            <\/script>
+        </body>
+    </html>
+`);
+// Close document stream
+printWindow.document.close();
         }
-        else if (printBtn) {
-            const id = Number(printBtn.dataset.id);
-            const note = notes.find(note => note.id === id);
-            if (note) {
-                printNote(note);
-            }
-        }
+    }
     });
 
     // Scroll to top button functionality
