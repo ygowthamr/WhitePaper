@@ -1,11 +1,26 @@
-<!-- Scroll to Top Button -->
+// Theme toggle functionality
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update toggle button icon if it exists
+    const themeIcon = document.querySelector('.theme-toggle i');
+    if (themeIcon) {
+        themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+}
 
-const scrollButton = document.getElementById('scrollButton');
+// const scrollButton = document.getElementById('scrollButton');
 const outerCircle = document.querySelector('.outer-circle');
 const arrow = document.querySelector('.arrow');
 
 // Function to handle scroll behavior
-window.addEventListener('scroll', () => {
+function handleScrollToTop() {
+    if (!scrollButton || !outerCircle) return;
+
     const scrollTop = window.scrollY;
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
     const scrollProgress = (scrollTop / scrollHeight) * 360;
@@ -18,16 +33,29 @@ window.addEventListener('scroll', () => {
     }
 
     // Update the circular progress
-    outerCircle.style.setProperty('--scroll-progress', `${scrollProgress}deg`);
-});
+    if (scrollHeight > 0) {
+        outerCircle.style.setProperty('--scroll-progress', `${scrollProgress}deg`);
+    } else {
+        outerCircle.style.setProperty('--scroll-progress', `0deg`);
+    }
+}
 
 // Scroll-to-top functionality
-scrollButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+if (scrollButton) {
+    scrollButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// Attach the unified scroll listener
+window.addEventListener('scroll', handleScrollToTop);
+
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    const MAX_CHARS = 500;
+    const AUTO_SAVE_DELAY = 1000;
+
     // Check if editor element exists
     const editorElement = document.getElementById('editor');
     if (!editorElement) {
@@ -61,19 +89,16 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput: document.getElementById('searchTxt'),
         sortSelect: document.getElementById('sortNotes'),
         notesContainer: document.getElementById('notes'),
-        toast: document.getElementById('toast'),
+        toastContainer: document.getElementById('toast-container'),
         charCount: document.querySelector('.char-count'),
         themeToggle: document.querySelector('.theme-toggle'),
-        scrollToTopBtn: document.getElementById('scrollToTopBtn')
     };
 
-    // Verify all elements exist
-    /*for (const [key, element] of Object.entries(elements)) {
-        if (!element) {
-            console.error(`${key} element not found`);
-            return;
-        }
-    }*/
+    // Verify critical elements exist
+    if (!elements.saveNoteBtn || !elements.tagInput || !elements.notesContainer || !elements.charCount || !elements.themeToggle) {
+        console.error('One or more critical application elements not found. Stopping initialization.');
+        return;
+    }
 
     // Initialize notes array
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
@@ -99,6 +124,27 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('darkMode', isDarkMode.toString());
     }
 
+    // Show toast message
+    function showToast(message, type = 'success', duration = 3000) {
+        let toastContainer = elements.toastContainer;
+        if (!toastContainer) {
+            const newToastContainer = document.createElement('div');
+            newToastContainer.id = 'toast-container';
+            document.body.appendChild(newToastContainer);
+            toastContainer = newToastContainer;
+        }
+
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('hide');
+            toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+        }, duration);
+    }
+
     // Save note function
     function saveNote() {
         const content = quill.root.innerHTML.trim();
@@ -111,27 +157,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const editId = elements.saveNoteBtn.dataset.editId;
-        const newNote = {
-            id: editId ? Number(editId) : Date.now(),
-            content: content,
-            plainText: plainText,
-            title: plainText.split('\n')[0].slice(0, 50),
-            tags: tags,
-            createdAt: new Date().toISOString()
-        };
+        let newNote;
 
         if (editId) {
+            notes = notes.map(note => {
+                if (note.id === Number(editId)) {
+                    return {
+                        ...note,
+                        content: content,
+                        plainText: plainText,
+                        title: plainText.split('\n')[0].slice(0, 50) || 'Untitled Note',
+                        tags: tags,
+                    };
+                }
+                return note;
+            });
+            showToast('Note updated successfully!', 'success');
             elements.saveNoteBtn.textContent = 'Save Note';
             delete elements.saveNoteBtn.dataset.editId;
+        } else {
+            newNote = {
+                id: Date.now(),
+                content: content,
+                plainText: plainText,
+                title: plainText.split('\n')[0].slice(0, 50) || 'Untitled Note',
+                tags: tags,
+                createdAt: new Date().toISOString()
+            };
+            notes.unshift(newNote);
+            showToast('Note saved successfully!', 'success');
         }
 
-        notes.unshift(newNote);
         localStorage.setItem('notes', JSON.stringify(notes));
         renderNotes();
         
         quill.setText('');
         elements.tagInput.value = '';
-        showToast('Note saved successfully!', 'success');
         updateCharCount();
         clearAutosave();
     }
@@ -154,10 +215,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-print"></i> Print
             </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"></i> Edit
                 </button>
                 <button class="btn btn-outline delete-btn" data-id="${note.id}">
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
         `;
@@ -192,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (sortBy === 'title') {
                 return a.title.localeCompare(b.title);
             } else {
-                return new Date(b.createdAt) - new Date(a.createdAt);
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             }
         });
         renderNotes(sortedNotes);
@@ -200,19 +261,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update character count
     function updateCharCount() {
-        const count = quill.getText().length - 1; // -1 to account for trailing newline
-        elements.charCount.textContent = `Characters: ${count}/500`;
-        elements.charCount.style.color = count > 500 ? '#ef4444' : 'var(--secondary)';
-    }
-
-    // Show toast message
-    function showToast(message, type = 'success') {
-        elements.toast.textContent = message;
-        elements.toast.style.display = 'block';
-        elements.toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
-        setTimeout(() => {
-            elements.toast.style.display = 'none';
-        }, 3000);
+        const count = quill.getText().length - 1;
+        elements.charCount.textContent = `Characters: ${count}/${MAX_CHARS}`;
+        elements.charCount.style.color = count > MAX_CHARS ? '#ef4444' : 'var(--secondary)';
     }
 
     // Clear autosave
@@ -222,18 +273,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listeners
     elements.saveNoteBtn.addEventListener('click', saveNote);
-    elements.searchInput.addEventListener('input', e => searchNotes(e.target.value));
-    elements.sortSelect.addEventListener('change', sortNotes);
-    elements.themeToggle.addEventListener('click', () => {
-        isDarkMode = !isDarkMode;
-        updateTheme();
-    });
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', e => searchNotes(e.target.value));
+    }
+    if (elements.sortSelect) {
+        elements.sortSelect.addEventListener('change', sortNotes);
+    }
+    if (elements.themeToggle) {
+        elements.themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            updateTheme();
+        });
+    }
 
     quill.on('text-change', updateCharCount);
 
     elements.notesContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
-        const printBtn = e.target.closest('.print-btn'); // New print button
+        const printBtn = e.target.closest('.print-btn');
         const editBtn = e.target.closest('.edit-btn');
         
         if (deleteBtn) {
@@ -253,15 +310,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.saveNoteBtn.textContent = 'Update Note';
                 elements.saveNoteBtn.dataset.editId = id;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                notes = notes.filter(n => n.id !== id);
-                localStorage.setItem('notes', JSON.stringify(notes));
-                renderNotes();
             }
         }else if (printBtn) {
         const id = Number(printBtn.dataset.id);
         const note = notes.find(note => note.id === id);
         if (note) {
-                // Open a new print window
                 const printWindow = window.open('', '', 'width=800,height=600');
 
 // Write the note content into the new window
@@ -299,11 +352,8 @@ printWindow.document.write(`
                 
                 .note-content { 
                     background: #fff;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 8px;
                     padding: 20px;
                     margin: 20px 0;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
                 }
                 
                 .tags-container {
@@ -384,35 +434,16 @@ printWindow.document.write(`
 `);
 // Close document stream
 printWindow.document.close();
+        } else {
+            showToast('Note not found for printing.', 'error');
         }
     }
-    });
-
-    // Scroll to top button functionality
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 200) {
-            elements.scrollToTopBtn.style.display = 'block';
-            elements.scrollToTopBtn.classList.add('fade-in');
-            elements.scrollToTopBtn.classList.remove('fade-out');
-        } else {
-            elements.scrollToTopBtn.classList.add('fade-out');
-            elements.scrollToTopBtn.classList.remove('fade-in');
-            setTimeout(() => {
-                elements.scrollToTopBtn.style.display = 'none';
-            }, 300);
-        }
-    });
-
-    elements.scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
             saveNote();
         }
     });
@@ -428,24 +459,35 @@ printWindow.document.close();
                     content: quill.root.innerHTML,
                     tags: elements.tagInput.value
                 }));
+                showToast('Autosaved!', 'info', 1500);
             }
-        }, 1000);
+        }, AUTO_SAVE_DELAY);
     });
 
     // Restore auto-saved content if exists
     const autosaved = localStorage.getItem('autosave');
     if (autosaved) {
-        const { content, tags } = JSON.parse(autosaved);
-        quill.root.innerHTML = content;
-        elements.tagInput.value = tags;
-        updateCharCount();
+        try {
+            const { content, tags } = JSON.parse(autosaved);
+            quill.root.innerHTML = content;
+            elements.tagInput.value = tags;
+            updateCharCount();
+            showToast('Restored autosaved content.', 'info', 2000);
+        } catch (e) {
+            console.error("Error parsing autosaved content:", e);
+            localStorage.removeItem('autosave');
+        }
     }
 
     // Set current year in footer
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    const currentYearElement = document.getElementById('currentYear');
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
 
     // Initialize
     updateTheme();
     renderNotes();
     updateCharCount();
+    handleScrollToTop();
 });
