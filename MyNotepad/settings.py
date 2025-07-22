@@ -47,21 +47,32 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github', 
+    'allauth.socialaccount.providers.google',
 ]
 
 # Set SITE_ID
 SITE_ID = 5  # Required for allauth
 
-# Add GitHub OAuth credentials
+# Add GitHub and Google  OAuth credentials
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'Github OAuth': {
-            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
-            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
-            'key': ''  
+        'APP': {
+            'client_id': '936590138724-ik4e33g2j3p0lutr3q1pujjoik03rjo2.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
         }
+    },
+    'google': {
+        'APP': {
+            'client_id': '1025741254746-8sgb5o6r9gsuq9alaj1d3umtf42dr8ih.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        },
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'}
     }
 }
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default backend
