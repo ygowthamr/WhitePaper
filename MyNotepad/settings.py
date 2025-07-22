@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from pathlib import Path
 
@@ -51,21 +53,21 @@ INSTALLED_APPS = [
 ]
 
 # Set SITE_ID
-SITE_ID = 5  # Required for allauth
+SITE_ID = 5   # Required for allauth
 
 # Add GitHub and Google  OAuth credentials
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'APP': {
-            'client_id': '936590138724-ik4e33g2j3p0lutr3q1pujjoik03rjo2.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.environ.get('GITHUB_CLIENT_ID'),
+            'secret': os.environ.get('GITHUB_CLIENT_SECRET'),
             'key': ''
         }
     },
     'google': {
         'APP': {
-            'client_id': '1025741254746-8sgb5o6r9gsuq9alaj1d3umtf42dr8ih.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+            'secret': os.environ.get('GOOGLE_CLIENT_SECRET'),
             'key': ''
         },
         'SCOPE': ['profile', 'email'],
