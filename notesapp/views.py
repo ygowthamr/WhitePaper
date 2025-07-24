@@ -1,21 +1,13 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from notesapp.models import text
+from django.shortcuts import render, redirect
+from .forms import NoteForm  # import your new form
 
-def index(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        data = text.objects.filter(Uname=username)
-        context = {
-            'Uname': username,
-            'data': data,
-        }
+def create_note(request):
+    if request.method == 'POST':
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('notes:list')  # change to your actual redirect
     else:
-        context = {
-            'Uname': None,
-            'data': None,
-        }
-    if(context['Uname'] is not None):
-        return render(request, 'notesapp/main.html', context)
-    else:
-        return render(request, 'notesapp/index.html', context)
+        form = NoteForm()
+    
+    return render(request, 'notes/create_note.html', {'form': form})
