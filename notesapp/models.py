@@ -1,9 +1,8 @@
-from django.contrib.auth.models import User
-from django.db import models
-from django.db.models.deletion import CASCADE
-from django.contrib.auth.models import User
-from django.db.models.fields import EmailField
+from django.core.exceptions import ValidationError
 
-class text(models.Model):
-    content=models.TextField()
-    Uname = models.CharField(max_length=30)
+def validate_not_blank(value):
+    if not value.strip():
+        raise ValidationError('Note cannot be blank.')
+
+class Note(models.Model):
+    text = models.TextField(validators=[validate_not_blank])
