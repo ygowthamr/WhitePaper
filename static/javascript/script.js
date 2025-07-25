@@ -1,57 +1,4 @@
-// Theme toggle functionality
-function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Update toggle button icon if it exists
-    const themeIcon = document.querySelector('.theme-toggle i');
-    if (themeIcon) {
-        themeIcon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-    }
-}
 
-// const scrollButton = document.getElementById('scrollButton');
-const outerCircle = document.querySelector('.outer-circle');
-const arrow = document.querySelector('.arrow');
-
-// Function to handle scroll behavior
-function handleScrollToTop() {
-    if (!scrollButton || !outerCircle) return;
-
-    const scrollTop = window.scrollY;
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollProgress = (scrollTop / scrollHeight) * 360;
-
-    // Show button after scrolling 7-8 lines (~100px)
-    if (scrollTop > 100) {
-        scrollButton.classList.add('visible');
-    } else {
-        scrollButton.classList.remove('visible');
-    }
-
-    // Update the circular progress
-    if (scrollHeight > 0) {
-        outerCircle.style.setProperty('--scroll-progress', `${scrollProgress}deg`);
-    } else {
-        outerCircle.style.setProperty('--scroll-progress', `0deg`);
-    }
-}
-
-// Scroll-to-top functionality
-if (scrollButton) {
-    scrollButton.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
-
-// Attach the unified scroll listener
-window.addEventListener('scroll', handleScrollToTop);
-
-
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     const MAX_CHARS = 500;
     const AUTO_SAVE_DELAY = 1000;
@@ -89,13 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput: document.getElementById('searchTxt'),
         sortSelect: document.getElementById('sortNotes'),
         notesContainer: document.getElementById('notes'),
-        toastContainer: document.getElementById('toast-container'),
-        charCount: document.querySelector('.char-count'),
-        themeToggle: document.querySelector('.theme-toggle'),
+        toast: document.getElementById('toast'),
+        charCount: document.querySelector('.char-count')
     };
 
     // Verify critical elements exist
-    if (!elements.saveNoteBtn || !elements.tagInput || !elements.notesContainer || !elements.charCount || !elements.themeToggle) {
+    if (!elements.saveNoteBtn || !elements.tagInput || !elements.notesContainer || !elements.charCount || !elements.toast) {
         console.error('One or more critical application elements not found. Stopping initialization.');
         return;
     }
@@ -103,45 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize notes array
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
 
-    // Theme handling
-    let isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    function updateTheme() {
-        const root = document.documentElement;
-        if (isDarkMode) {
-            root.style.setProperty('--background', '#1a1a1a');
-            root.style.setProperty('--surface', '#2d2d2d');
-            root.style.setProperty('--text', '#ffffff');
-            root.style.setProperty('--secondary', '#a1a1aa');
-            elements.themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-        } else {
-            root.style.setProperty('--background', '#f8fafc');
-            root.style.setProperty('--surface', '#ffffff');
-            root.style.setProperty('--text', '#0f172a');
-            root.style.setProperty('--secondary', '#64748b');
-            elements.themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
-        }
-        localStorage.setItem('darkMode', isDarkMode.toString());
-    }
-
     // Show toast message
     function showToast(message, type = 'success', duration = 3000) {
-        let toastContainer = elements.toastContainer;
-        if (!toastContainer) {
-            const newToastContainer = document.createElement('div');
-            newToastContainer.id = 'toast-container';
-            document.body.appendChild(newToastContainer);
-            toastContainer = newToastContainer;
-        }
-
-        const toast = document.createElement("div");
-        toast.className = `toast ${type}`;
+        const toast = elements.toast;
         toast.textContent = message;
-        toastContainer.appendChild(toast);
-
+        toast.style.display = 'block';
+        toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
         setTimeout(() => {
-            toast.classList.add('hide');
-            toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+            toast.style.display = 'none';
         }, duration);
     }
 
@@ -196,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCharCount();
         clearAutosave();
     }
-    
 
     // Create note card
     function createNoteCard(note) {
@@ -212,8 +126,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
                 <button class="btn btn-outline print-btn" data-id="${note.id}">
-                <i class="fas fa-print"></i> Print
-            </button>
+                    <i class="fas fa-print"></i> Print
+                </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
                     <i class="fas fa-edit"></i> Edit
                 </button>
@@ -279,12 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (elements.sortSelect) {
         elements.sortSelect.addEventListener('change', sortNotes);
     }
-    if (elements.themeToggle) {
-        elements.themeToggle.addEventListener('click', () => {
-            isDarkMode = !isDarkMode;
-            updateTheme();
-        });
-    }
 
     quill.on('text-change', updateCharCount);
 
@@ -311,133 +219,116 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.saveNoteBtn.dataset.editId = id;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-        }else if (printBtn) {
-        const id = Number(printBtn.dataset.id);
-        const note = notes.find(note => note.id === id);
-        if (note) {
+        } else if (printBtn) {
+            const id = Number(printBtn.dataset.id);
+            const note = notes.find(note => note.id === id);
+            if (note) {
                 const printWindow = window.open('', '', 'width=800,height=600');
-
-// Write the note content into the new window
-printWindow.document.write(`
-    <html>
-        <head>
-            <title>Print Note</title>
-            <style>
-                body { 
-                    font-family: Arial, sans-serif; 
-                    padding: 30px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    line-height: 1.6;
-                }
-                
-                .note-header {
-                    text-align: center;
-                    margin-bottom: 25px;
-                    padding-bottom: 15px;
-                    border-bottom: 2px solid #eaeaea;
-                }
-                
-                h2 { 
-                    margin: 0;
-                    color: #2c3e50;
-                    font-size: 24px;
-                }
-                
-                .timestamp {
-                    color: #7f8c8d;
-                    font-size: 14px;
-                    margin-top: 5px;
-                }
-                
-                .note-content { 
-                    background: #fff;
-                    padding: 20px;
-                    margin: 20px 0;
-                }
-                
-                .tags-container {
-                    margin-top: 20px;
-                    padding-top: 15px;
-                    border-top: 1px solid #eaeaea;
-                }
-                
-                .tags-title {
-                    font-weight: bold;
-                    color: #34495e;
-                    margin-bottom: 10px;
-                    font-size: 14px;
-                }
-                
-                .tags {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                }
-                
-                .tag {
-                    background: #f0f2f5;
-                    padding: 5px 12px;
-                    border-radius: 15px;
-                    font-size: 13px;
-                    color: #516175;
-                }
-                
-                @media print {
-                    body {
-                        padding: 20px;
-                    }
-                    
-                    .note-content {
-                        border: none;
-                        box-shadow: none;
-                        padding: 0;
-                    }
-                    
-                    .tags-container {
-                        break-inside: avoid;
-                    }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="note-header">
-                <h2>${note.title || 'Untitled Note'}</h2>
-                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}</div>
-            </div>
-            
-            <div class="note-content">${note.content}</div>
-            
-            ${note.tags && note.tags.length ? `
-                <div class="tags-container">
-                    <div class="tags-title">Tags</div>
-                    <div class="tags">
-                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            
-            <script>
-                window.onload = function() {
-                    window.print();
-                    setTimeout(() => window.close(), 500);
-                };
-            <\/script>
-        </body>
-    </html>
-`);
-// Close document stream
-printWindow.document.close();
-        } else {
-            showToast('Note not found for printing.', 'error');
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Print Note</title>
+                            <style>
+                                body { 
+                                    font-family: Arial, sans-serif; 
+                                    padding: 30px;
+                                    max-width: 800px;
+                                    margin: 0 auto;
+                                    line-height: 1.6;
+                                }
+                                .note-header {
+                                    text-align: center;
+                                    margin-bottom: 25px;
+                                    padding-bottom: 15px;
+                                    border-bottom: 2px solid #eaeaea;
+                                }
+                                h2 { 
+                                    margin: 0;
+                                    color: #2c3e50;
+                                    font-size: 24px;
+                                }
+                                .timestamp {
+                                    color: #7f8c8d;
+                                    font-size: 14px;
+                                    margin-top: 5px;
+                                }
+                                .note-content { 
+                                    background: #fff;
+                                    padding: 20px;
+                                    margin: 20px 0;
+                                }
+                                .tags-container {
+                                    margin-top: 20px;
+                                    padding-top: 15px;
+                                    border-top: 1px solid #eaeaea;
+                                }
+                                .tags-title {
+                                    font-weight: bold;
+                                    color: #34495e;
+                                    margin-bottom: 10px;
+                                    font-size: 14px;
+                                }
+                                .tags {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 8px;
+                                }
+                                .tag {
+                                    background: #f0f2f5;
+                                    padding: 5px 12px;
+                                    border-radius: 15px;
+                                    font-size: 13px;
+                                    color: #516175;
+                                }
+                                @media print {
+                                    body {
+                                        padding: 20px;
+                                    }
+                                    .note-content {
+                                        border: none;
+                                        box-shadow: none;
+                                        padding: 0;
+                                    }
+                                    .tags-container {
+                                        break-inside: avoid;
+                                    }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="note-header">
+                                <h2>${note.title || 'Untitled Note'}</h2>
+                                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}</div>
+                            </div>
+                            <div class="note-content">${note.content}</div>
+                            ${note.tags && note.tags.length ? `
+                                <div class="tags-container">
+                                    <div class="tags-title">Tags</div>
+                                    <div class="tags">
+                                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    setTimeout(() => window.close(), 500);
+                                };
+                            </script>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            } else {
+                showToast('Note not found for printing.', 'error');
+            }
         }
-    }
     });
 
     // Keyboard shortcuts
@@ -486,8 +377,6 @@ printWindow.document.close();
     }
 
     // Initialize
-    updateTheme();
     renderNotes();
     updateCharCount();
-    handleScrollToTop();
 });
