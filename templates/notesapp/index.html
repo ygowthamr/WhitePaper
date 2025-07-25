@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,13 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
-    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
     
     <title>Whitepaper - Smart Notes</title>
     <style>
@@ -25,6 +25,31 @@
             --text: #0f172a;
             --secondary: #64748b;
             --primary: #2563eb;
+        }
+
+        [data-theme="dark"] {
+            --background: #1a1a1a;
+            --surface: #2d2d2d;
+            --text: #ffffff;
+            --secondary: #a1a1aa;
+            --primary: #4f46e5;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: rotate(180deg);
         }
 
         body {
@@ -174,19 +199,56 @@
             color: var(--secondary);
         }
 
-        #scrollToTopBtn {
+        /* Scroll to Top Button */
+        #scrollButton {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
             display: none;
             z-index: 1000;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        #scrollButton.visible {
+            display: block;
+        }
+
+        .outer-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(100, 116, 139, 0.3);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: conic-gradient(
+                var(--primary) var(--scroll-progress, 0deg),
+                transparent var(--scroll-progress, 0deg)
+            );
+            transition: background 0.1s linear;
+        }
+
+        .inner-circle {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .inner-circle:hover {
+            background-color: var(--primary);
+        }
+
+        .arrow {
+            color: white;
+            font-size: 1.2em;
         }
 
         .char-count {
@@ -194,139 +256,141 @@
             font-size: 0.875rem;
             margin-top: 0.5rem;
         }
-        /* footer */
-   .footer-body{
-    display: grid;
-    justify-content: center;
-    align-content: end;
-    background: var(--surface);
-    padding: 25px;
-    }
-    footer{
-    position: relative;
-    width:100%;
-    height: auto;
-    background: var(--surface);
-   }
-   .footer-container{
-    width:100%;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    grid-gap:20px;
-    
-}
-.footer-container .sec h2{
-  position: relative;
-  color: var(--text);
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-.footer-container .sec p{
-    color: var(--text);
-   
-}
-.footer-container .social{
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(5,50px);
-}
-.footer-container .social{
-    list-style: none;
-}
-.footer-container .social li a{
- display:inline-block;
- width: 36px;
- height: 36px;
- background:var(--text);
- display: grid;
- align-content: center;
- text-decoration: none;
-}
-.footer-container .social li a i{
-    color:var(--background);
-    font-size: 20px;
-    position: relative;
-    left:10px;
 
-}
+        /* Footer */
+        .footer-body {
+            display: grid;
+            justify-content: center;
+            align-content: end;
+            background: var(--surface);
+            padding: 25px;
+        }
 
-/* quick links and support combine*/
-.footer-container .quicklinks{
-    position: relative;
-   
+        footer {
+            position: relative;
+            width: 100%;
+            height: auto;
+            background: var(--surface);
+        }
 
-}
+        .footer-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-gap: 20px;
+        }
 
-.footer-container .quicklinks ul li{
-  list-style: none;
-  position: relative;
-  left:-35px;
-}
-.footer-container .quicklinks ul li a{
-    color:var(--text);
-    text-decoration: none;
-    margin-bottom: 10px;
-    display: inline-block;
-}
+        .footer-container .sec h2 {
+            position: relative;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
 
-/*  contact */
-.footer-container .contact .info{
-  
-  position: relative;
-  left:-35px;
+        .footer-container .sec p {
+            color: var(--text);
+        }
 
-}
-.footer-container .contact .info li{
-    display: grid;
-    grid-template-columns: 30px 1fr;
-    margin-bottom: 16px;
-}
-.footer-container .contact .info li span{
- color:var(--text);
- font-size: 15px;
- 
-}
-.footer-container .contact .info li a{
-    color:var(--text);
-    text-decoration: none;
-}
-/* media */
-@media(max-width:991px){
-   footer{
-    padding: 40px;
-   }
-   .footer-container{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    grid-gap: 20px;
-   }
-}
+        .footer-container .social {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+        }
 
-@media(max-width:768px){
-    .footer-container{
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(1,1fr);
-        grid-gap: 20px;
-       }
-}
+        .footer-container .social {
+            list-style: none;
+        }
 
-/* footer */
-.footer-container .quicklinks li a:hover{
-   color:var( --primary);
-   position: relative;
-   left:5px;
-}
-.location:hover,.call:hover,.mail:hover{
-   
-   position: relative;
-   left:5px;
-}
-.footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
-    color:var( --primary);
-}
+        .footer-container .social li a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: var(--text);
+            display: grid;
+            align-content: center;
+            text-decoration: none;
+        }
 
+        .footer-container .social li a i {
+            color: var(--background);
+            font-size: 20px;
+            position: relative;
+            left: 10px;
+        }
+
+        .footer-container .quicklinks {
+            position: relative;
+        }
+
+        .footer-container .quicklinks ul li {
+            list-style: none;
+            position: relative;
+            left: -35px;
+        }
+
+        .footer-container .quicklinks ul li a {
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .footer-container .contact .info {
+            position: relative;
+            left: -35px;
+        }
+
+        .footer-container .contact .info li {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            margin-bottom: 16px;
+        }
+
+        .footer-container .contact .info li span {
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .footer-container .contact .info li a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        @media (max-width: 991px) {
+            footer {
+                padding: 40px;
+            }
+            .footer-container {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                grid-gap: 20px;
+            }
+        }
+
+        .footer-container .quicklinks li a:hover {
+            color: var(--primary);
+            position: relative;
+            left: 5px;
+        }
+
+        .location:hover, .call:hover, .mail:hover {
+            position: relative;
+            left: 5px;
+        }
+
+        .footer-container .contact .info li i:hover, .footer-container .contact .info li a:hover {
+            color: var(--primary);
+        }
     </style>
 </head>
 
@@ -381,7 +445,13 @@
             <div id="notes" class="notes-grid"></div>
         </section>
 
-        <button id="scrollToTopBtn">↑</button>
+        <div id="scrollButton" class="hidden">
+            <div class="outer-circle">
+                <div class="inner-circle">
+                    <div class="arrow"><i class="fa-solid fa-arrow-up"></i></div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <div class="toast" id="toast"></div>
@@ -389,496 +459,62 @@
     <footer>
         <div class="footer-body">
             <div class="footer-container">
-               <!---discript-->
-               <div class="sec discript">
-                   
-                   <a href="/" class="logo">
-                       <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper</a>
-                   </a>
-                   <p>
-                       A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
-                   </p>
-                   <!--icons-->
-   
-                   <ul class="social">
-                       <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
-                       <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
-                       <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
-                       <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
-                       <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
-                   </ul>
-               </div>
-   
-                <!--Quick links_--->
+                <div class="sec discript">
+                    <a href="/" class="logo">
+                        <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper
+                    </a>
+                    <p>
+                        A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
+                    </p>
+                    <ul class="social">
+                        <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
+                        <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
+                        <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
+                        <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+                    </ul>
+                </div>
                 <div class="sec quicklinks">
-                   <h2>Quick Links</h2>
-                   <ul>
-                       <li><a href="#" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
-                       </li>
-                       <li><a href="#" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
-                       <li><a href="#note-editor" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
-                       <li><a href="#sortednotes" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
-                   </ul>
-               </div>
-   
-                <!--support-->
+                    <h2>Quick Links</h2>
+                    <ul>
+                        <li><a href="#" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a></li>
+                        <li><a href="#" class="link"><i class="fa-solid fa-circle-info" style="padding-right: 5px;"></i>About Us</a></li>
+                        <li><a href="#note-editor" class="link"><i class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                        <li><a href="#sortednotes" class="link"><i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+                    </ul>
+                </div>
                 <div class="sec quicklinks">
-                   <h2>Support</h2>
-                   <ul>
-                       <li><a href="#">Terms & Conditions</a></li>
-                       <li><a href="#">Privacy Policy</a></li>
-                       <li><a href="#">FAQ</a></li>
-                   </ul>
-               </div>
-               <!--contact-->
-               <div class="sec contact">
-                   <h2>Contact</h2>
-                   <ul class="info">
-                       <li class="location">
-                           <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
-                       <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
-                       <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
-                   </ul>
-               </div>
-           </div>
-             </div>
-           </div>
-
-
-        <p class="footer">&copy; <span id="currentYear"></span> Whitepaper. All rights reserved.</p>
+                    <h2>Support</h2>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="sec contact">
+                    <h2>Contact</h2>
+                    <ul class="info">
+                        <li class="location">
+                            <span><i class="fa-solid fa-location-dot"></i></span>India
+                        </li>
+                        <li class="call">
+                            <span><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a>
+                        </li>
+                        <li class="mail">
+                            <span><i class="fa-solid fa-envelope"></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="footer">© <span id="currentYear"></span> Whitepaper. All rights reserved.</p>
     </footer>
 
     <!-- Quill Editor -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <script>
-        // Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if editor element exists
-    const editorElement = document.getElementById('editor');
-    if (!editorElement) {
-        console.error('Editor element not found');
-        return;
-    }
-
-    // Initialize Quill editor
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'font': [] }, { 'size': [] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'script': 'sub' }, { 'script': 'super' }],
-                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ]
-        },
-        placeholder: 'Type your note here...',
-    });
-
-    // Initialize elements
-    const elements = {
-        saveNoteBtn: document.getElementById('saveNoteBtn'),
-        tagInput: document.getElementById('tagInput'),
-        searchInput: document.getElementById('searchTxt'),
-        sortSelect: document.getElementById('sortNotes'),
-        notesContainer: document.getElementById('notes'),
-        toast: document.getElementById('toast'),
-        charCount: document.querySelector('.char-count'),
-        themeToggle: document.querySelector('.theme-toggle'),
-        scrollToTopBtn: document.getElementById('scrollToTopBtn')
-    };
-
-    // Verify all elements exist
-    for (const [key, element] of Object.entries(elements)) {
-        if (!element) {
-            console.error(`${key} element not found`);
-            return;
-        }
-    }
-
-    // Initialize notes array
-    let notes = JSON.parse(localStorage.getItem('notes') || '[]');
-
-    // Theme handling
-    let isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    function updateTheme() {
-        const root = document.documentElement;
-        if (isDarkMode) {
-            root.style.setProperty('--background', '#1a1a1a');
-            root.style.setProperty('--surface', '#2d2d2d');
-            root.style.setProperty('--text', '#ffffff');
-            root.style.setProperty('--secondary', '#a1a1aa');
-            elements.themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-        } else {
-            root.style.setProperty('--background', '#f8fafc');
-            root.style.setProperty('--surface', '#ffffff');
-            root.style.setProperty('--text', '#0f172a');
-            root.style.setProperty('--secondary', '#64748b');
-            elements.themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
-        }
-        localStorage.setItem('darkMode', isDarkMode.toString());
-    }
-
-    // Save note function
-    function saveNote() {
-        const content = quill.root.innerHTML.trim();
-        const plainText = quill.getText().trim();
-        const tags = elements.tagInput.value.split(',').map(tag => tag.trim()).filter(Boolean);
-
-        if (!plainText) {
-            showToast('Please enter some content', 'error');
-            return;
-        }
-
-        const editId = elements.saveNoteBtn.dataset.editId;
-        const newNote = {
-            id: editId ? Number(editId) : Date.now(),
-            content: content,
-            plainText: plainText,
-            title: plainText.split('\n')[0].slice(0, 50),
-            tags: tags,
-            createdAt: new Date().toISOString()
-        };
-
-        if (editId) {
-            elements.saveNoteBtn.textContent = 'Save Note';
-            delete elements.saveNoteBtn.dataset.editId;
-        }
-
-        notes.unshift(newNote);
-        localStorage.setItem('notes', JSON.stringify(notes));
-        renderNotes();
-        
-        quill.setText('');
-        elements.tagInput.value = '';
-        showToast('Note saved successfully!', 'success');
-        updateCharCount();
-        clearAutosave();
-    }
-    
-
-    // Create note card
-    function createNoteCard(note) {
-        const div = document.createElement('div');
-        div.className = 'note-card';
-        div.innerHTML = `
-            <h3 class="note-title">${note.title || 'Untitled Note'}</h3>
-            <div class="note-content">${note.content}</div>
-            ${note.tags?.length ? `
-            <div class="tags">
-                ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            ` : ''}
-            <div class="note-actions" style="margin-top: 1rem;">
-                <button class="btn btn-outline print-btn" data-id="${note.id}">
-                <i class="fas fa-print"></i> Print
-            </button>
-                <button class="btn btn-outline edit-btn" data-id="${note.id}">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-outline delete-btn" data-id="${note.id}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-        return div;
-    }
-
-    // Render notes
-    function renderNotes(notesToRender = notes) {
-        elements.notesContainer.innerHTML = '';
-        if (notesToRender.length === 0) {
-            elements.notesContainer.innerHTML = '<p style="text-align: center; color: var(--secondary);">No notes found. Create your first note above!</p>';
-            return;
-        }
-        notesToRender.forEach(note => {
-            elements.notesContainer.appendChild(createNoteCard(note));
-        });
-    }
-
-    // Search notes
-    function searchNotes(query) {
-        const filteredNotes = notes.filter(note => 
-            note.plainText.toLowerCase().includes(query.toLowerCase()) ||
-            note.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-        );
-        renderNotes(filteredNotes);
-    }
-
-    // Sort notes
-    function sortNotes() {
-        const sortBy = elements.sortSelect.value;
-        const sortedNotes = [...notes].sort((a, b) => {
-            if (sortBy === 'title') {
-                return a.title.localeCompare(b.title);
-            } else {
-                return new Date(b.createdAt) - new Date(a.createdAt);
-            }
-        });
-        renderNotes(sortedNotes);
-    }
-
-    // Update character count
-    function updateCharCount() {
-        const count = quill.getText().length - 1; // -1 to account for trailing newline
-        elements.charCount.textContent = `Characters: ${count}/500`;
-        elements.charCount.style.color = count > 500 ? '#ef4444' : 'var(--secondary)';
-    }
-
-    // Show toast message
-    function showToast(message, type = 'success') {
-        elements.toast.textContent = message;
-        elements.toast.style.display = 'block';
-        elements.toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
-        setTimeout(() => {
-            elements.toast.style.display = 'none';
-        }, 3000);
-    }
-
-    // Clear autosave
-    function clearAutosave() {
-        localStorage.removeItem('autosave');
-    }
-
-    // Event listeners
-    elements.saveNoteBtn.addEventListener('click', saveNote);
-    elements.searchInput.addEventListener('input', e => searchNotes(e.target.value));
-    elements.sortSelect.addEventListener('change', sortNotes);
-    elements.themeToggle.addEventListener('click', () => {
-        isDarkMode = !isDarkMode;
-        updateTheme();
-    });
-
-    quill.on('text-change', updateCharCount);
-
-    elements.notesContainer.addEventListener('click', (e) => {
-        const deleteBtn = e.target.closest('.delete-btn');
-        const printBtn = e.target.closest('.print-btn'); // New print button
-        const editBtn = e.target.closest('.edit-btn');
-        
-        if (deleteBtn) {
-            const id = Number(deleteBtn.dataset.id);
-            if (confirm('Are you sure you want to delete this note?')) {
-                notes = notes.filter(note => note.id !== id);
-                localStorage.setItem('notes', JSON.stringify(notes));
-                renderNotes();
-                showToast('Note deleted successfully!', 'success');
-            }
-        } else if (editBtn) {
-            const id = Number(editBtn.dataset.id);
-            const note = notes.find(note => note.id === id);
-            if (note) {
-                quill.root.innerHTML = note.content;
-                elements.tagInput.value = note.tags.join(', ');
-                elements.saveNoteBtn.textContent = 'Update Note';
-                elements.saveNoteBtn.dataset.editId = id;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                notes = notes.filter(n => n.id !== id);
-                localStorage.setItem('notes', JSON.stringify(notes));
-                renderNotes();
-            }
-        }else if (printBtn) {
-        const id = Number(printBtn.dataset.id);
-        const note = notes.find(note => note.id === id);
-        if (note) {
-                // Open a new print window
-                const printWindow = window.open('', '', 'width=800,height=600');
-
-// Write the note content into the new window
-printWindow.document.write(`
-    <html>
-        <head>
-            <title>Print Note</title>
-            <style>
-                body { 
-                    font-family: Arial, sans-serif; 
-                    padding: 30px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    line-height: 1.6;
-                }
-                
-                .note-header {
-                    text-align: center;
-                    margin-bottom: 25px;
-                    padding-bottom: 15px;
-                    border-bottom: 2px solid #eaeaea;
-                }
-                
-                h2 { 
-                    margin: 0;
-                    color: #2c3e50;
-                    font-size: 24px;
-                }
-                
-                .timestamp {
-                    color: #7f8c8d;
-                    font-size: 14px;
-                    margin-top: 5px;
-                }
-                
-                .note-content { 
-                    background: #fff;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 8px;
-                    padding: 20px;
-                    margin: 20px 0;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                }
-                
-                .tags-container {
-                    margin-top: 20px;
-                    padding-top: 15px;
-                    border-top: 1px solid #eaeaea;
-                }
-                
-                .tags-title {
-                    font-weight: bold;
-                    color: #34495e;
-                    margin-bottom: 10px;
-                    font-size: 14px;
-                }
-                
-                .tags {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                }
-                
-                .tag {
-                    background: #f0f2f5;
-                    padding: 5px 12px;
-                    border-radius: 15px;
-                    font-size: 13px;
-                    color: #516175;
-                }
-                
-                @media print {
-                    body {
-                        padding: 20px;
-                    }
-                    
-                    .note-content {
-                        border: none;
-                        box-shadow: none;
-                        padding: 0;
-                    }
-                    
-                    .tags-container {
-                        break-inside: avoid;
-                    }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="note-header">
-                <h2>${note.title || 'Untitled Note'}</h2>
-                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}</div>
-            </div>
-            
-            <div class="note-content">${note.content}</div>
-            
-            ${note.tags && note.tags.length ? `
-                <div class="tags-container">
-                    <div class="tags-title">Tags</div>
-                    <div class="tags">
-                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            
-            <script>
-                window.onload = function() {
-                    window.print();
-                    setTimeout(() => window.close(), 500);
-                };
-            <\/script>
-        </body>
-    </html>
-`);
-// Close document stream
-printWindow.document.close();
-        }
-    }
-    });
-
-    // Scroll to top button functionality
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 200) {
-            elements.scrollToTopBtn.style.display = 'block';
-            elements.scrollToTopBtn.classList.add('fade-in');
-            elements.scrollToTopBtn.classList.remove('fade-out');
-        } else {
-            elements.scrollToTopBtn.classList.add('fade-out');
-            elements.scrollToTopBtn.classList.remove('fade-in');
-            setTimeout(() => {
-                elements.scrollToTopBtn.style.display = 'none';
-            }, 300);
-        }
-    });
-
-    elements.scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'Enter') {
-            saveNote();
-        }
-    });
-
-    // Auto-save functionality
-    let autoSaveTimeout;
-    quill.on('text-change', () => {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = setTimeout(() => {
-            const content = quill.getText().trim();
-            if (content) {
-                localStorage.setItem('autosave', JSON.stringify({
-                    content: quill.root.innerHTML,
-                    tags: elements.tagInput.value
-                }));
-            }
-        }, 1000);
-    });
-
-    // Restore auto-saved content if exists
-    const autosaved = localStorage.getItem('autosave');
-    if (autosaved) {
-        const { content, tags } = JSON.parse(autosaved);
-        quill.root.innerHTML = content;
-        elements.tagInput.value = tags;
-        updateCharCount();
-    }
-
-    // Set current year in footer
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-    // Initialize
-    updateTheme();
-    renderNotes();
-    updateCharCount();
-});
-    </script>
-    <!-- Your custom script -->
-    <!-- <script src="../../static/javascript/script.js"></script> -->
-     <script>
-        
-     </script>
+    <!-- Common script for theme and scroll -->
+    <script src="../../static/javascript/common.js"></script>
+    <!-- Note-taking script -->
+    <script src="../../static/javascript/script.js"></script>
 </body>
 </html>
