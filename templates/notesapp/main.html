@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -289,7 +288,6 @@
         <div class="user-info">
             <div class="user-name">
                 <i class="fas fa-user"></i>
-                {{Uname}}
             </div>
             <a href="/accounts/logout/" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
@@ -397,19 +395,19 @@
             </div>
 
             <div id="notes" class="notes-grid">
-                {% if user.is_authenticated %} {% for note in data %}
+
                 <div class="note-card" style="overflow: hidden;">
                     <div class="note-header">
                         <i class="fas fa-sticky-note"></i>
-                        <strong>{{ note.heading }}</strong>
+                        <strong></strong>
                         <div class="tags-container">
-                            {% for tag in note.tags.all %}
-                            <span class="tag">{{ tag.name }}</span>
-                            {% endfor %}
+                            
+                            <span class="tag"></span>
+                
                         </div>
                     </div>
                     <div class="note-content">
-                        <p>{{ note.content }}</p>
+                        <!-- <p>{{ note.content }}</p> -->
                     </div>
                     <div class="note-actions">
                         <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
