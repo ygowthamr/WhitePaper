@@ -1,33 +1,8 @@
-<!-- Scroll to Top Button -->
 
-const scrollButton = document.getElementById('scrollButton');
-const outerCircle = document.querySelector('.outer-circle');
-const arrow = document.querySelector('.arrow');
-
-// Function to handle scroll behavior
-window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollProgress = (scrollTop / scrollHeight) * 360;
-
-    // Show button after scrolling 7-8 lines (~100px)
-    if (scrollTop > 100) {
-        scrollButton.classList.add('visible');
-    } else {
-        scrollButton.classList.remove('visible');
-    }
-
-    // Update the circular progress
-    outerCircle.style.setProperty('--scroll-progress', `${scrollProgress}deg`);
-});
-
-// Scroll-to-top functionality
-scrollButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    const MAX_CHARS = 500;
+    const AUTO_SAVE_DELAY = 1000;
+
     // Check if editor element exists
     const editorElement = document.getElementById('editor');
     if (!editorElement) {
@@ -62,41 +37,27 @@ document.addEventListener('DOMContentLoaded', function() {
         sortSelect: document.getElementById('sortNotes'),
         notesContainer: document.getElementById('notes'),
         toast: document.getElementById('toast'),
-        charCount: document.querySelector('.char-count'),
-        themeToggle: document.querySelector('.theme-toggle'),
-        scrollToTopBtn: document.getElementById('scrollToTopBtn')
+        charCount: document.querySelector('.char-count')
     };
 
-    // Verify all elements exist
-    /*for (const [key, element] of Object.entries(elements)) {
-        if (!element) {
-            console.error(`${key} element not found`);
-            return;
-        }
-    }*/
+    // Verify critical elements exist
+    if (!elements.saveNoteBtn || !elements.tagInput || !elements.notesContainer || !elements.charCount || !elements.toast) {
+        console.error('One or more critical application elements not found. Stopping initialization.');
+        return;
+    }
 
     // Initialize notes array
     let notes = JSON.parse(localStorage.getItem('notes') || '[]');
 
-    // Theme handling
-    let isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    function updateTheme() {
-        const root = document.documentElement;
-        if (isDarkMode) {
-            root.style.setProperty('--background', '#1a1a1a');
-            root.style.setProperty('--surface', '#2d2d2d');
-            root.style.setProperty('--text', '#ffffff');
-            root.style.setProperty('--secondary', '#a1a1aa');
-            elements.themeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-        } else {
-            root.style.setProperty('--background', '#f8fafc');
-            root.style.setProperty('--surface', '#ffffff');
-            root.style.setProperty('--text', '#0f172a');
-            root.style.setProperty('--secondary', '#64748b');
-            elements.themeToggle.querySelector('i').classList.replace('fa-sun', 'fa-moon');
-        }
-        localStorage.setItem('darkMode', isDarkMode.toString());
+    // Show toast message
+    function showToast(message, type = 'success', duration = 3000) {
+        const toast = elements.toast;
+        toast.textContent = message;
+        toast.style.display = 'block';
+        toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, duration);
     }
 
     // Save note function
@@ -111,31 +72,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const editId = elements.saveNoteBtn.dataset.editId;
-        const newNote = {
-            id: editId ? Number(editId) : Date.now(),
-            content: content,
-            plainText: plainText,
-            title: plainText.split('\n')[0].slice(0, 50),
-            tags: tags,
-            createdAt: new Date().toISOString()
-        };
+        let newNote;
 
         if (editId) {
+            notes = notes.map(note => {
+                if (note.id === Number(editId)) {
+                    return {
+                        ...note,
+                        content: content,
+                        plainText: plainText,
+                        title: plainText.split('\n')[0].slice(0, 50) || 'Untitled Note',
+                        tags: tags,
+                    };
+                }
+                return note;
+            });
+            showToast('Note updated successfully!', 'success');
             elements.saveNoteBtn.textContent = 'Save Note';
             delete elements.saveNoteBtn.dataset.editId;
+        } else {
+            newNote = {
+                id: Date.now(),
+                content: content,
+                plainText: plainText,
+                title: plainText.split('\n')[0].slice(0, 50) || 'Untitled Note',
+                tags: tags,
+                createdAt: new Date().toISOString()
+            };
+            notes.unshift(newNote);
+            showToast('Note saved successfully!', 'success');
         }
 
-        notes.unshift(newNote);
         localStorage.setItem('notes', JSON.stringify(notes));
         renderNotes();
         
         quill.setText('');
         elements.tagInput.value = '';
-        showToast('Note saved successfully!', 'success');
         updateCharCount();
         clearAutosave();
     }
-    
 
     // Create note card
     function createNoteCard(note) {
@@ -151,13 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
                 <button class="btn btn-outline print-btn" data-id="${note.id}">
-                <i class="fas fa-print"></i> Print
-            </button>
+                    <i class="fas fa-print"></i> Print
+                </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit"></i> Edit
                 </button>
                 <button class="btn btn-outline delete-btn" data-id="${note.id}">
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
         `;
@@ -192,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (sortBy === 'title') {
                 return a.title.localeCompare(b.title);
             } else {
-                return new Date(b.createdAt) - new Date(a.createdAt);
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             }
         });
         renderNotes(sortedNotes);
@@ -200,19 +175,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update character count
     function updateCharCount() {
-        const count = quill.getText().length - 1; // -1 to account for trailing newline
-        elements.charCount.textContent = `Characters: ${count}/500`;
-        elements.charCount.style.color = count > 500 ? '#ef4444' : 'var(--secondary)';
-    }
-
-    // Show toast message
-    function showToast(message, type = 'success') {
-        elements.toast.textContent = message;
-        elements.toast.style.display = 'block';
-        elements.toast.style.backgroundColor = type === 'success' ? '#10b981' : '#ef4444';
-        setTimeout(() => {
-            elements.toast.style.display = 'none';
-        }, 3000);
+        const count = quill.getText().length - 1;
+        elements.charCount.textContent = `Characters: ${count}/${MAX_CHARS}`;
+        elements.charCount.style.color = count > MAX_CHARS ? '#ef4444' : 'var(--secondary)';
     }
 
     // Clear autosave
@@ -222,18 +187,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listeners
     elements.saveNoteBtn.addEventListener('click', saveNote);
-    elements.searchInput.addEventListener('input', e => searchNotes(e.target.value));
-    elements.sortSelect.addEventListener('change', sortNotes);
-    elements.themeToggle.addEventListener('click', () => {
-        isDarkMode = !isDarkMode;
-        updateTheme();
-    });
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', e => searchNotes(e.target.value));
+    }
+    if (elements.sortSelect) {
+        elements.sortSelect.addEventListener('change', sortNotes);
+    }
 
     quill.on('text-change', updateCharCount);
 
     elements.notesContainer.addEventListener('click', (e) => {
         const deleteBtn = e.target.closest('.delete-btn');
-        const printBtn = e.target.closest('.print-btn'); // New print button
+        const printBtn = e.target.closest('.print-btn');
         const editBtn = e.target.closest('.edit-btn');
         
         if (deleteBtn) {
@@ -253,166 +218,123 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.saveNoteBtn.textContent = 'Update Note';
                 elements.saveNoteBtn.dataset.editId = id;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                notes = notes.filter(n => n.id !== id);
-                localStorage.setItem('notes', JSON.stringify(notes));
-                renderNotes();
             }
-        }else if (printBtn) {
-        const id = Number(printBtn.dataset.id);
-        const note = notes.find(note => note.id === id);
-        if (note) {
-                // Open a new print window
+        } else if (printBtn) {
+            const id = Number(printBtn.dataset.id);
+            const note = notes.find(note => note.id === id);
+            if (note) {
                 const printWindow = window.open('', '', 'width=800,height=600');
-
-// Write the note content into the new window
-printWindow.document.write(`
-    <html>
-        <head>
-            <title>Print Note</title>
-            <style>
-                body { 
-                    font-family: Arial, sans-serif; 
-                    padding: 30px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    line-height: 1.6;
-                }
-                
-                .note-header {
-                    text-align: center;
-                    margin-bottom: 25px;
-                    padding-bottom: 15px;
-                    border-bottom: 2px solid #eaeaea;
-                }
-                
-                h2 { 
-                    margin: 0;
-                    color: #2c3e50;
-                    font-size: 24px;
-                }
-                
-                .timestamp {
-                    color: #7f8c8d;
-                    font-size: 14px;
-                    margin-top: 5px;
-                }
-                
-                .note-content { 
-                    background: #fff;
-                    border: 1px solid #e0e0e0;
-                    border-radius: 8px;
-                    padding: 20px;
-                    margin: 20px 0;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-                }
-                
-                .tags-container {
-                    margin-top: 20px;
-                    padding-top: 15px;
-                    border-top: 1px solid #eaeaea;
-                }
-                
-                .tags-title {
-                    font-weight: bold;
-                    color: #34495e;
-                    margin-bottom: 10px;
-                    font-size: 14px;
-                }
-                
-                .tags {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 8px;
-                }
-                
-                .tag {
-                    background: #f0f2f5;
-                    padding: 5px 12px;
-                    border-radius: 15px;
-                    font-size: 13px;
-                    color: #516175;
-                }
-                
-                @media print {
-                    body {
-                        padding: 20px;
-                    }
-                    
-                    .note-content {
-                        border: none;
-                        box-shadow: none;
-                        padding: 0;
-                    }
-                    
-                    .tags-container {
-                        break-inside: avoid;
-                    }
-                }
-            </style>
-        </head>
-        <body>
-            <div class="note-header">
-                <h2>${note.title || 'Untitled Note'}</h2>
-                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}</div>
-            </div>
-            
-            <div class="note-content">${note.content}</div>
-            
-            ${note.tags && note.tags.length ? `
-                <div class="tags-container">
-                    <div class="tags-title">Tags</div>
-                    <div class="tags">
-                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            ` : ''}
-            
-            <script>
-                window.onload = function() {
-                    window.print();
-                    setTimeout(() => window.close(), 500);
-                };
-            <\/script>
-        </body>
-    </html>
-`);
-// Close document stream
-printWindow.document.close();
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Print Note</title>
+                            <style>
+                                body { 
+                                    font-family: Arial, sans-serif; 
+                                    padding: 30px;
+                                    max-width: 800px;
+                                    margin: 0 auto;
+                                    line-height: 1.6;
+                                }
+                                .note-header {
+                                    text-align: center;
+                                    margin-bottom: 25px;
+                                    padding-bottom: 15px;
+                                    border-bottom: 2px solid #eaeaea;
+                                }
+                                h2 { 
+                                    margin: 0;
+                                    color: #2c3e50;
+                                    font-size: 24px;
+                                }
+                                .timestamp {
+                                    color: #7f8c8d;
+                                    font-size: 14px;
+                                    margin-top: 5px;
+                                }
+                                .note-content { 
+                                    background: #fff;
+                                    padding: 20px;
+                                    margin: 20px 0;
+                                }
+                                .tags-container {
+                                    margin-top: 20px;
+                                    padding-top: 15px;
+                                    border-top: 1px solid #eaeaea;
+                                }
+                                .tags-title {
+                                    font-weight: bold;
+                                    color: #34495e;
+                                    margin-bottom: 10px;
+                                    font-size: 14px;
+                                }
+                                .tags {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 8px;
+                                }
+                                .tag {
+                                    background: #f0f2f5;
+                                    padding: 5px 12px;
+                                    border-radius: 15px;
+                                    font-size: 13px;
+                                    color: #516175;
+                                }
+                                @media print {
+                                    body {
+                                        padding: 20px;
+                                    }
+                                    .note-content {
+                                        border: none;
+                                        box-shadow: none;
+                                        padding: 0;
+                                    }
+                                    .tags-container {
+                                        break-inside: avoid;
+                                    }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="note-header">
+                                <h2>${note.title || 'Untitled Note'}</h2>
+                                <div class="timestamp">Printed on ${new Date().toLocaleDateString('en-US', { 
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}</div>
+                            </div>
+                            <div class="note-content">${note.content}</div>
+                            ${note.tags && note.tags.length ? `
+                                <div class="tags-container">
+                                    <div class="tags-title">Tags</div>
+                                    <div class="tags">
+                                        ${note.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    setTimeout(() => window.close(), 500);
+                                };
+                            </script>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            } else {
+                showToast('Note not found for printing.', 'error');
+            }
         }
-    }
-    });
-
-    // Scroll to top button functionality
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 200) {
-            elements.scrollToTopBtn.style.display = 'block';
-            elements.scrollToTopBtn.classList.add('fade-in');
-            elements.scrollToTopBtn.classList.remove('fade-out');
-        } else {
-            elements.scrollToTopBtn.classList.add('fade-out');
-            elements.scrollToTopBtn.classList.remove('fade-in');
-            setTimeout(() => {
-                elements.scrollToTopBtn.style.display = 'none';
-            }, 300);
-        }
-    });
-
-    elements.scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
     });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === 'Enter') {
+            e.preventDefault();
             saveNote();
         }
     });
@@ -428,24 +350,33 @@ printWindow.document.close();
                     content: quill.root.innerHTML,
                     tags: elements.tagInput.value
                 }));
+                showToast('Autosaved!', 'info', 1500);
             }
-        }, 1000);
+        }, AUTO_SAVE_DELAY);
     });
 
     // Restore auto-saved content if exists
     const autosaved = localStorage.getItem('autosave');
     if (autosaved) {
-        const { content, tags } = JSON.parse(autosaved);
-        quill.root.innerHTML = content;
-        elements.tagInput.value = tags;
-        updateCharCount();
+        try {
+            const { content, tags } = JSON.parse(autosaved);
+            quill.root.innerHTML = content;
+            elements.tagInput.value = tags;
+            updateCharCount();
+            showToast('Restored autosaved content.', 'info', 2000);
+        } catch (e) {
+            console.error("Error parsing autosaved content:", e);
+            localStorage.removeItem('autosave');
+        }
     }
 
     // Set current year in footer
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    const currentYearElement = document.getElementById('currentYear');
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
 
     // Initialize
-    updateTheme();
     renderNotes();
     updateCharCount();
 });

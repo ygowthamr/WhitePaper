@@ -29,6 +29,31 @@
             --primary: #2563eb;
         }
 
+        [data-theme="dark"] {
+            --background: #1a1a1a;
+            --surface: #2d2d2d;
+            --text: #ffffff;
+            --secondary: #a1a1aa;
+            --primary: #4f46e5;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: rotate(180deg);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -488,6 +513,7 @@
    
     <!-- Your custom script -->
     <script src="static/javascript/script.js"></script>
+    <script src="static/javascript/common.js"></script>
      <script>
         
      </script>

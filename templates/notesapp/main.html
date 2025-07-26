@@ -1,462 +1,496 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">\ -->
-    <link
-      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> -->
-<!-- <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script> -->
-
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Quill Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <!-- Font Awesome - Consolidated to latest version -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
     <title>My Notepad</title>
-<link rel="stylesheet" href="../../static/css/main.css">
-<style>
+    <link rel="stylesheet" href="../../static/css/main.css">
+    <link href="../../static/css/NewStyle.css" rel="stylesheet">
+    <style>
+        /* --- Original Styles from main.html inline blocks --- */
+        :root {
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --secondary: #64748b;
+            --primary: #2563eb;
+        }
 
-  /* footer */
-  .footer-body{
-display: grid;
-justify-content: center;
-align-content: end;
-background: var(--surface);
-padding: 25px;
-}
-footer{
-position: relative;
-width:100%;
-height: auto;
-background: var(--surface);
-}
-.footer-container{
-width:100%;
-display: grid;
-grid-template-columns: 2fr 1fr 1fr 1fr;
-grid-gap:20px;
-padding: 30px;
+        [data-theme="dark"] {
+            --background: #1a1a1a;
+            --surface: #2d2d2d;
+            --text: #ffffff;
+            --secondary: #a1a1aa;
+            --primary: #4f46e5;
+        }
 
-}
-.footer-container .sec h2{
-position: relative;
-color: var(--text);
-font-weight: 600;
-margin-bottom: 15px;
-transform: translate(10%,0%);
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
 
-}
-.footer-container .sec p{
-color: var(--text);
-margin: 20px;
- transform: translate(-9%,0%); 
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: rotate(180deg);
+        }
 
-}
-.footer-container .social{
-margin-top: 20px;
-display: grid;
-grid-template-columns: repeat(5,50px);
+        /* Footer */
+        .footer-body {
+            display: grid;
+            justify-content: center;
+            align-content: end;
+            background: var(--surface);
+            padding: 25px;
+        }
+        footer {
+            position: relative;
+            width: 100%;
+            height: auto;
+            background: var(--surface);
+        }
+        .footer-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-gap: 20px;
+            padding: 30px;
+        }
+        .footer-container .sec h2 {
+            position: relative;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 15px;
+            transform: translate(10%, 0%);
+        }
+        .footer-container .sec p {
+            color: var(--text);
+            margin: 20px;
+            transform: translate(-9%, 0%);
+        }
+        .footer-container .social {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+        }
+        .footer-container .social {
+            list-style: none;
+        }
+        .footer-container .social li a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: var(--text);
+            display: grid;
+            align-content: center;
+            text-decoration: none;
+        }
+        .footer-container .social li a i {
+            color: var(--background);
+            font-size: 20px;
+            position: relative;
+            left: 1px;
+        }
 
+        /* quick links and support combine */
+        .footer-container .quicklinks {
+            position: relative;
+            left: -40px;
+        }
+        .footer-container .quicklinks ul li {
+            list-style: none;
+            position: relative;
+            left: 1px;
+        }
+        .footer-container .quicklinks ul li a {
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
 
-}
-.footer-container .social{
-list-style: none;
+        /* contact */
+        .footer-container .contact .info {
+            position: relative;
+            left: -35px;
+        }
+        .footer-container .contact h2 {
+            transform: translate(-15%, 0%);
+        }
+        .footer-container .contact .info li {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            margin-bottom: 16px;
+        }
+        .footer-container .contact .info li span {
+            color: var(--text);
+            font-size: 15px;
+        }
+        .footer-container .contact .info li a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        /* media */
+        @media (max-width: 991px) {
+            footer {
+                padding: 40px;
+            }
+            .footer-container {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 30px;
+            }
+            .footer-container .quicklinks {
+                width: 250px;
+                transform: translate(17%, 0%);
+            }
+            .footer-container .quicklinks ul {
+                transform: translate(25%, 0%);
+                width: 150px;
+            }
+            .footer-container .quicklinks h2 {
+                transform: translate(15%, 0%);
+                width: 150px;
+            }
+            .footer-container .contact ul {
+                width: 250px;
+                transform: translate(15%, 0);
+            }
+            .footer-container .contact h2 {
+                transform: translate(-1%, 0%);
+                width: 250px;
+            }
+        }
 
-}
-.footer-container .social li a{
-display:inline-block;
-width: 36px;
-height: 36px;
-background:var(--text);
-display: grid;
-align-content: center;
-text-decoration: none;
+        @media (max-width: 768px) {
+            .footer-container {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(1, 1fr);
+                grid-gap: 20px;
+            }
+            .footer-container .quicklinks ul {
+                transform: translate(-10%, 0);
+            }
+            .footer-container .quicklinks h2 {
+                transform: translate(-20%, 0);
+            }
+            .footer-container .contact h2 {
+                transform: translate(-30%, 0);
+            }
+        }
 
-}
-.footer-container .social li a i{
-color:var(--background);
-font-size: 20px;
-position: relative;
-left:1px;
-}
+        /* footer */
+        .footer-container .quicklinks li a:hover {
+            color: var(--primary);
+            position: relative;
+            left: 5px;
+        }
+        .location:hover, .call:hover, .mail:hover {
+            position: relative;
+            left: 5px;
+        }
+        .footer-container .contact .info li i:hover, .footer-container .contact .info li a:hover {
+            color: var(--primary);
+        }
 
-/* quick links and support combine*/
-.footer-container .quicklinks{
-position: relative;
-left:-40px;
-}
+        /* Scroll to Top Button */
+        #scrollButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
 
-.footer-container .quicklinks ul li{
-list-style: none;
-position: relative;
-left:1px;
+        #scrollButton.visible {
+            display: block;
+        }
 
-}
-.footer-container .quicklinks ul li a{
-color:var(--text);
-text-decoration: none;
-margin-bottom: 10px;
-display: inline-block;
-}
+        .outer-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(100, 116, 139, 0.3);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: conic-gradient(
+                var(--primary) var(--scroll-progress, 0deg),
+                transparent var(--scroll-progress, 0deg)
+            );
+            transition: background 0.1s linear;
+        }
 
-/*  contact */
-.footer-container .contact .info{
-position: relative;
-left:-35px;
+        .inner-circle {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+        .inner-circle:hover {
+            background-color: var(--primary);
+        }
 
-}
-.footer-container .contact h2{
-  transform: translate(-15%,0%);
-}
-.footer-container .contact .info li{
-display: grid;
-grid-template-columns: 30px 1fr;
-margin-bottom: 16px;
+        .arrow {
+            color: white;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
 
-}
-.footer-container .contact .info li span{
-color:var(--text);
-font-size: 15px;
-}
-.footer-container .contact .info li a{
-color:var(--text);
-text-decoration: none;
-}
-/* media */
-@media(max-width:991px){
-footer{
-padding: 40px;
-}
-.footer-container{
-width: 100%;
-display: grid;
-grid-template-columns: repeat(2,1fr);
-grid-gap: 30px;/*new*/
-
-}
-.footer-container .quicklinks{
-width:250px;
-transform: translate(17%,0%);
-}
-/* new*/
-.footer-container .quicklinks ul {
-transform: translate(25%,0%);
-width: 150px;
-
-}
-.footer-container .quicklinks h2{
-
-transform: translate(15%,0%);
-width:150px;
-}
-.footer-container .contact ul{
-
-width:250px;
-transform: translate(15%,0);
-}
-.footer-container .contact h2{
-transform: translate(-1%,0%);
-width:250px;
-
-}
-}
-
-@media(max-width:768px){
-.footer-container{
-width: 100%;
-display: grid;
-grid-template-columns: repeat(1,1fr);
-grid-gap: 20px;
-}
-.footer-container .quicklinks ul{
-  transform: translate(-10%,0);
-  
- 
-}
-.footer-container .quicklinks h2{
-  transform: translate(-20%,0);
-  
-}
-.footer-container .contact h2{
-  transform: translate(-30%,0);
-}
-
-}
-
-/* footer */
-.footer-container .quicklinks li a:hover{
-color:var( --primary);
-position: relative;
-left:5px;
-}
-.location:hover,.call:hover,.mail:hover{
-position: relative;
-left:5px;
-}
-.footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
-color:var( --primary);
-}
-</style>
-    
-  </head>
-
-  <body>
+<body>
     <header class="header">
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
-        <i id="themeIcon" class="fas fa-moon"></i>
-      </button>
-      <div class="header-content" style="margin: 0px 20px">
-        <a href="/" class="logo">
-          <i class="fas fa-pen-fancy"></i> My Notepad
-        </a>
-        <div class="search-container">
-          <input
-            type="text"
-            class="search-input"
-            id="searchTxt"
-            placeholder="Search notes..."
-          />
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+            <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+        <div class="header-content" style="margin: 0px 20px">
+            <a href="/" class="logo">
+                <i class="fas fa-pen-fancy"></i> My Notepad
+            </a>
+            <div class="search-container">
+                <input
+                    type="text"
+                    class="search-input"
+                    id="searchTxt"
+                    placeholder="Search notes..."
+                />
+            </div>
         </div>
-      </div>
     </header>
 
     <main class="main-container">
-      <div class="user-info">
-        <div class="user-name">
-          <i class="fas fa-user"></i>
-          {{Uname}}
-        </div>
-        <a href="/accounts/logout/" class="logout-btn">
-          <i class="fas fa-sign-out-alt"></i>
-          Logout
-        </a>
-      </div>
-
-      <div class="note-editor">
-        <h2 class="editor-title"><i class="fas fa-edit"></i> Add a New Note</h2>
-        <input
-          type="text"
-          id="headingInput"
-          class="heading-input"
-          placeholder="Enter Note Title"
-        />
-        <div class="controls">
-          <button id="voice-btn">Start Voice Input</button>
-          <span id="status"></span>
-        </div>
-        <div id="addTxt" class="note-textarea"></div>
-        <div
-          id="charCount"
-          style="
-            font-size: 14px;
-            margin-top: 5px;
-            text-align: left;
-            color: grey;
-          "
-        >
-          Characters: 0/500
-        </div>
-        <div id="charWarning" style="font-weight: bold"></div>
-        <div
-          id="save-status"
-          style="
-            font-size: 14px;
-            color: rgb(15, 130, 7);
-            margin-top: 5px;
-            text-align: right;
-          "
-        ></div>
-        <input
-          type="text"
-          id="tagInput"
-          class="tag-input"
-          placeholder="Add tags (comma separated)"
-        />
-        <button id="addBtn" class="add-note-btn">
-          <i class="fas fa-plus"></i>
-          Add Note
-        </button>
-
-        <!-- <div class="text-input">
-            <h1>Add a New Note</h1>
-            <form>
-                <textarea name="note" id="addTxt" cols="30" rows="10" placeholder="Type your note here..."></textarea>
-                <div id="charCount" style="font-size: 14px; margin-top: 5px; text-align: left; color: grey;">Characters: 0/500</div>
-                <div id="charWarning" style="font-weight: bold;"></div>
-                <div id="save-status" style="font-size: 14px; color:rgb(15, 130, 7); margin-top: 5px; text-align: right;"></div>
-                <input size="26" type="text" id="tagInput" placeholder="Add tags (comma separated)"> <!-- The placeholder was not fully visible so added size=26. Still adds many. -->
-        <!-- <button type="button" id="addBtn">
-                    Add it
-                </button>
-            </form> -->
-      </div>
-      <div class="drawing-tool-container" id="drawingToolContainer" style="display: none;">
-        <div class="drawing-header">
-          <h3><i class="fas fa-paint-brush"></i> Drawing Tool</h3>
-          <div class="drawing-controls">
-            <input type="color" id="colorPicker" value="#000000" aria-label="Color picker">
-            <select id="brushSize" aria-label="Brush size">
-              <option value="1">Small</option>
-              <option value="3" selected>Medium</option>
-              <option value="5">Large</option>
-              <option value="10">Extra Large</option>
-            </select>
-            <button id="eraserTool" class="tool-btn"><i class="fas fa-eraser"></i></button>
-            <button id="clearCanvas" class="tool-btn"><i class="fas fa-trash-alt"></i></button>
-          </div>
-          <button id="closeDrawing" class="close-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <canvas id="drawingCanvas" width="800" height="400"></canvas>
-        <div class="drawing-actions">
-          <button id="insertDrawing" class="primary-btn">Insert into Note</button>
-          <button id="cancelDrawing" class="secondary-btn">Cancel</button>
-        </div>
-      </div>
-
-      <section class="notes-section">
-        <h2
-          style="
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-          "
-        >
-          <i class="fas fa-book" style="margin-right: 8px; color: #007bff"></i>
-          Your Saved Notes
-        </h2>
-
-        <div style="display: flex; align-items: center; padding: 8px">
-          <select
-            id="tagFilter"
-            style="
-              padding: 8px;
-              font-size: 16px;
-              border: 1px solid #ccc;
-              border-radius: 5px;
-              background-color: #fff;
-              cursor: pointer;
-            "
-          >
-            <option value="">All Notes</option>
-          </select>
+        <div class="user-info">
+            <div class="user-name">
+                <i class="fas fa-user"></i>
+            </div>
+            <a href="/accounts/logout/" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
         </div>
 
-        <div id="notes" class="notes-grid">
-          {% if user.is_authenticated %} {% for note in data %}
-          <div class="note-card" style="overflow: hidden;">
-            <div class="note-header">
-              <i class="fas fa-sticky-note"></i>
-              <strong>{{ note.heading }}</strong>
-              <div class="tags-container">
-                {% for tag in note.tags.all %}
-                <span class="tag">{{ tag.name }}</span>
-                {% endfor %}
+        <div class="note-editor">
+            <h2 class="editor-title"><i class="fas fa-edit"></i> Add a New Note</h2>
+            <input
+                type="text"
+                id="headingInput"
+                class="heading-input"
+                placeholder="Enter Note Title"
+            />
+            <div class="controls">
+                <button id="voice-btn">Start Voice Input</button>
+                <span id="status"></span>
+            </div>
+            <div id="addTxt" class="note-textarea"></div>
+            <div
+                id="charCount"
+                style="
+                    font-size: 14px;
+                    margin-top: 5px;
+                    text-align: left;
+                    color: grey;
+                "
+            >
+                Characters: 0/500
+            </div>
+            <div id="charWarning" style="font-weight: bold"></div>
+            <div
+                id="save-status"
+                style="
+                    font-size: 14px;
+                    color: rgb(15, 130, 7);
+                    margin-top: 5px;
+                    text-align: right;
+                "
+            ></div>
+            <input
+                type="text"
+                id="tagInput"
+                class="tag-input"
+                placeholder="Add tags (comma separated)"
+            />
+            <button id="addBtn" class="add-note-btn">
+                <i class="fas fa-plus"></i>
+                Add Note
+            </button>
+        </div>
+        
+        <div class="drawing-tool-container" id="drawingToolContainer" style="display: none;">
+            <div class="drawing-header">
+              <h3><i class="fas fa-paint-brush"></i> Drawing Tool</h3>
+              <div class="drawing-controls">
+                <input type="color" id="colorPicker" value="#000000" aria-label="Color picker">
+                <select id="brushSize" aria-label="Brush size">
+                  <option value="1">Small</option>
+                  <option value="3" selected>Medium</option>
+                  <option value="5">Large</option>
+                  <option value="10">Extra Large</option>
+                </select>
+                <button id="eraserTool" class="tool-btn"><i class="fas fa-eraser"></i></button>
+                <button id="clearCanvas" class="tool-btn"><i class="fas fa-trash-alt"></i></button>
               </div>
+              <button id="closeDrawing" class="close-btn"><i class="fas fa-times"></i></button>
             </div>
-            <div class="note-content">
-              <p>{{ note.content }}</p>
+            <canvas id="drawingCanvas" width="800" height="400"></canvas>
+            <div class="drawing-actions">
+              <button id="insertDrawing" class="primary-btn">Insert into Note</button>
+              <button id="cancelDrawing" class="secondary-btn">Cancel</button>
             </div>
-            <div class="note-actions">
-              <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
-                <i class="fas fa-thumbtack"></i>
-              </button>
-              <button class="edit-btn" data-note-id="{{ note.id }}">
-                Edit
-              </button>
-              <button class="delete-btn" data-note-id="{{ note.id }}">
-                Delete
-              </button>
-              <button class="share-btn" data-note-id="{{ note.id }}">
-                <i class="fas fa-share-alt"></i> Share
-              </button>
-              <div class="share-popup" id="share-popup-{{ note.id }}">
-                <div class="share-popup-content">
-                  <button class="share-option twitter-share">
-                    <i class="fab fa-twitter"></i> Twitter
-                  </button>
-                  <button class="share-option linkedin-share">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                  </button>
-                  <button class="share-option whatsapp-share">
-                    <i class="fab fa-whatsapp"></i> WhatsApp
-                  </button>
-                  <button class="share-option email-share">
-                    <i class="fas fa-envelope"></i> Email
-                  </button>
-                  <div class="share-url-section">
-                    <h4>Long URL</h4>
-                    <div class="share-link-wrapper">
-                      <input
-                        type="text"
-                        class="share-link"
-                        id="long-url-${note.id}"
-                        readonly
-                      />
-                      <button
-                        class="copy-link"
-                        onclick="copyShareLink('{{ note.id }}', 'long-url')"
-                      >
-                        <i class="fas fa-copy"></i>
-                      </button>
-                    </div>
+        </div>
 
-                    <h4>Short URL</h4>
-                    <div class="share-link-wrapper">
-                      <input
-                        type="text"
-                        class="share-link"
-                        id="short-url-${note.id}"
-                        readonly
-                      />
-                      <button
-                        class="copy-link"
-                        onclick="copyShareLink('{{ note.id }}', 'short-url')"
-                      >
-                        <i class="fas fa-copy"></i>
-                      </button>
-                    </div>
-                  </div>
+        <section class="notes-section">
+            <h2
+                style="
+                    display: flex;
+                    align-items: center;
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333;
+                "
+            >
+                <i class="fas fa-book" style="margin-right: 8px; color: #007bff"></i>
+                Your Saved Notes
+            </h2>
 
-                  <div class="qr-code-section">
-                    <img
-                      id="qr-code-${note.id}"
-                      alt="QR Code"
-                      width="150"
-                      height="150"
-                    />
-                    <button
-                      class="download-qr"
-                      onclick="downloadQRCode('{{ note.id }}')"
-                    >
-                      <i class="fas fa-download"></i> Download QR Code
-                    </button>
-                  </div>
+            <div style="display: flex; align-items: center; padding: 8px">
+                <select
+                    id="tagFilter"
+                    style="
+                        padding: 8px;
+                        font-size: 16px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                        background-color: #fff;
+                        cursor: pointer;
+                    "
+                >
+                    <option value="">All Notes</option>
+                </select>
+            </div>
+
+            <div id="notes" class="notes-grid">
+
+                <div class="note-card" style="overflow: hidden;">
+                    <div class="note-header">
+                        <i class="fas fa-sticky-note"></i>
+                        <strong></strong>
+                        <div class="tags-container">
+                            
+                            <span class="tag"></span>
+                
+                        </div>
+                    </div>
+                    <div class="note-content">
+                        <!-- <p>{{ note.content }}</p> -->
+                    </div>
+                    <div class="note-actions">
+                        <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
+                            <i class="fas fa-thumbtack"></i>
+                        </button>
+                        <button class="edit-btn" data-note-id="{{ note.id }}">
+                            Edit
+                        </button>
+                        <button class="delete-btn" data-note-id="{{ note.id }}">
+                            Delete
+                        </button>
+                        <button class="share-btn" data-note-id="{{ note.id }}">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                        <div class="share-popup" id="share-popup-{{ note.id }}">
+                            <div class="share-popup-content">
+                                <button class="share-option twitter-share">
+                                    <i class="fab fa-twitter"></i> Twitter
+                                </button>
+                                <button class="share-option linkedin-share">
+                                    <i class="fab fa-linkedin"></i> LinkedIn
+                                </button>
+                                <button class="share-option whatsapp-share">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <button class="share-option email-share">
+                                    <i class="fas fa-envelope"></i> Email
+                                </button>
+                                <div class="share-url-section">
+                                    <h4>Long URL</h4>
+                                    <div class="share-link-wrapper">
+                                        <input
+                                            type="text"
+                                            class="share-link"
+                                            id="long-url-{{note.id}}"
+                                            readonly
+                                        />
+                                        <button
+                                            class="copy-link"
+                                            onclick="copyShareLink('{{ note.id }}', 'long-url')"
+                                        >
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+
+                                    <h4>Short URL</h4>
+                                    <div class="share-link-wrapper">
+                                        <input
+                                            type="text"
+                                            class="share-link"
+                                            id="short-url-{{note.id}}"
+                                            readonly
+                                        />
+                                        <button
+                                            class="copy-link"
+                                            onclick="copyShareLink('{{ note.id }}', 'short-url')"
+                                        >
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="qr-code-section">
+                                    <img
+                                        id="qr-code-{{note.id}}"
+                                        alt="QR Code"
+                                        width="150"
+                                        height="150"
+                                    />
+                                    <button
+                                        class="download-qr"
+                                        onclick="downloadQRCode('{{ note.id }}')"
+                                    >
+                                        <i class="fas fa-download"></i> Download QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                {% endfor %} {% endif %}
             </div>
-          </div>
-          {% endfor %} {% endif %}
-        </div>
-      </section>
+        </section>
     </main>
     <div class="chat-widget" id="chatWidget">
         <div class="chat-header" id="chatHeader">
@@ -472,1284 +506,112 @@ color:var( --primary);
             <i class="fas fa-paper-plane"></i>
           </button>
         </div>
-      </div>
-    <footer class="footer-body">
-      <div class="footer-container">
-         <!---discript-->
-         <div class="sec discript">
-             
-             <a href="/" class="logo">
-                 <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper</a>
-             </a>
-             <p>
-                 A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
-             </p>
-             <!--icons-->
-
-             <ul class="social">
-                 <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
-                 <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
-                 <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
-                 <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
-                 <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
-             </ul>
-         </div>
-
-          <!--Quick links_--->
-          <div class="sec quicklinks">
-             <h2>Quick Links</h2>
-             <ul>
-                 <li><a href="#" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
-                 </li>
-                 <li><a href="#" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
-                 <li><a href="#note-editor" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
-                 <li><a href="#sortednotes" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
-             </ul>
-         </div>
-
-          <!--support-->
-          <div class="sec quicklinks">
-             <h2>Support</h2>
-             <ul>
-                 <li><a href="#">Terms & Conditions</a></li>
-                 <li><a href="#">Privacy Policy</a></li>
-                 <li><a href="#">FAQ</a></li>
-             </ul>
-         </div>
-         <!--contact-->
-         <div class="sec contact">
-             <h2>Contact</h2>
-             <ul class="info">
-                 <li class="location">
-                     <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
-                 <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
-                 <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
-             </ul>
-         </div>
-     </div>
-       </div>
-     </div>
-
-      <p class="footer">
-        &copy; <span id="currentYear"></span> My Notepad. All rights reserved.
-      </p>
+    </div>
+    <footer>
+        <div class="footer-body">
+            <div class="footer-container">
+                <div class="sec discript">
+                    <a href="/" class="logo">
+                        <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper
+                    </a>
+                    <p>
+                        A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
+                    </p>
+                    <ul class="social">
+                        <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
+                        <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
+                        <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
+                        <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+                    </ul>
+                </div>
+                <div class="sec quicklinks">
+                    <h2>Quick Links</h2>
+                    <ul>
+                        <li><a href="#" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a></li>
+                        <li><a href="#" class="link"><i class="fa-solid fa-circle-info" style="padding-right: 5px;"></i>About Us</a></li>
+                        <li><a href="#note-editor" class="link"><i class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                        <li><a href="#sortednotes" class="link"><i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+                    </ul>
+                </div>
+                <div class="sec quicklinks">
+                    <h2>Support</h2>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="sec contact">
+                    <h2>Contact</h2>
+                    <ul class="info">
+                        <li class="location">
+                            <span><a><i class="fa-solid fa-location-dot"></i></span>India</a>
+                        </li>
+                        <li class="call">
+                            <span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a>
+                        </li>
+                        <li class="mail">
+                            <span><a><i class="fa-solid fa-envelope"></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="footer">© <span id="currentYear"></span> 2025 Whitepaper. All rights reserved.</p>
     </footer>
 
+    <div id="scrollButton" class="hidden">
+        <div class="outer-circle">
+            <div class="inner-circle">
+                <div class="arrow"><i class="fa-solid fa-arrow-up"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quill Editor -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
+    <!-- Marked.js for Markdown parsing in chat -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Common script for theme and scroll -->
+    <script src="../../static/javascript/common.js"></script>
+
+    <!-- Other scripts -->
     <script src="{% static 'javascript/authenticated.js' %}"></script>
     <script src="{% static 'javascript/autosave.js' %}"></script>
+
+    <!-- Inline script for theme toggle and initialization -->
     <script>
-      document.getElementById("currentYear").textContent =
-        new Date().getFullYear();
-    </script>
-    <script>
-      // Theme Toggle Functionality
-      const themeToggle = document.getElementById("themeToggle");
-      const themeIcon = document.getElementById("themeIcon");
-      const htmlElement = document.documentElement;
-
-      // Check for saved theme preference or system preference
-      const savedTheme = localStorage.getItem("darkMode");
-      const systemPrefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      );
-      // Initialize Quill editor
-      const quill = new Quill("#addTxt", {
-        theme: "snow",
-        modules: {
-          toolbar: [
-            ["bold", "italic", "underline"],
-            ["blockquote", "code-block"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            ["link"],
-            ["clean"],
-          ],
-          handlers: {
-        drawing: function() {
-          document.getElementById('drawingToolContainer').style.display = 'flex';
-        }
-      }
-        },
-        placeholder: "Type your note content here...",
-      });
-      // Add custom drawing button to Quill toolbar
-const toolbar = quill.getModule('toolbar');
-toolbar.addHandler('drawing', function() {
-  document.getElementById('drawingToolContainer').style.display = 'flex';
-});
-
-// Add drawing icon to Quill toolbar
-document.querySelector('.ql-drawing').innerHTML = '<i class="fas fa-paint-brush"></i>';
-      function setTheme(theme) {
-        if (theme === "true") {
-          htmlElement.classList.add("dark-theme");
-          themeIcon.classList.replace("fa-moon", "fa-sun");
-          localStorage.setItem("darkMode", "true");
-        } else {
-          htmlElement.classList.remove("dark-theme");
-          themeIcon.classList.replace("fa-sun", "fa-moon");
-          localStorage.setItem("darkMode", "false");
-        }
-      }
-
-      // Initial theme setup
-      if (savedTheme === "true") {
-        setTheme("true");
-      } else if (savedTheme === "false") {
-        setTheme("false");
-      } else if (systemPrefersDark.matches) {
-        setTheme("true");
-      }
-
-      // Theme toggle event listener
-      themeToggle.addEventListener("click", () => {
-        const currentTheme = htmlElement.classList.contains("dark-theme")
-          ? "true"
-          : "false";
-        setTheme(currentTheme === "false" ? "true" : "false");
-      });
-
-      document.getElementById("currentYear").textContent =
-        new Date().getFullYear();
-    </script>
-      <script>
-        marked.setOptions({
-        breaks: true,
-        gfm: true,
-        headerIds: false,
-        sanitize: false
-      });
-        // Gemini API Integration
-        const GEMINI_API_KEY = 'AIzaSyCD4SkgWZ2StFJLw52SGkNKozWgzgByXOA';
-        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-  
-        // Chat Widget Functionality
-        const chatWidget = document.getElementById('chatWidget');
-        const chatHeader = document.getElementById('chatHeader');
-        const chatToggle = document.getElementById('chatToggle');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendButton = document.getElementById('sendMessage');
-  
-        // Toggle chat expansion
-        chatHeader.addEventListener('click', () => {
-          chatWidget.classList.toggle('expanded');
-          chatToggle.classList.toggle('fa-chevron-up');
-          chatToggle.classList.toggle('fa-chevron-down');
-        });
-  
-             // Updated sendMessage function
-      async function sendMessage(message) {
-        // Add user message to chat
-        const userMessageDiv = document.createElement('div');
-        userMessageDiv.className = 'message user-message';
-        userMessageDiv.textContent = message;
-        chatMessages.appendChild(userMessageDiv);
-
-        // Show typing indicator
-        const typingIndicator = document.createElement('div');
-        typingIndicator.className = 'typing-indicator';
-        typingIndicator.innerHTML = `
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        `;
-        chatMessages.appendChild(typingIndicator);
-
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        try {
-          // Call Gemini API
-          const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              contents: [{
-                parts: [{
-                  text: message
-                }]
-              }]
-            })
-          });
-
-          const data = await response.json();
-          
-          // Remove typing indicator
-          typingIndicator.remove();
-
-          // Add bot response to chat with Markdown parsing
-          if (data.candidates && data.candidates[0].content.parts[0].text) {
-            const botMessageDiv = document.createElement('div');
-            botMessageDiv.className = 'message bot-message';
-            
-            // Parse and render the markdown content
-            const rawText = data.candidates[0].content.parts[0].text;
-            const formattedContent = marked.parse(rawText);
-            
-            // Create a wrapper for the formatted content
-            const contentWrapper = document.createElement('div');
-            contentWrapper.className = 'formatted-content';
-            contentWrapper.innerHTML = formattedContent;
-            
-            // Add the formatted content to the message
-            botMessageDiv.appendChild(contentWrapper);
-            chatMessages.appendChild(botMessageDiv);
-          } else {
-            throw new Error('Invalid response from API');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          typingIndicator.remove();
-          
-          const errorMessageDiv = document.createElement('div');
-          errorMessageDiv.className = 'message bot-message';
-          errorMessageDiv.textContent = 'Sorry, I encountered an error. Please try again.';
-          chatMessages.appendChild(errorMessageDiv);
-        }
-
-        // Scroll to bottom after adding new content
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      // Handle clipboard operations for code blocks
-      document.addEventListener('click', function(e) {
-        if (e.target.matches('.copy-code-btn')) {
-          const codeBlock = e.target.nextElementSibling;
-          navigator.clipboard.writeText(codeBlock.textContent).then(() => {
-            e.target.textContent = 'Copied!';
-            setTimeout(() => {
-              e.target.textContent = 'Copy';
-            }, 2000);
-          });
-        }
-      });
-
-        // Handle send button click
-        sendButton.addEventListener('click', () => {
-          const message = chatInput.value.trim();
-          if (message) {
-            sendMessage(message);
-            chatInput.value = '';
-          }
-        });
-  
-        // Handle enter key press
-        chatInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            const message = chatInput.value.trim();
-            if (message) {
-              sendMessage(message);
-              chatInput.value = '';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize theme and scroll-to-top from common.js
+            if (typeof initializeTheme === 'function') {
+                initializeTheme();
+            } else {
+                console.warn('initializeTheme function not found in common.js');
             }
-          }
-        });
-      </script>
-      <script>
-        // Keyboard Shortcuts for My Notepad
-document.addEventListener('DOMContentLoaded', function() {
-  // Get references to key elements
-  const quillEditor = Quill.find(document.getElementById('addTxt'));
-  const headingInput = document.getElementById('headingInput');
-  const tagInput = document.getElementById('tagInput');
-  const addBtn = document.getElementById('addBtn');
-  const searchInput = document.getElementById('searchTxt');
-  const themeToggle = document.getElementById('themeToggle');
-  const chatInput = document.getElementById('chatInput');
-  const chatWidget = document.getElementById('chatWidget');
-  const sendMessage = document.getElementById('sendMessage');
-  const protectionToggle = document.getElementById('protectionToggle');
-  const notePasswordField = document.getElementById('notePassword');
-  
-  // Shortcut mappings and descriptions for help modal
-  const shortcuts = {
-    // General application shortcuts
-    'Ctrl+/': 'Show keyboard shortcuts help',
-    'Ctrl+Shift+D': 'Toggle dark/light theme',
-    'Ctrl+Shift+S': 'Save current note',
-    'Ctrl+Shift+F': 'Focus search box',
-    'Escape': 'Clear current selection or focus',
-    'Alt+C': 'Toggle chat widget',
-    
-    // Editor focus and navigation
-    'Ctrl+1': 'Focus note title',
-    'Ctrl+2': 'Focus note content editor',
-    'Ctrl+3': 'Focus tags input',
-    'Ctrl+Enter': 'Save note',
-    
-    // Text formatting (using Quill's built-in shortcuts)
-    'Ctrl+B': 'Bold text',
-    'Ctrl+I': 'Italic text',
-    'Ctrl+U': 'Underline text',
-    'Ctrl+Shift+7': 'Numbered list',
-    'Ctrl+Shift+8': 'Bullet list',
-    'Ctrl+Shift+9': 'Blockquote',
-    'Ctrl+Shift+0': 'Code block',
-    
-    // Custom formatting shortcuts
-    'Ctrl+H': 'Add heading format to selection',
-    'Ctrl+L': 'Insert link',
-    'Ctrl+Shift+C': 'Clear formatting',
-    
-    // Navigation between notes
-    'Alt+ArrowUp': 'Navigate to previous note',
-    'Alt+ArrowDown': 'Navigate to next note',
-    
-    // Note actions
-    'Ctrl+Alt+E': 'Edit selected note',
-    'Ctrl+Alt+D': 'Delete selected note',
-    'Ctrl+Alt+P': 'Toggle password protection',
-    'Ctrl+Alt+S': 'Share selected note',
-    
-    // Search and filter
-    'Ctrl+F': 'Search notes',
-    'Ctrl+Alt+F': 'Clear search/filters',
-    'Ctrl+Alt+T': 'Focus tag filter dropdown',
-    
-    // Security shortcuts
-    'Ctrl+Alt+L': 'Lock/Unlock note'
-  };
 
-  // Track current note selection for navigation
-  let currentlySelectedNote = null;
-  
-  // Create help modal
-  createShortcutsHelpModal();
-  
-  // Main keyboard shortcut handler
-  document.addEventListener('keydown', function(e) {
-    // Skip if user is typing in text inputs (except for specific shortcuts)
-    const isTagInput = e.target === tagInput;
-    const isHeadingInput = e.target === headingInput;
-    const isChatInput = e.target === chatInput;
-    const isSearchInput = e.target === searchInput;
-    const isPasswordInput = e.target === notePasswordField;
-    const isQuillEditor = e.target.closest('.ql-editor') !== null;
-    const isInputField = isTagInput || isHeadingInput || isChatInput || isSearchInput || isPasswordInput;
-    
-    // Show help dialog - works from anywhere
-    if (e.ctrlKey && e.key === '/') {
-      e.preventDefault();
-      toggleShortcutsHelp();
-      return;
-    }
-    
-    // Escape to clear selection or close modals
-    if (e.key === 'Escape') {
-      if (document.querySelector('.help-modal').style.display === 'flex') {
-        document.querySelector('.help-modal').style.display = 'none';
-        return;
-      }
-      
-      if (document.querySelector('.share-popup.active')) {
-        document.querySelector('.share-popup.active').classList.remove('active');
-        return;
-      }
-      
-      if (quillEditor.getSelection()) {
-        quillEditor.setSelection(null);
-        return;
-      }
-      
-      // Focus out of any field
-      if (document.activeElement && document.activeElement !== document.body) {
-        document.activeElement.blur();
-        return;
-      }
-    }
-    
-    // Handle global shortcuts (that work regardless of focus)
-    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-      e.preventDefault();
-      themeToggle.click();
-      return;
-    }
-    
-    if (e.altKey && e.key === 'c') {
-      e.preventDefault();
-      toggleChatWidget();
-      return;
-    }
-    
-    if (e.ctrlKey && e.shiftKey && e.key === 'F') {
-      e.preventDefault();
-      searchInput.focus();
-      return;
-    }
-    
-    // Shortcuts that should work when in input fields
-    if (isInputField || isQuillEditor) {
-      // Allow Ctrl+Enter to save note from any input field
-      if (e.ctrlKey && e.key === 'Enter') {
-        e.preventDefault();
-        addBtn.click();
-        return;
-      }
-      
-      // If in an input field other than the editor, don't process editor shortcuts
-      if (!isQuillEditor) {
-        return;
-      }
-    }
-    
-    // Focus shortcuts
-    if (e.ctrlKey && e.key === '1') {
-      e.preventDefault();
-      headingInput.focus();
-      return;
-    }
-    
-    if (e.ctrlKey && e.key === '2') {
-      e.preventDefault();
-      document.querySelector('.ql-editor').focus();
-      return;
-    }
-    
-    if (e.ctrlKey && e.key === '3') {
-      e.preventDefault();
-      tagInput.focus();
-      return;
-    }
-    
-    // Search shortcut
-    if (e.ctrlKey && e.key === 'f') {
-      e.preventDefault();
-      searchInput.focus();
-      return;
-    }
-    
-    // Custom formatting shortcuts (when in editor)
-    if (isQuillEditor) {
-      // Add heading
-      if (e.ctrlKey && e.key === 'h') {
-        e.preventDefault();
-        formatAsHeading();
-        return;
-      }
-      
-      // Insert link
-      if (e.ctrlKey && e.key === 'l') {
-        e.preventDefault();
-        insertLink();
-        return;
-      }
-      
-      // Clear formatting
-      if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        clearFormatting();
-        return;
-      }
-    }
-    
-    // Note navigation
-    if (e.altKey && e.key === 'ArrowUp') {
-      e.preventDefault();
-      navigateNotes('prev');
-      return;
-    }
-    
-    if (e.altKey && e.key === 'ArrowDown') {
-      e.preventDefault();
-      navigateNotes('next');
-      return;
-    }
-    
-    // Note actions (only if not in an input field)
-    if (!isInputField && !isQuillEditor) {
-      // Edit selected note
-      if (e.ctrlKey && e.altKey && e.key === 'e') {
-        e.preventDefault();
-        if (currentlySelectedNote) {
-          editNote(currentlySelectedNote);
-        }
-        return;
-      }
-      
-      // Delete selected note
-      if (e.ctrlKey && e.altKey && e.key === 'd') {
-        e.preventDefault();
-        if (currentlySelectedNote) {
-          deleteNote(currentlySelectedNote);
-        }
-        return;
-      }
-      
-      // Share selected note
-      if (e.ctrlKey && e.altKey && e.key === 's') {
-        e.preventDefault();
-        if (currentlySelectedNote) {
-          shareNote(currentlySelectedNote);
-        }
-        return;
-      }
-      
-      // Toggle password protection
-      if (e.ctrlKey && e.altKey && e.key === 'p') {
-        e.preventDefault();
-        protectionToggle.click();
-        return;
-      }
-      
-      // Focus tag filter
-      if (e.ctrlKey && e.altKey && e.key === 't') {
-        e.preventDefault();
-        document.getElementById('tagFilter').focus();
-        return;
-      }
-      
-      // Clear filters
-      if (e.ctrlKey && e.altKey && e.key === 'f') {
-        e.preventDefault();
-        clearFilters();
-        return;
-      }
-    }
-  });
-  
-  // Mark note cards as selectable and track current selection
-  setupNoteSelection();
-  
-  // Utility functions
-  function toggleShortcutsHelp() {
-    const helpModal = document.querySelector('.help-modal');
-    if (helpModal.style.display === 'flex') {
-      helpModal.style.display = 'none';
-    } else {
-      helpModal.style.display = 'flex';
-    }
-  }
-  
-  function toggleChatWidget() {
-    chatWidget.classList.toggle('expanded');
-    const chatToggle = document.getElementById('chatToggle');
-    chatToggle.classList.toggle('fa-chevron-up');
-    chatToggle.classList.toggle('fa-chevron-down');
-    
-    if (chatWidget.classList.contains('expanded')) {
-      chatInput.focus();
-    }
-  }
-  
-  function setupNoteSelection() {
-    const noteCards = document.querySelectorAll('.note-card');
-    noteCards.forEach(card => {
-      card.addEventListener('click', function(e) {
-        // Don't select if clicking on a button
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-          return;
-        }
-        
-        // Remove selection from all notes
-        noteCards.forEach(c => c.classList.remove('selected-note'));
-        
-        // Add selection to this note
-        card.classList.add('selected-note');
-        currentlySelectedNote = card;
-      });
-    });
-    
-    // Add selection styling
-    const style = document.createElement('style');
-    style.textContent = `
-      .note-card.selected-note {
-        border-left: 4px solid #f59e0b !important;
-        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5) !important;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-  
-  function navigateNotes(direction) {
-    const noteCards = Array.from(document.querySelectorAll('.note-card'));
-    if (!noteCards.length) return;
-    
-    let index = -1;
-    if (currentlySelectedNote) {
-      index = noteCards.indexOf(currentlySelectedNote);
-    }
-    
-    if (direction === 'next') {
-      index = (index + 1) % noteCards.length;
-    } else {
-      index = index <= 0 ? noteCards.length - 1 : index - 1;
-    }
-    
-    // Remove selection from all notes
-    noteCards.forEach(card => card.classList.remove('selected-note'));
-    
-    // Select the new note
-    noteCards[index].classList.add('selected-note');
-    currentlySelectedNote = noteCards[index];
-    
-    // Scroll to the selected note
-    noteCards[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-  
-  function editNote(noteCard) {
-    const editBtn = noteCard.querySelector('.edit-btn');
-    if (editBtn) editBtn.click();
-  }
-  
-  function deleteNote(noteCard) {
-    if (confirm('Are you sure you want to delete this note?')) {
-      const deleteBtn = noteCard.querySelector('.delete-btn');
-      if (deleteBtn) deleteBtn.click();
-    }
-  }
-  
-  function shareNote(noteCard) {
-    const shareBtn = noteCard.querySelector('.share-btn');
-    if (shareBtn) shareBtn.click();
-  }
-  
-  function clearFilters() {
-    searchInput.value = '';
-    document.getElementById('tagFilter').value = '';
-    const event = new Event('input');
-    searchInput.dispatchEvent(event);
-  }
-  
-  // Editor formatting functions
-  function formatAsHeading() {
-    const selection = quillEditor.getSelection();
-    if (selection) {
-      // Toggle between heading levels (1-3) or remove heading
-      const format = quillEditor.getFormat(selection);
-      let newHeader = 1;
-      
-      if (format.header) {
-        if (format.header < 3) {
-          newHeader = format.header + 1;
-        } else {
-          newHeader = false; // Remove header formatting
-        }
-      }
-      
-      quillEditor.format('header', newHeader);
-    }
-  }
-  
-  function insertLink() {
-    const selection = quillEditor.getSelection();
-    if (selection) {
-      const text = quillEditor.getText(selection.index, selection.length);
-      const url = prompt('Enter the URL for link:', 'http://');
-      
-      if (url) {
-        quillEditor.deleteText(selection.index, selection.length);
-        quillEditor.insertText(selection.index, text, {
-          'link': url
+            if (typeof handleScrollToTop === 'function') {
+                handleScrollToTop();
+            } else {
+                console.warn('handleScrollToTop function not found in common.js');
+            }
+
+            // Set up theme toggle event listener
+            const themeToggleBtn = document.getElementById('themeToggle');
+            if (themeToggleBtn && typeof toggleTheme === 'function') {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+            } else {
+                console.warn('Theme toggle button or toggleTheme function not found');
+            }
+
+            // Set current year in footer
+            const currentYearElement = document.getElementById('currentYear');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
         });
-        quillEditor.setSelection(selection.index + text.length, 0);
-      }
-    } else {
-      const url = prompt('Enter the URL for link:', 'http://');
-      const linkText = prompt('Enter the text to display:', 'Link text');
-      
-      if (url && linkText) {
-        const range = quillEditor.getSelection() || { index: quillEditor.getLength(), length: 0 };
-        quillEditor.insertText(range.index, linkText, {
-          'link': url
-        });
-        quillEditor.setSelection(range.index + linkText.length, 0);
-      }
-    }
-  }
-  
-  function clearFormatting() {
-    const selection = quillEditor.getSelection();
-    if (selection) {
-      const formats = quillEditor.getFormat(selection);
-      
-      Object.keys(formats).forEach(format => {
-        quillEditor.removeFormat(selection.index, selection.length);
-      });
-    }
-  }
-  
-  // Create help modal for keyboard shortcuts
-  function createShortcutsHelpModal() {
-    const modal = document.createElement('div');
-    modal.className = 'help-modal';
-    modal.style.display = 'none';
-    
-    // Generate shortcuts HTML
-    const shortcutsHtml = Object.entries(shortcuts).map(([key, description]) => {
-      return `<div class="shortcut-item">
-        <span class="shortcut-key">${key}</span>
-        <span class="shortcut-description">${description}</span>
-      </div>`;
-    }).join('');
-    
-    // Create modal content
-    modal.innerHTML = `
-      <div class="help-modal-content">
-        <div class="help-modal-header">
-          <h2>Keyboard Shortcuts</h2>
-          <button class="help-close-btn">&times;</button>
-        </div>
-        <div class="help-modal-body">
-          <div class="shortcuts-list">
-            ${shortcutsHtml}
-          </div>
-        </div>
-      </div>
-    `;
-    
-    // Add modal styles
-    const modalStyle = document.createElement('style');
-    modalStyle.textContent = `
-      .help-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1001;
-      }
-      
-      .help-modal-content {
-        background-color: var(--surface);
-        border-radius: 12px;
-        width: 800px;
-        max-width: 90%;
-        max-height: 90vh;
-        overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      }
-      
-      .help-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      }
-      
-      .help-modal-header h2 {
-        margin: 0;
-        color: var(--text);
-        font-size: 1.5rem;
-      }
-      
-      .help-close-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--text);
-        opacity: 0.7;
-        transition: opacity 0.2s;
-      }
-      
-      .help-close-btn:hover {
-        opacity: 1;
-      }
-      
-      .help-modal-body {
-        padding: 1.5rem;
-        overflow-y: auto;
-        max-height: calc(90vh - 60px);
-      }
-      
-      .shortcuts-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 1rem;
-      }
-      
-      .shortcut-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 0.75rem;
-      }
-      
-      .shortcut-key {
-        background-color: var(--background);
-        color: var(--text);
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        margin-right: 1rem;
-        font-family: monospace;
-        min-width: 100px;
-        text-align: center;
-        font-weight: bold;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-      
-      .shortcut-description {
-        color: var(--text);
-        font-size: 0.9rem;
-      }
-      
-      @media (max-width: 600px) {
-        .shortcuts-list {
-          grid-template-columns: 1fr;
-        }
-      }
-    `;
-    
-    document.head.appendChild(modalStyle);
-    document.body.appendChild(modal);
-    
-    // Add event listener for close button
-    const closeBtn = modal.querySelector('.help-close-btn');
-    closeBtn.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside content
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-  }
-});
-      </script>
-      <script>
-        // Canvas Drawing Functionality
-document.addEventListener('DOMContentLoaded', function() {
-  // Canvas elements
-  const canvas = document.getElementById('drawingCanvas');
-  const ctx = canvas.getContext('2d');
-  const colorPicker = document.getElementById('colorPicker');
-  const brushSize = document.getElementById('brushSize');
-  const eraserTool = document.getElementById('eraserTool');
-  const clearCanvas = document.getElementById('clearCanvas');
-  const closeDrawing = document.getElementById('closeDrawing');
-  const insertDrawing = document.getElementById('insertDrawing');
-  const cancelDrawing = document.getElementById('cancelDrawing');
-  const drawingContainer = document.getElementById('drawingToolContainer');
-  
-  // Drawing state
-  let isDrawing = false;
-  let lastX = 0;
-  let lastY = 0;
-  let currentColor = '#000000';
-  let currentSize = 3;
-  let isEraser = false;
-  
-  // Adjust canvas size to container
-  function resizeCanvas() {
-    // Get the width of the container
-    const containerWidth = drawingContainer.clientWidth - 32; // account for padding
-    
-    // Set canvas dimensions while maintaining aspect ratio
-    canvas.width = Math.min(containerWidth, 800);
-    canvas.height = canvas.width * 0.5; // Maintain 2:1 aspect ratio
-    
-    // Clear and reset canvas after resize
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  
-  // Initialize canvas
-  function initCanvas() {
-    resizeCanvas();
-    
-    // Set initial canvas background to white
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  
-  // Drawing functions
-  function startDrawing(e) {
-    isDrawing = true;
-    
-    // Get mouse position relative to canvas
-    const rect = canvas.getBoundingClientRect();
-    lastX = e.clientX - rect.left;
-    lastY = e.clientY - rect.top;
-  }
-  
-  function draw(e) {
-    if (!isDrawing) return;
-    
-    // Get current mouse position
-    const rect = canvas.getBoundingClientRect();
-    const currentX = e.clientX - rect.left;
-    const currentY = e.clientY - rect.top;
-    
-    // Set drawing properties
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    ctx.lineWidth = currentSize;
-    
-    if (isEraser) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.strokeStyle = 'rgba(0,0,0,1)';
-    } else {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = currentColor;
-    }
-    
-    // Draw line
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(currentX, currentY);
-    ctx.stroke();
-    
-    // Update last position
-    lastX = currentX;
-    lastY = currentY;
-  }
-  
-  function stopDrawing() {
-    isDrawing = false;
-  }
-  
-  // Tool functions
-  function setColor(color) {
-    currentColor = color;
-    isEraser = false;
-    eraserTool.classList.remove('tool-active');
-  }
-  
-  function setBrushSize(size) {
-    currentSize = size;
-  }
-  
-  function toggleEraser() {
-    isEraser = !isEraser;
-    
-    if (isEraser) {
-      eraserTool.classList.add('tool-active');
-    } else {
-      eraserTool.classList.remove('tool-active');
-    }
-  }
-  
-  function clearCanvasFunc() {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  
-  // Insert drawing into Quill editor
-  function insertDrawingIntoEditor() {
-    // Convert canvas to image data URL
-    const imageData = canvas.toDataURL('image/png');
-    
-    // Get current Quill editor instance
-    const quillEditor = Quill.find(document.getElementById('addTxt'));
-    
-    // Get current cursor position
-    const range = quillEditor.getSelection() || { index: quillEditor.getLength(), length: 0 };
-    
-    // Insert image at cursor position
-    quillEditor.insertEmbed(range.index, 'image', imageData);
-    
-    // Move cursor after the image
-    quillEditor.setSelection(range.index + 1, 0);
-    
-    // Close drawing tool
-    drawingContainer.style.display = 'none';
-  }
-  
-  // Event listeners
-  window.addEventListener('resize', resizeCanvas);
-  
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
-  
-  // Touch support for mobile
-  canvas.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousedown', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    canvas.dispatchEvent(mouseEvent);
-  });
-  
-  canvas.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousemove', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    canvas.dispatchEvent(mouseEvent);
-  });
-  
-  canvas.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    const mouseEvent = new MouseEvent('mouseup');
-    canvas.dispatchEvent(mouseEvent);
-  });
-  
-  colorPicker.addEventListener('change', function() {
-    setColor(this.value);
-  });
-  
-  brushSize.addEventListener('change', function() {
-    setBrushSize(this.value);
-  });
-  
-  eraserTool.addEventListener('click', toggleEraser);
-  clearCanvas.addEventListener('click', clearCanvasFunc);
-  
-  insertDrawing.addEventListener('click', insertDrawingIntoEditor);
-  
-  closeDrawing.addEventListener('click', function() {
-    drawingContainer.style.display = 'none';
-  });
-  
-  cancelDrawing.addEventListener('click', function() {
-    drawingContainer.style.display = 'none';
-  });
-  
-  // Add keyboard shortcut for drawing tool (Ctrl+D)
-  document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === 'd') {
-      e.preventDefault();
-      drawingContainer.style.display = drawingContainer.style.display === 'flex' ? 'none' : 'flex';
-      
-      if (drawingContainer.style.display === 'flex') {
-        initCanvas();
-      }
-    }
-  });
-  
-  // Initialize canvas on first load
-  initCanvas();
-  
-  // Add drawing button to document for testing/alternate access
-  const addDrawingButton = document.createElement('button');
-  addDrawingButton.id = 'openDrawingTool';
-  addDrawingButton.className = 'add-note-btn';
-  addDrawingButton.style.marginRight = '10px';
-  addDrawingButton.innerHTML = '<i class="fas fa-paint-brush"></i> Draw';
-  
-  // Insert before the Add Note button
-  const addNoteBtn = document.getElementById('addBtn');
-  addNoteBtn.parentNode.insertBefore(addDrawingButton, addNoteBtn);
-  
-  // Event listener for the drawing button
-  addDrawingButton.addEventListener('click', function() {
-    drawingContainer.style.display = 'flex';
-    initCanvas();
-  });
-});
-      </script>
-      <script>
-        // Text-to-Speech Functionality
-document.addEventListener('DOMContentLoaded', function() {
-  // Get reference to Quill editor
-  const quillEditor = Quill.find(document.getElementById('addTxt'));
-  
-  // Create the speaker button
-  const speakerButton = document.createElement('button');
-  speakerButton.id = 'speakerButton';
-  speakerButton.className = 'speak-btn';
-  speakerButton.title = 'Read note aloud';
-  speakerButton.innerHTML = '<i class="fas fa-volume-up"></i>';
-  speakerButton.style.marginRight = '10px';
-  
-  // Add styling for the button
-  const style = document.createElement('style');
-  style.textContent = `
-    .speak-btn {
-      background-color: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .speak-btn:hover {
-      background-color: var(--primary-dark, #0056b3);
-    }
-    
-    .speak-btn.speaking {
-      background-color: #e74c3c;
-    }
-    
-    .speak-btn.speaking i {
-      animation: pulse 1.5s infinite;
-    }
-    
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-    
-    .tts-controls {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-    }
-    
-    .tts-rate-control {
-      display: flex;
-      align-items: center;
-      margin-left: 15px;
-    }
-    
-    .tts-rate-control label {
-      margin-right: 8px;
-      font-size: 14px;
-    }
-    
-    .tts-rate-control select {
-      padding: 4px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // Insert button before the Add Note button
-  const addNoteBtn = document.getElementById('addBtn');
-  addNoteBtn.parentNode.insertBefore(speakerButton, addNoteBtn);
-  
-  // Create speech rate control
-  const rateControl = document.createElement('div');
-  rateControl.className = 'tts-controls';
-  rateControl.innerHTML = `
-    <div class="tts-rate-control">
-      <label for="speechRate">Speed:</label>
-      <select id="speechRate">
-        <option value="0.5">0.5x</option>
-        <option value="0.75">0.75x</option>
-        <option value="1" selected>1x</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2x</option>
-      </select>
-    </div>
-  `;
-  speakerButton.parentNode.insertBefore(rateControl, addNoteBtn);
-  
-  // Initialize speech synthesis variables
-  let speechSynthesis = window.speechSynthesis;
-  let utterance = null;
-  let isSpeaking = false;
-  
-  // Function to speak text
-  function speakText() {
-    // If already speaking, stop current speech
-    if (isSpeaking) {
-      stopSpeaking();
-      return;
-    }
-    
-    // Get text from Quill editor
-    const editorContent = quillEditor.getText();
-    
-    if (!editorContent.trim()) {
-      // Show alert if there's no text to read
-      alert('There is no text to read.');
-      return;
-    }
-    
-    // Create speech utterance
-    utterance = new SpeechSynthesisUtterance(editorContent);
-    
-    // Get selected rate
-    const rate = parseFloat(document.getElementById('speechRate').value);
-    utterance.rate = rate;
-    
-    // Set default voice (first available)
-    const voices = speechSynthesis.getVoices();
-    if (voices.length > 0) {
-      // Prefer a native voice if available
-      const nativeVoice = voices.find(voice => voice.localService);
-      utterance.voice = nativeVoice || voices[0];
-    }
-    
-    // Set up events
-    utterance.onstart = function() {
-      isSpeaking = true;
-      speakerButton.classList.add('speaking');
-    };
-    
-    utterance.onend = function() {
-      isSpeaking = false;
-      speakerButton.classList.remove('speaking');
-    };
-    
-    utterance.onerror = function(event) {
-      console.error('SpeechSynthesis Error:', event.error);
-      isSpeaking = false;
-      speakerButton.classList.remove('speaking');
-      alert('Speech synthesis error: ' + event.error);
-    };
-    
-    // Start speaking
-    speechSynthesis.speak(utterance);
-  }
-  
-  // Function to stop speaking
-  function stopSpeaking() {
-    if (speechSynthesis) {
-      speechSynthesis.cancel();
-      isSpeaking = false;
-      speakerButton.classList.remove('speaking');
-    }
-  }
-  
-  // Add click event to speaker button
-  speakerButton.addEventListener('click', speakText);
-  
-  // Handle page visibility changes (pause speech when tab is hidden)
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden && isSpeaking) {
-      speechSynthesis.pause();
-    } else if (isSpeaking) {
-      speechSynthesis.resume();
-    }
-  });
-  
-  // Clean up resources when page is unloaded
-  window.addEventListener('beforeunload', function() {
-    if (isSpeaking) {
-      stopSpeaking();
-    }
-  });
-  
-  // Add keyboard shortcut for text-to-speech (Alt+S)
-  document.addEventListener('keydown', function(e) {
-    if (e.altKey && e.key === 's') {
-      e.preventDefault();
-      speakText();
-    }
-  });
-  
-  // Ensure voices are loaded (sometimes needed for Chrome)
-  function loadVoices() {
-    return new Promise(function(resolve) {
-      const voices = speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        resolve(voices);
-      } else {
-        speechSynthesis.onvoiceschanged = function() {
-          resolve(speechSynthesis.getVoices());
-        };
-      }
-    });
-  }
-  
-  // Initialize voices when available
-  loadVoices().then(function(voices) {
-    console.log(`${voices.length} speech synthesis voices loaded.`);
-  });
-});
-      </script>
-  </body>
+    </script>
+</body>
 </html>
