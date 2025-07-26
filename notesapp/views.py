@@ -10,12 +10,13 @@ def index(request):
             'Uname': username,
             'data': data,
         }
+        return render(request, 'notesapp/main.html', context)
     else:
         context = {
             'Uname': None,
             'data': None,
         }
-    if(context['Uname'] is not None):
-        return render(request, 'notesapp/main.html', context)
-    else:
         return render(request, 'notesapp/index.html', context)
+
+def license_view(request):
+    return render(request, 'notesapp/license.html')  

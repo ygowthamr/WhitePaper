@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    
+    <!-- Quill Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="static/css/NewStyle.css" rel="stylesheet">
+   
+    <title>Whitepaper - License</title>
+    <style>
+ :root {
+        /* Light Theme */
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --secondary: #64748b;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+}
+
+[data-theme="dark"] {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --background: #121212;
+        --surface: #1e1e1e;
+        --text: #e2e8f0;
+        --secondary: #a0aec0;
+        --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Header */
+.header {
+  background-color: var(--surface);
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.search-input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  width: 300px;
+  text-align: center;
+}
+
+/* Main Container */
+.main-container {
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.container {
+  background-color: var(--surface);
+  color: var(--text);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.container h1 {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+pre {
+  background-color: var(--background);
+  color: var(--text);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.license-summary {
+  background-color: var(--surface);
+  color: var(--text);
+  padding: 1.5rem;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+.license-summary ul {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+}
+
+.license-summary li {
+  margin-bottom: 0.5rem;
+  list-style-type: "👉 ";
+}
+
+
+    /* footer */
+   .footer-body{
+    display: grid;
+    justify-content: center;
+    align-content: end;
+    background: var(--surface);
+    padding: 25px;
+    }
+    footer{
+    position: relative;
+    width:100%;
+    height: auto;
+    background: var(--surface);
+   }
+   .footer-container{
+    width:100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-gap:20px;
+    padding:15px;
+    
+}
+.footer-container .sec h2{
+  position: relative;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+.footer-container .sec p{
+    color: var(--text);
+    padding: 25px;
+
+   
+}
+.footer-container .social{
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(5,50px);
+}
+.footer-container .social{
+    list-style: none;
+}
+.footer-container .social li a{
+ display:inline-block;
+ width: 36px;
+ height: 36px;
+ background:var(--text);
+ display: grid;
+ align-content: center;
+ text-decoration: none;
+}
+.footer-container .social li a i{
+    color:var(--background);
+    font-size: 20px;
+    position: relative;
+    left:10px;
+}
+/* quick links and support combine*/
+.footer-container .quicklinks{
+    position: relative;
+
+}
+
+.footer-container .quicklinks ul li{
+  list-style: none;
+  position: relative;
+  left:-5px;
+}
+.footer-container .quicklinks ul li a{
+    color:var(--text);
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/*  contact */
+.footer-container .contact .info{
+  
+  position: relative;
+  left:-35px;
+
+}
+.footer-container .contact .info li{
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    margin-bottom: 16px;
+}
+.footer-container .contact .info li span{
+ color:var(--text);
+ font-size: 15px;
+ 
+}
+.footer-container .contact .info li a{
+    color:var(--text);
+    text-decoration: none;
+}
+
+/* Responsive Footer */
+@media(max-width: 991px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media(max-width: 768px) {
+  .footer-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+/* footer */
+.footer-container .quicklinks li a:hover{
+   color:var( --primary);
+   position: relative;
+   left:5px;
+}
+.location:hover,.call:hover,.mail:hover{
+   
+   position: relative;
+   left:5px;
+}
+.footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
+    color:var( --primary);
+}
+.footer a{
+  text-decoration: none;
+  color: var(--text);
+}
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <i class="fas fa-pen-fancy"></i> Whitepaper - License
+            </a>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <style>
+                    .search-input {
+                        width: 300px;
+                        text-align: center;
+                    }
+                </style>
+                <input type="text" id="searchTxt" class="search-input" placeholder="Search notes...">
+
+
+                <button class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+    <div class="container">
+        <h1>MIT License</h1>
+    <pre>
+MIT License
+
+Copyright (c) 2024 ygowthamr
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+    </pre>
+        <br>
+        <div class="license-summary">
+            <h3>📄 Summary of the MIT License</h3>
+                <br>
+                <p>This project is licensed under the MIT License. Here's a quick overview of what that means for you:</p>
+                    <ul>
+                        <li>✅ <strong>You can use</strong> this software freely for personal, academic, or commercial purposes.</li>
+                        <li>✅ <strong>You can modify</strong> the code and adapt it to your needs.</li>
+                        <li>✅ <strong>You can distribute</strong> the original or modified code.</li>
+                        <li>✅ <strong>You can even sell</strong> the software or include it in commercial products.</li>
+                        <li>📌 <strong>Just include</strong> the original copyright and license notice in your version.</li>
+                        <li>⚠️ <strong>No warranty is provided.</strong> The software is offered "as is", without any guarantees.</li>
+                    </ul>
+                <p>For complete details, please read the full license text below.</p>
+            </div>
+        </div>
+
+    <!-- Top scroll button -->
+        <div id="scrollButton" class="hidden">
+            <div class="outer-circle">
+                <div class="inner-circle">
+                    <div class="arrow"><i class="fa-solid fa-arrow-up"></i></div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <footer class="footer-body">
+        <div class="footer-container">
+           <!---discript-->
+           <div class="sec discript">
+               
+               <a href="/" class="logo">
+                   <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper - License</a>
+               </a>
+               <p style="margin-left: -30px;">
+                   Notepad License page created by <a href="https://github.com/Sougata2006" target="_blank" style="color: #007acc; text-decoration: none;">Sougata Paul</a>
+               </p>
+               <!--icons-->
+
+               <ul class="social">
+                   <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
+                   <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
+                   <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
+                   <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
+                   <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+               </ul>
+           </div>
+
+            <!--Quick links_--->
+            <div class="sec quicklinks">
+               <h2>Quick Links</h2>
+               <ul>
+                   <li><a href="{% url 'index' %}" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
+                   </li>
+                   <li><a href="{% url 'index' %}" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
+                   <li><a href="{% url 'index' %}" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                   <li><a href="{% url 'index' %}" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+               </ul>
+           </div>
+
+            <!--support-->
+            <div class="sec quicklinks">
+               <h2>Support</h2>
+               <ul>
+                   <li><a href="{% url 'index' %}">Terms & Conditions</a></li>
+                   <li><a href="{% url 'index' %}">Privacy Policy</a></li>
+                   <li><a href="{% url 'index' %}">FAQ</a></li>  
+               </ul>
+           </div>
+           <!--contact-->
+           <div class="sec contact">
+               <h2>Contact</h2>
+               <ul class="info">
+                   <li class="location">
+                       <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
+                   <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
+                   <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
+               </ul>
+           </div>
+       </div>
+         </div>
+       </div>
+
+        <p style="margin-left: 460px;" class="footer">&copy; <span id="currentYear"></span> 2025 Whitepaper | All rights reserved | <a href="{% url 'license' %}">License</a></p> 
+    </footer>
+
+    <!-- Quill Editor -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+   
+    <!-- Your custom script -->
+    <script src="static/javascript/script.js" defer></script>
+<script>
+  const toggleBtn = document.querySelector(".theme-toggle");
+  const icon = toggleBtn.querySelector("i");
+  const root = document.documentElement;
+
+  // Optional: save preference in localStorage
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme) {
+    root.setAttribute("data-theme", savedTheme);
+    icon.classList = savedTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    const currentTheme = root.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+    root.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme); // Save preference
+
+    icon.classList = newTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+  });
+</script>
+</body>
+</html>
