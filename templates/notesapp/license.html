@@ -372,11 +372,11 @@ SOFTWARE.
             <div class="sec quicklinks">
                <h2>Quick Links</h2>
                <ul>
-                   <li><a href="index.html" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
+                   <li><a href="{% url 'index' %}" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
                    </li>
-                   <li><a href="index.html" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
-                   <li><a href="index.html" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
-                   <li><a href="index.html" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+                   <li><a href="{% url 'index' %}" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
+                   <li><a href="{% url 'index' %}" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                   <li><a href="{% url 'index' %}" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
                </ul>
            </div>
 
@@ -384,9 +384,9 @@ SOFTWARE.
             <div class="sec quicklinks">
                <h2>Support</h2>
                <ul>
-                   <li><a href="index.html">Terms & Conditions</a></li>
-                   <li><a href="index.html">Privacy Policy</a></li>
-                   <li><a href="index.html">FAQ</a></li>
+                   <li><a href="{% url 'index' %}">Terms & Conditions</a></li>
+                   <li><a href="{% url 'index' %}">Privacy Policy</a></li>
+                   <li><a href="{% url 'index' %}">FAQ</a></li>  
                </ul>
            </div>
            <!--contact-->
@@ -403,7 +403,7 @@ SOFTWARE.
          </div>
        </div>
 
-        <p class="footer">&copy; <span id="currentYear"></span> 2025 Whitepaper | All rights reserved | <a href="license.html">License</a></p> 
+        <p style="margin-left: 460px;" class="footer">&copy; <span id="currentYear"></span> 2025 Whitepaper | All rights reserved | <a href="{% url 'license' %}">License</a></p> 
     </footer>
 
     <!-- Quill Editor -->
