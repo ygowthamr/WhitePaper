@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Whitepaper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/contactus.css">
+    
+</head>
+<body>
+    <div class="background-elements">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+        <div class="geometric-pattern"></div>
+        <div class="dots-pattern"></div>
+        <div class="wave-pattern"></div>
+        <div class="particles-container" id="particles"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">W</div>
+                    <div class="logo-text">Whitepaper</div>
+                </div>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="contact-section">
+                <div class="contact-info">
+                    <h1 class="section-title">Get in Touch</h1>
+                    <p class="section-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible with our innovative solutions.</p>
+                    
+                    <div class="contact-card">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-details">
+                                <h3>Email Us</h3>
+                                <p>hello@whitepaper.com<br>support@whitepaper.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-details">
+                                <h3>Call Us</h3>
+                                <p>+1 (555) 123-4567<br>Available 24/7</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h3>Visit Us</h3>
+                                <p>123 Innovation Street<br>Tech Valley, CA 94025</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">⏰</div>
+                            <div class="contact-details">
+                                <h3>Business Hours</h3>
+                                <p>Mon - Fri: 9:00 AM - 6:00 PM<br>Weekend: By appointment</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link"><span>🐦</span></a>
+                        <a href="#" class="social-link"><span>💼</span></a>
+                        <a href="#" class="social-link"><span>📘</span></a>
+                        <a href="#" class="social-link"><span>📷</span></a>
+                        <a href="#" class="social-link"><span>🎵</span></a>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <div class="form-container">
+                        <h2 class="form-title">Send us a Message</h2>
+                        <p class="form-subtitle">Fill out the form below and we'll get back to you within 24 hours with personalized assistance.</p>
+                        
+                        <form id="contactForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Email Address *</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="subject">Subject *</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="">Select a topic</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="support">Technical Support</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="billing">Billing Question</option>
+                                    <option value="partnership">Partnership Opportunity</option>
+                                    <option value="demo">Request Demo</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="message">Message *</label>
+                                <textarea id="message" name="message" placeholder="Tell us more about your inquiry and how we can help you..." required></textarea>
+                            </div>
+
+                            <button type="submit" class="submit-btn">
+                                <span class="loading-spinner"></span>
+                                <span class="btn-text">Send Message</span>
+                            </button>
+
+                            <div class="success-message" id="successMessage">
+                                ✅ Thank you! Your message has been sent successfully. We'll get back to you soon with personalized assistance.
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="/static/javascript/contactus.js"></script>
+</body>
+</html>
