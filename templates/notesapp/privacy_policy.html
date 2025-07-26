@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    
+    <title>Privacy Policy - Whitepaper</title>
+    <style>
+        :root {
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --secondary: #64748b;
+            --primary: #2563eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--surface);
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .content-card {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .section ul {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            background-color: #f0f9ff;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+            margin: 1rem 0;
+        }
+
+        .warning {
+            background-color: #fef3c7;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #f59e0b;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'mynotepad' %}" class="logo">Whitepaper</a>
+            <a href="{% url 'mynotepad' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="content-card">
+            <h1 class="page-title">Privacy Policy</h1>
+            <p class="last-updated">Last updated: July 2025</p>
+
+            <div class="section">
+                <h2>1. Introduction</h2>
+                <p>At Whitepaper, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our note-taking application.</p>
+            </div>
+
+            <div class="section">
+                <h2>2. Information We Collect</h2>
+                
+                <h3>2.1 Personal Information</h3>
+                <p>When you create an account, we collect:</p>
+                <ul>
+                    <li>Email address</li>
+                    <li>Username</li>
+                    <li>Password (encrypted)</li>
+                    <li>Account creation date</li>
+                </ul>
+
+                <h3>2.2 Usage Information</h3>
+                <p>We automatically collect information about how you use our service:</p>
+                <ul>
+                    <li>Notes content and metadata</li>
+                    <li>Tags and categories</li>
+                    <li>Search queries</li>
+                    <li>Feature usage patterns</li>
+                    <li>Device information and IP address</li>
+                </ul>
+
+                <h3>2.3 Technical Information</h3>
+                <p>We collect technical information including:</p>
+                <ul>
+                    <li>Browser type and version</li>
+                    <li>Operating system</li>
+                    <li>Device identifiers</li>
+                    <li>Log files and analytics data</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>3. How We Use Your Information</h2>
+                <p>We use the collected information for the following purposes:</p>
+                <ul>
+                    <li><strong>Service Provision:</strong> To provide and maintain our note-taking service</li>
+                    <li><strong>Account Management:</strong> To manage your account and authenticate you</li>
+                    <li><strong>Communication:</strong> To send you important updates and notifications</li>
+                    <li><strong>Improvement:</strong> To analyze usage patterns and improve our service</li>
+                    <li><strong>Security:</strong> To protect against fraud and ensure service security</li>
+                    <li><strong>Support:</strong> To provide customer support and respond to inquiries</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>4. Your Rights and Choices</h2>
+                
+                <h3>4.1 Access and Control</h3>
+                <p>You have the right to:</p>
+                <ul>
+                    <li>Access your personal information</li>
+                    <li>Update or correct your information</li>
+                    <li>Delete your account and data</li>
+                    <li>Export your notes and data</li>
+                    <li>Opt-out of certain communications</li>
+                </ul>
+
+                <h3>4.2 Cookies and Tracking</h3>
+                <p>You can control cookie settings through your browser preferences. However, disabling certain cookies may affect service functionality.</p>
+            </div>
+
+            <div class="section">
+                <h2>5. Children's Privacy</h2>
+                <p>Our service is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13.</p>
+            </div>
+
+            <div class="section">
+                <h2>6. Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time. We will notify you of significant changes via email or through the service. Continued use of the service after changes constitutes acceptance of the updated policy.</p>
+            </div>
+
+            <div class="section">
+                <h2>11. Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
+                <div class="highlight">
+                    <p><strong>Email:</strong> whitepaper@email.com</p>
+                    <p><strong>Phone:</strong> +12345678900</p>
+                    <p><strong>Address:</strong> India</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html> 
