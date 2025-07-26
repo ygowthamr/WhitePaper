@@ -24,5 +24,14 @@ function initializeTheme() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  initializeTheme();
+
+  const toggleBtn = document.querySelector('.theme-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', toggleTheme);
+  }
+});
+
 // Call initialize on page load
 document.addEventListener('DOMContentLoaded', initializeTheme);
