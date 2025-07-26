@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,16 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts for consistent typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    <!-- Font Awesome for icons -->
+    <!-- PR #<number>: [Your Fix Placeholder, e.g., Upgraded Font Awesome to 6.7.2] -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <!-- Quill Editor CSS -->
+    <!-- Quill Editor CSS for rich text editing -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
+    <!-- Favicon for branding -->
+    <!-- PR #<number>: [Your Fix Placeholder, e.g., Corrected favicon path] -->
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+    <link rel="stylesheet" href="../../static/css/NewStyle.css">
     
     <title>Whitepaper - Smart Notes</title>
     <style>
@@ -35,7 +38,7 @@
             --primary: #4f46e5;
         }
 
-        /* Theme toggle button */
+        /* Theme toggle button styling */
         .theme-toggle {
             background: none;
             border: none;
@@ -445,6 +448,8 @@
             <div id="notes" class="notes-grid"></div>
         </section>
 
+        <!-- Scroll-to-top button with circular progress -->
+        <!-- PR #<number>: [Your Fix Placeholder, e.g., Corrected icon to fa-arrow-up] -->
         <div id="scrollButton" class="hidden">
             <div class="outer-circle">
                 <div class="inner-circle">
@@ -454,6 +459,8 @@
         </div>
     </main>
 
+    <!-- Toast notification for user feedback -->
+    <!-- PR #<number>: [Your Fix Placeholder, e.g., Adjusted toast positioning] -->
     <div class="toast" id="toast"></div>
 
     <footer>
@@ -507,14 +514,18 @@
                 </div>
             </div>
         </div>
+        <!-- Footer copyright with dynamic year -->
+        <!-- PR #<number>: [Your Fix Placeholder, e.g., Fixed footer alignment] -->
         <p class="footer">© <span id="currentYear"></span> Whitepaper. All rights reserved.</p>
     </footer>
 
-    <!-- Quill Editor -->
+    <!-- Quill Editor for rich text editing -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    <!-- Common script for theme and scroll -->
+    <!-- Common script for theme and scroll-to-top functionality -->
+    <!-- PR #<number>: [Your Fix Placeholder, e.g., Added common.js for shared logic] -->
     <script src="../../static/javascript/common.js"></script>
-    <!-- Note-taking script -->
+    <!-- Note-taking script for Quill, save, edit, print, etc. -->
+    <!-- PR #<number>: [Your Fix Placeholder, e.g., Moved note-taking to script.js] -->
     <script src="../../static/javascript/script.js"></script>
 </body>
 </html>
