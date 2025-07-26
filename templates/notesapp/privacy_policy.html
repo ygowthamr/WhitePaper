@@ -153,6 +153,124 @@
                 padding: 1.5rem;
             }
         }
+
+        /* Footer Styles */
+        footer{
+            position: relative;
+            width:100%;
+            height: auto;
+            background: var(--surface);
+        }
+        .footer-container{
+            width:100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-gap:20px;
+        }
+        .footer-container .sec h2{
+            position: relative;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .footer-container .sec p{
+            color: var(--text);
+        }
+        .footer-container .social{
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(5,50px);
+        }
+        .footer-container .social{
+            list-style: none;
+        }
+        .footer-container .social li a{
+            display:inline-block;
+            width: 36px;
+            height: 36px;
+            background:var(--text);
+            display: grid;
+            align-content: center;
+            text-decoration: none;
+        }
+        .footer-container .social li a i{
+            color:var(--background);
+            font-size: 20px;
+            position: relative;
+            left:10px;
+        }
+
+        /* quick links and support combine*/
+        .footer-container .quicklinks{
+            position: relative;
+        }
+
+        .footer-container .quicklinks ul li{
+            list-style: none;
+            position: relative;
+            left:-35px;
+        }
+        .footer-container .quicklinks ul li a{
+            color:var(--text);
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /*  contact */
+        .footer-container .contact .info{
+            position: relative;
+            left:-35px;
+        }
+        .footer-container .contact .info li{
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            margin-bottom: 16px;
+        }
+        .footer-container .contact .info li span{
+            color:var(--text);
+            font-size: 15px;
+        }
+        .footer-container .contact .info li a{
+            color:var(--text);
+            text-decoration: none;
+        }
+
+        /* footer hover effects */
+        .footer-container .quicklinks li a:hover{
+            color:var(--primary);
+            position: relative;
+            left:5px;
+        }
+        .location:hover,.call:hover,.mail:hover{
+            position: relative;
+            left:5px;
+        }
+        .footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
+            color:var(--primary);
+        }
+
+        /* footer media queries */
+        @media(max-width:991px){
+            footer{
+                padding: 40px;
+            }
+            .footer-container{
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                grid-gap: 20px;
+            }
+        }
+
+        @media(max-width:768px){
+            .footer-container{
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+                grid-gap: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -260,41 +378,42 @@
         </div>
     </main>
 
-    <footer class="footer-body">
-        <div class="footer-container">
-           <!---discript-->
-           <div class="sec discript">
-               
-               <a href="/" class="logo">
-                   <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper</a>
-               </a>
-               <p>
-                   A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
-               </p>
-               <!--icons-->
-
-               <ul class="social">
-                   <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
-                   <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
-                   <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
-                   <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
-                   <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
-               </ul>
-           </div>
-
-            <!--Quick links_--->
-            <div class="sec quicklinks">
-               <h2>Quick Links</h2>
-               <ul>
-                   <li><a href="#" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
-                   </li>
-                   <li><a href="#" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
-                   <li><a href="#note-editor" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
-                   <li><a href="#sortednotes" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
-               </ul>
-           </div>
-
-                            <!--support-->
+    <footer>
+        <div class="footer-body">
+            <div class="footer-container">
+               <!---discript-->
+               <div class="sec discript">
+                   
+                   <a href="{% url 'mynotepad' %}" class="logo">
+                       <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper</a>
+                   </a>
+                   <p>
+                       A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
+                   </p>
+                   <!--icons-->
+   
+                   <ul class="social">
+                       <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
+                       <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
+                       <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
+                       <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
+                       <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+                   </ul>
+               </div>
+   
+                <!--Quick links_--->
+                <div class="sec quicklinks">
+                   <h2>Quick Links</h2>
+                   <ul>
+                       <li><a href="{% url 'mynotepad' %}" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
+                       </li>
+                       <li><a href="#" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
+                       <li><a href="#" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                       <li><a href="#" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+                   </ul>
+               </div>
+   
+                <!--support-->
                 <div class="sec quicklinks">
                    <h2>Support</h2>
                    <ul>
@@ -303,22 +422,25 @@
                        <li><a href="{% url 'faq' %}">FAQ</a></li>
                    </ul>
                </div>
-           <!--contact-->
-           <div class="sec contact">
-               <h2>Contact</h2>
-               <ul class="info">
-                   <li class="location">
-                       <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
-                   <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
-                   <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
-               </ul>
+               <!--contact-->
+               <div class="sec contact">
+                   <h2>Contact</h2>
+                   <ul class="info">
+                       <li class="location">
+                           <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
+                       <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
+                       <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
+                   </ul>
+               </div>
            </div>
-       </div>
-         </div>
-       </div>
+             </div>
+           </div>
 
         <p class="footer">&copy; <span id="currentYear"></span> Whitepaper. All rights reserved.</p>
     </footer>
-    
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
 </body>
 </html> 
