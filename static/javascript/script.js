@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
                 [{ 'script': 'sub' }, { 'script': 'super' }],
-                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                [{ 'header': ['1', '2', false] }],
+                [{ 'size': ['small', false, 'large', 'huge'] }, 'blockquote', 'code-block'],
+
                 [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
                 [{ 'align': [] }],
                 ['link', 'image', 'video'],
@@ -29,6 +31,81 @@ document.addEventListener('DOMContentLoaded', function() {
         placeholder: 'Type your note here...',
     });
 
+// Remove Quill's default block header format
+delete Quill.imports['formats/header'];
+
+
+
+
+   // Create custom Inline Heading format
+const Inline = Quill.import('blots/inline');
+
+class InlineHeader extends Inline {
+    static create(level) {
+        let node = super.create();
+        node.setAttribute('data-header', level);
+        node.style.fontSize = level === '1' ? '1.8em' : '1.4em';
+        node.style.fontWeight = 'bold';
+        return node;
+    }
+    static formats(node) {
+        return node.getAttribute('data-header');
+    }
+}
+
+InlineHeader.blotName = 'inlineHeader';
+InlineHeader.tagName = 'SPAN';
+
+Quill.register(InlineHeader, true);
+
+// Apply inline header when dropdown changes
+const headerSelect = document.querySelector('.ql-header');
+if (headerSelect) {
+    headerSelect.addEventListener('change', (e) => {
+        const value = e.target.value;
+        if (value === '1' || value === '2') {
+            quill.format('inlineHeader', value);
+        } else {
+            quill.format('inlineHeader', false);
+        }
+    });
+}
+
+
+
+// 🔹 Add tooltips to Quill toolbar buttons
+const tooltips = {
+    'ql-bold': 'Bold',
+    'ql-italic': 'Italic',
+    'ql-underline': 'Underline',
+    'ql-strike': 'Strikethrough',
+    'ql-color': 'Text Color',
+    'ql-background': 'Highlight',
+    'ql-script': 'Subscript/Superscript',
+    'ql-size': 'Font Size (applies to selected text only)',
+    'ql-blockquote': 'Quote',
+    'ql-code-block': 'Code Block',
+    'ql-list': 'List',
+    'ql-indent': 'Indent',
+    'ql-align': 'Align',
+    'ql-link': 'Insert Link',
+    'ql-image': 'Insert Image',
+    'ql-video': 'Insert Video',
+    'ql-clean': 'Clear Formatting',
+    'ql-font': 'Font',
+};
+
+// Apply tooltips
+document.querySelectorAll('.ql-toolbar button, .ql-toolbar select').forEach(btn => {
+    const classes = Array.from(btn.classList);
+    const tooltipKey = classes.find(cls => tooltips[cls]);
+    if (tooltipKey) {
+        btn.setAttribute('title', tooltips[tooltipKey]);
+    }
+});
+
+
+    
     // Initialize elements
     const elements = {
         saveNoteBtn: document.getElementById('saveNoteBtn'),
