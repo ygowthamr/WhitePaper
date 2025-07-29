@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    <!-- Added favicon -->
+    <link rel="icon" type="image/x-icon" href="../../static/images/favicon-32x32.png">
     
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -26,6 +27,31 @@
             --text: #0f172a;
             --secondary: #64748b;
             --primary: #2563eb;
+        }
+
+        [data-theme="dark"] {
+            --background: #1a1a1a;
+            --surface: #2d2d2d;
+            --text: #ffffff;
+            --secondary: #a1a1aa;
+            --primary: #4f46e5;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+            transform: rotate(180deg);
         }
 
         body {
@@ -436,11 +462,11 @@
                <!--icons-->
 
                <ul class="social">
-                   <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
-                   <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
-                   <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
-                   <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
-                   <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+                   <li><a href="https://www.facebook.com/" class="icons" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a></li>
+                   <li><a href="https://www.instagram.com/" class="icons" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a></li>
+                   <li><a href="https://github.com/" class="icons" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a></li>
+                   <li><a href="https://www.linkedin.com/" class="icons" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin"></i></a></li>
+                   <li><a href="https://x.com/" class="icons" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a></li>
                </ul>
            </div>
 
@@ -487,6 +513,7 @@
    
     <!-- Your custom script -->
     <script src="static/javascript/script.js"></script>
+    <script src="static/javascript/common.js"></script>
      <script>
         
      </script>
