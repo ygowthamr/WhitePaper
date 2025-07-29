@@ -23,10 +23,13 @@ STATIC_DIR=os.path.join(BASE_DIR,'static')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    raise Exception('DJANGO_SECRET_KEY environment variable not set! Please set it for production security.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ["*"]
 # Set ALLOWED_HOSTS from environment variable, default to localhost for safety
 ALLOWED_HOSTS_ENV = os.environ.get('DJANGO_ALLOWED_HOSTS')
 if ALLOWED_HOSTS_ENV:
@@ -62,9 +65,6 @@ GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'Github OAuth': {
-            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
-            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
-            'key': ''  
             'client_id': GITHUB_CLIENT_ID,
             'secret': GITHUB_CLIENT_SECRET,
             'key': ''
