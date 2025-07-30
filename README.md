@@ -210,14 +210,17 @@ WhitePaper/
     requirements.txt
     static/
         css/
+            main.css
             NewStyle.css
             responsive.css
             style.css
         images/
+            favicon-32x32.png
+            scroll-top.png
         javascript/
-            Theme.js
             authenticated.js
             autosave.js
+            common.js
             script.js
     templates/
         notesapp/
