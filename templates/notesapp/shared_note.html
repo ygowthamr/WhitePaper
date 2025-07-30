@@ -1,5 +1,6 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -430,5 +431,28 @@
         });
     </script>
     {% endif %}
+
+
+    {% block content %}
+  <div class="note-container">
+    <form id="note-form" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="note_id" id="note-id" value="{{ note.id }}">
+
+      <div class="form-group">
+        <input type="text" name="title" id="note-title" placeholder="Note Title" value="{{ note.title }}" autocomplete="off" required>
+      </div>
+
+      <div class="form-group">
+        <textarea name="content" id="note-content" placeholder="Start typing...">{{ note.content }}</textarea>
+      </div>
+
+      <div id="save-status" style="font-size: 14px; color: grey; margin-top: 5px;"></div>
+    </form>
+  </div>
+
+  <!-- Load JavaScript -->
+  <script src="{% static 'js/autosave.js' %}"></script>
+{% endblock %}
 </body>
 </html>

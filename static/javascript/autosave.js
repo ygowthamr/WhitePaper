@@ -1,5 +1,10 @@
 let saveTimeout;
 
+function getCSRFToken() {
+    let cookie = document.cookie.match('(^|;)\\s*csrftoken\\s*=\\s*([^;]+)');
+    return cookie ? cookie.pop() : '';
+}
+
 function showSaveStatus(message) {
     const statusElement = document.getElementById('save-status');
     if (statusElement) {
@@ -12,39 +17,67 @@ function showSaveStatus(message) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const maxChars = 500; // Maximum character limit for note content
-    const warningThreshold = 50; // Threshold to show warning
+function autosave(noteId) {
+    console.log("Auto-saving triggered...");
+
     const addTxt = document.getElementById('addTxt');
-    const headingInput = document.getElementById('headingInput'); 
+    const headingInput = document.getElementById('headingInput');
+    const content = addTxt.value;
+    const heading = headingInput.value;
+    const noteTextArea = document.querySelector('.note-textarea');
+
+
+    showSaveStatus('Saving...');
+
+    fetch('/autosave/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify({
+            id: noteId,
+            heading: heading,
+            content: content
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showSaveStatus('Saved');
+        } else {
+            showSaveStatus('Error saving note');
+        }
+    })
+    .catch(error => {
+        showSaveStatus('Save failed');
+        console.error('Error:', error);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const maxChars = 500;
+    const warningThreshold = 50;
+
+    const addTxt = document.getElementById('addTxt');
+    const headingInput = document.getElementById('headingInput');
     const charCountElement = document.getElementById('charCount');
     const warningElement = document.getElementById('charWarning');
-    let saveTimeout;
+    const noteId = document.getElementById('note-id')?.value;
 
-    if (addTxt && headingInput) {
-        // Restore autosaved content if available
-        const savedHeading = localStorage.getItem('autosaved_heading');
-        const savedContent = localStorage.getItem('autosaved_note');
-        if (savedHeading) headingInput.value = savedHeading;
-        if (savedContent) addTxt.value = savedContent;
-
-        // Autosave on input for note content and heading
-        function autosave() {
-            localStorage.setItem('autosaved_heading', headingInput.value);
-            localStorage.setItem('autosaved_note', addTxt.value);
-            showSaveStatus('Saved');
-        }
-
+    if (addTxt && headingInput && noteId) {
         addTxt.addEventListener('input', function () {
-            // Enforce max character limit for note content
+            // Enforce max character limit
             if (addTxt.value.length > maxChars) {
                 addTxt.value = addTxt.value.slice(0, maxChars);
             }
-            // Update character count display
+
+            // Update character count
             if (charCountElement) {
                 charCountElement.textContent = `Characters: ${addTxt.value.length}/${maxChars}`;
             }
-            // Show warning if close to limit
+
+            // Show warning
             if (warningElement) {
                 const remaining = maxChars - addTxt.value.length;
                 if (remaining <= warningThreshold && remaining > 0) {
@@ -57,13 +90,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     warningElement.textContent = "";
                 }
             }
+
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(autosave, 800);
+            saveTimeout = setTimeout(() => autosave(noteId), 800);
         });
 
         headingInput.addEventListener('input', function () {
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(autosave, 800);
+            saveTimeout = setTimeout(() => autosave(noteId), 800);
         });
     }
 });
