@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +27,13 @@ STATIC_DIR=os.path.join(BASE_DIR,'static')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a5*a9*82gs&52#4stx8uqrfycl!@l7j=pwvzj0w#22_fr-gfo#'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes', 'on')
 
-ALLOWED_HOSTS = ["*"]
+# Parse ALLOWED_HOSTS from environment variable
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -52,12 +57,12 @@ INSTALLED_APPS = [
 # Set SITE_ID
 SITE_ID = 5  # Required for allauth
 
-# Add GitHub OAuth credentials
+# Add GitHub OAuth credentials from environment variables
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'Github OAuth': {
-            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
-            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
+            'client_id': os.getenv('GITHUB_CLIENT_ID', ''), 
+            'secret': os.getenv('GITHUB_CLIENT_SECRET', ''), 
             'key': ''  
         }
     }
