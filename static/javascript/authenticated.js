@@ -123,20 +123,30 @@ document.addEventListener("DOMContentLoaded", function () {
       charWarning.textContent = "";
     }
   });
-  // Character count and limit
+
+
   addTxt.addEventListener("input", function () {
-    const maxChars = 500;
-    const currentLength = addTxt.value.length;
+  const maxChars = 500;
+  const currentLength = addTxt.value.length;
 
+  // Check if charCount element exists
+  if (charCount) {
     charCount.textContent = `Characters: ${currentLength}/${maxChars}`;
+  }
 
-    if (currentLength > maxChars) {
+  if (currentLength > maxChars) {
+    if (charWarning) {
       charWarning.textContent = "Exceeded maximum character limit!";
-      addTxt.value = addTxt.value.slice(0, maxChars);
-    } else {
+    }
+    addTxt.value = addTxt.value.slice(0, maxChars);
+  } else {
+    if (charWarning) {
       charWarning.textContent = "";
     }
-  });
+  }
+});
+
+
 
   // Tag Filter Functionality
   function updateTagFilter(tags) {
@@ -738,6 +748,29 @@ notesContainer.addEventListener('click', async function(e) {
     return cookieValue;
   }
 
+  function autosave() {
+  const csrftoken = getCookie("csrftoken");
+  fetch("/autosave/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrftoken,
+    },
+    body: JSON.stringify({
+      id: 6, 
+      content: document.getElementById("note-textarea").value,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log("Autosave:", data))
+    .catch((err) => console.error("Autosave error:", err));
+}
+
+setInterval(autosave, 5000);
+
+
+ 
+
   // Initial notes load
   fetchNotes();
 });
@@ -848,3 +881,5 @@ function copyShareLink(noteId, urlType) {
       }
     }
   });
+
+
