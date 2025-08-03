@@ -1,6 +1,5 @@
 <!-- Login Template -->
 <!DOCTYPE html>
-{% load socialaccount %}
 {% load static %}
 <html lang="en">
 <head>
@@ -468,18 +467,7 @@
                     <p>Don't have an account? <a href="/accounts/signup/">Sign up</a></p>
                 </div>
 
-                <div class="auth-divider">
-                    <span>or continue with</span>
-                </div>
 
-                <div class="social-auth">
-                    <button type="button" class="social-button">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <a href="{% provider_login_url 'github' %}" class="social-button" style="text-decoration: none;">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
             </form>
         </div>
     </main>
