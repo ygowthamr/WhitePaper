@@ -1,7 +1,6 @@
 
 <!-- Signup Template -->
 <!DOCTYPE html>
-{% load socialaccount %}
 {% load static %}
 <html lang="en">
     <head>
@@ -16,8 +15,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-        <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
-        <link rel="stylesheet" href="../../static/css/NewStyle.css">
+        <link rel="icon" type="image/x-icon" href="{% static 'images/favicon-32x32.png' %}">
+        <link rel="stylesheet" href="{% static 'css/NewStyle.css' %}">
         <title>Whitepaper - Sign Up</title>
       
         
@@ -468,18 +467,7 @@ body, html {
                     <p>Already have an account? <a href="/accounts/login/">Login</a></p>
                 </div>
 
-                <div class="auth-divider">
-                    <span>or sign up with</span>
-                </div>
 
-                <div class="social-auth">
-                    <button type="button" class="social-button">
-                        <i class="fab fa-google"></i> Google
-                    </button>
-                    <a href="{% provider_login_url 'github' %}" class="social-button" style="text-decoration: none;">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                </div>
             </form>
         </div>
     </main>

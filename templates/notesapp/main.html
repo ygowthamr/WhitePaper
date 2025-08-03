@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -12,10 +13,10 @@
     <!-- Font Awesome - Consolidated to latest version -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.png' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon-32x32.png' %}">
     <title>My Notepad</title>
-    <link rel="stylesheet" href="../../static/css/main.css">
-    <link href="../../static/css/NewStyle.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link href="{% static 'css/NewStyle.css' %}" rel="stylesheet">
     <style>
         /* --- Original Styles from main.html inline blocks --- */
         :root {
@@ -395,19 +396,20 @@
             </div>
 
             <div id="notes" class="notes-grid">
-
+                {% if data %}
+                    {% for note in data %}
                 <div class="note-card" style="overflow: hidden;">
                     <div class="note-header">
                         <i class="fas fa-sticky-note"></i>
-                        <strong></strong>
+                        <strong>{{ note.heading }}</strong>
                         <div class="tags-container">
-                            
-                            <span class="tag"></span>
-                
+                            {% for tag in note.tags %}
+                                <span class="tag">{{ tag }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="note-content">
-                        <!-- <p>{{ note.content }}</p> -->
+                        <p>{{ note.content|truncatewords:20 }}</p>
                     </div>
                     <div class="note-actions">
                         <button class="pin-btn" data-note-id="{{ note.id }}" title="Pin this note">
@@ -488,7 +490,13 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %} {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="no-notes-message">
+                        <i class="fas fa-sticky-note" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p>No notes found. Create your first note above!</p>
+                    </div>
+                {% endif %}
             </div>
         </section>
     </main>
@@ -576,7 +584,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <!-- Common script for theme and scroll -->
-    <script src="../../static/javascript/common.js"></script>
+    <script src="{% static 'javascript/common.js' %}"></script>
 
     <!-- Other scripts -->
     <script src="{% static 'javascript/authenticated.js' %}"></script>
