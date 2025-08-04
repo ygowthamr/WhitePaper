@@ -1,6 +1,5 @@
 from django.db import models
 from notesapp.models import text
-from django.db import models
 from django.contrib.auth.models import User
 
 class SharedNotePermission(models.Model):
