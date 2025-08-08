@@ -23,12 +23,19 @@ STATIC_DIR=os.path.join(BASE_DIR,'static')
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a5*a9*82gs&52#4stx8uqrfycl!@l7j=pwvzj0w#22_fr-gfo#'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    raise Exception('DJANGO_SECRET_KEY environment variable not set! Please set it for production security.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ["*"]
+# Set ALLOWED_HOSTS from environment variable, default to localhost for safety
+ALLOWED_HOSTS_ENV = os.environ.get('DJANGO_ALLOWED_HOSTS')
+if ALLOWED_HOSTS_ENV:
+    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS_ENV.split(',') if host.strip()]
+else:
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -53,15 +60,19 @@ INSTALLED_APPS = [
 SITE_ID = 5  # Required for allauth
 
 # Add GitHub OAuth credentials
+GITHUB_CLIENT_ID = os.environ.get('GITHUB_CLIENT_ID')
+GITHUB_CLIENT_SECRET = os.environ.get('GITHUB_CLIENT_SECRET')
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'Github OAuth': {
-            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
-            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
-            'key': ''  
+            'client_id': GITHUB_CLIENT_ID,
+            'secret': GITHUB_CLIENT_SECRET,
+            'key': ''
         }
     }
 }
+if not GITHUB_CLIENT_ID or not GITHUB_CLIENT_SECRET:
+    raise Exception('GITHUB_CLIENT_ID and/or GITHUB_CLIENT_SECRET environment variables not set! Please set them for production security.')
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Default backend
