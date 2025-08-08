@@ -509,3 +509,39 @@ footer a:hover {
 .btn-primary:hover {
     background-color: #0056b3;
 }
+/* Style for the Voice Input button as a microphone icon */
+#voice-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    /* This line is key to hiding any text that might still be present */
+    line-height: 0;
+    text-indent: -9999px; /* This hides any remaining text off-screen */
+}
+
+/* Style for the icon itself inside the button */
+#voice-btn i {
+    text-indent: 0; /* Puts the icon back on screen */
+}
+
+#voice-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+#voice-btn:active {
+    background-color: #1e40af;
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

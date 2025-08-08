@@ -1,0 +1,11 @@
+[33m4e5c8b4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mvoice-input-button-update[m[33m, [m[1;31morigin/voice-input-button-update[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m4f541e3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{1}: checkout: moving from voice-input-button-update to voice-input-button-update
+[33m4f541e3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{2}: checkout: moving from master to voice-input-button-update
+[33m4f541e3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{3}: checkout: moving from Contributor to master
+[33mfd03af5[m[33m ([m[1;31morigin/Contributor[m[33m, [m[1;32mContributor[m[33m)[m HEAD@{4}: reset: moving to HEAD
+[33mfd03af5[m[33m ([m[1;31morigin/Contributor[m[33m, [m[1;32mContributor[m[33m)[m HEAD@{5}: commit: Fix print button hover effect to match other buttons
+[33m3971843[m HEAD@{6}: checkout: moving from Contributor to Contributor
+[33m3971843[m HEAD@{7}: commit: resolved issue in reset_password.html
+[33m95a1fdc[m HEAD@{8}: commit: updating style.css and enhancing frontend
+[33m4f541e3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{9}: checkout: moving from master to Contributor
+[33m4f541e3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{10}: clone: from https://github.com/InderjotSingh17/WhitePaper.git
