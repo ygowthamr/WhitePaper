@@ -697,3 +697,23 @@ footer a:hover {
     color: #94a3b8;
     padding: 2rem;
 }
+.print-btn {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 1.1rem;
+  padding: 0.3rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.print-btn:focus,
+.print-btn:active,
+.print-btn:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: #2563eb;
+  transform: scale(1.2);
+}
