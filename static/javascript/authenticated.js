@@ -59,20 +59,32 @@ document.addEventListener("DOMContentLoaded", function () {
     // Event handlers
     recognition.onstart = function() {
       statusSpan.textContent = 'Listening...';
-      voiceBtn.textContent = 'Stop Voice Input';
+      // Find the icon and change its class
+      const voiceIcon = voiceBtn.querySelector('i');
+      if (voiceIcon) {
+          voiceIcon.className = 'fas fa-stop-circle'; 
+      }
       isListening = true;
     };
     
     recognition.onend = function() {
       statusSpan.textContent = '';
-      voiceBtn.textContent = 'Start Voice Input';
+      // Find the icon and change its class back
+      const voiceIcon = voiceBtn.querySelector('i');
+      if (voiceIcon) {
+          voiceIcon.className = 'fas fa-microphone';
+      }
       isListening = false;
     };
     
     recognition.onerror = function(event) {
       console.error('Speech recognition error:', event.error);
       statusSpan.textContent = 'Error: ' + event.error;
-      voiceBtn.textContent = 'Start Voice Input';
+      // Find the icon and change its class back on error
+      const voiceIcon = voiceBtn.querySelector('i');
+      if (voiceIcon) {
+          voiceIcon.className = 'fas fa-microphone'; 
+      }
       isListening = false;
     };
     
