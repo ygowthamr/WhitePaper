@@ -202,7 +202,7 @@ document.querySelectorAll('.ql-toolbar button, .ql-toolbar select').forEach(btn 
             </div>
             ` : ''}
             <div class="note-actions" style="margin-top: 1rem;">
-                <button class="btn btn-outline print-btn" data-id="${note.id}">
+                <button class="print-btn" data-id="${note.id}">
                     <i class="fas fa-print"></i> Print
                 </button>
                 <button class="btn btn-outline edit-btn" data-id="${note.id}">
@@ -215,7 +215,6 @@ document.querySelectorAll('.ql-toolbar button, .ql-toolbar select').forEach(btn 
         `;
         return div;
     }
-
     // Render notes
     function renderNotes(notesToRender = notes) {
         elements.notesContainer.innerHTML = '';
