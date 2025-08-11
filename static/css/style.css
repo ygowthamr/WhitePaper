@@ -509,3 +509,211 @@ footer a:hover {
 .btn-primary:hover {
     background-color: #0056b3;
 }
+/* Reset note grid */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+/* Card Style */
+.note-card {
+    background: var(--surface, #fff);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Note header with icon and title */
+.note-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text, #1f2937);
+    margin-bottom: 1rem;
+}
+
+.note-header i {
+    font-size: 1.2rem;
+    color: var(--primary, #2563eb);
+}
+
+/* Tags */
+.tags-container {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.tag {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+/* Content */
+.note-content p {
+    font-size: 0.95rem;
+    color: var(--secondary, #475569);
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+}
+
+/* Action Icons */
+.note-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.note-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    font-size: 1.1rem;
+    padding: 0.3rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.note-actions button:hover {
+    color: var(--primary, #2563eb);
+    transform: scale(1.2);
+}
+
+/* Share popup styles */
+.share-popup {
+    position: absolute;
+    bottom: 3.5rem;
+    right: 1.5rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    width: 300px;
+    z-index: 10;
+    display: none;
+}
+
+.share-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.share-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #f1f5f9;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.share-option:hover {
+    background-color: #e2e8f0;
+}
+
+.share-url-section h4 {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.share-link-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.share-link {
+    flex: 1;
+    padding: 0.4rem;
+    font-size: 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.4rem;
+    background-color: #f8fafc;
+    color: #334155;
+}
+
+.copy-link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2563eb;
+    font-size: 1rem;
+}
+
+/* QR code section */
+.qr-code-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.download-qr {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.download-qr:hover {
+    background: #1d4ed8;
+}
+
+/* No notes message */
+.no-notes-message {
+    text-align: center;
+    color: #94a3b8;
+    padding: 2rem;
+}
+.print-btn {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 1.1rem;
+  padding: 0.3rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.print-btn:focus,
+.print-btn:active,
+.print-btn:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: #2563eb;
+  transform: scale(1.2);
+}
