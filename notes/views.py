@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from notesapp.models import text
+from notesapp.models import Note
 from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Tag, SharedNotePermission
+from .models import Note
+from .forms import NoteForm
 
 @ensure_csrf_cookie
 @login_required
@@ -13,148 +15,177 @@ def newnote(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            heading = data.get('heading', '').strip()  
+            heading = data.get('heading', '').strip()
             note_content = data.get('note', '').strip()
-            tags = data.get('tags', [])  
+            tags = data.get('tags', [])
+            reminder_at = data.get('reminder_at')  # ISO datetime string or None
             username = request.user.username
 
             if not note_content:
                 return JsonResponse({'success': False, 'error': 'Note content is required'}, status=400)
-        
+
             full_content = f"{heading}|||{note_content}" if heading else note_content
-         
-            note = text(Uname=username, content=full_content)
+            note = Note(Uname=username, content=full_content)
+
+            # Parse reminder if provided
+            if reminder_at:
+                try:
+                    note.reminder_at = timezone.make_aware(timezone.datetime.fromisoformat(reminder_at))
+                except Exception:
+                    return JsonResponse({'success': False, 'error': 'Invalid reminder datetime format'}, status=400)
+
             note.save()
-          
+
             for tag_name in tags:
                 tag_name = tag_name.strip()
                 if tag_name:
                     Tag.objects.create(name=tag_name, note=note)
 
-            return JsonResponse({'success': True, 'note_id': note.id}, status=201)
+            return JsonResponse({
+                'success': True,
+                'note': {
+                    'id': note.id,
+                    'heading': heading if heading else "Untitled",
+                    'reminder_at': note.reminder_at.isoformat() if note.reminder_at else None
+                }
+            }, status=201)
+
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
 
 @login_required
 def getnotes(request):
     username = request.user.username
     tag_filter = request.GET.get('tag')
 
-    notes = text.objects.filter(Uname=username)
+    notes = Note.objects.filter(Uname=username)
     if tag_filter:
         notes = notes.filter(tags__name=tag_filter)
 
     notes_data = []
+    upcoming_reminders = []
+    now = timezone.now()
     for note in notes:
         if "|||" in note.content:
-            heading, content = note.content.split("|||", 1)  # Split at first occurrence
+            heading, content = note.content.split("|||", 1)
         else:
-            heading, content = "Untitled", note.content 
+            heading, content = "Untitled", note.content
 
         notes_data.append({
             'id': note.id,
-            'heading': heading.strip(), 
+            'heading': heading.strip(),
             'content': content.strip(),
-            'tags': list(note.tags.values_list('name', flat=True))
+            'tags': list(note.tags.values_list('name', flat=True)),
+            'reminder_at': note.reminder_at.isoformat() if note.reminder_at else None
         })
+        # Add to upcoming reminders list if within next 10 minutes
+        if note.reminder_at and now <= note.reminder_at <= now + timezone.timedelta(minutes=10):
+            upcoming_reminders.append({
+                'id': note.id,
+                'heading': heading.strip(),
+                'reminder_at': note.reminder_at.isoformat()
+            })
 
-    return JsonResponse({'notes': notes_data})
+    return JsonResponse({
+        'notes': notes_data,
+        'upcoming_reminders': upcoming_reminders
+    })
 
 @ensure_csrf_cookie
 @login_required
 def deletenote(request, note_id):
     if request.method == "DELETE":
         try:
-            note = text.objects.get(id=note_id, Uname=request.user.username)
+            note = Note.objects.get(id=note_id, Uname=request.user.username)
             note.delete()
             return JsonResponse({'success': True})
-        except text.DoesNotExist:
+        except Note.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Note not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
+
 @login_required
 def printnote(request, note_id):
-    """
-    Endpoint to fetch a specific note for printing
-    """
     if request.method == "GET":
         try:
-            # Get the note and verify ownership
-            note = text.objects.get(id=note_id, Uname=request.user.username)
-            
-            # Prepare note data for printing
+            note = Note.objects.get(id=note_id, Uname=request.user.username)
+
             note_data = {
                 'id': note.id,
                 'content': note.content,
                 'tags': list(note.tags.values_list('name', flat=True)),
                 'created_at': note.created_at.isoformat() if hasattr(note, 'created_at') else timezone.now().isoformat(),
+                'reminder_at': note.reminder_at.isoformat() if note.reminder_at else None,
                 'author': note.Uname
             }
-            
-            return JsonResponse({
-                'success': True,
-                'note': note_data
-            })
-            
-        except text.DoesNotExist:
-            return JsonResponse({
-                'success': False, 
-                'error': 'Note not found'
-            }, status=404)
+
+            return JsonResponse({'success': True, 'note': note_data})
+
+        except Note.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Note not found'}, status=404)
         except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': str(e)
-            }, status=500)
-            
-    return JsonResponse({
-        'success': False,
-        'error': 'Invalid request method'
-    }, status=405)
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
 
 @login_required
 def updatenote(request, note_id):
     if request.method == "PUT":
         try:
-            note = text.objects.get(id=note_id, Uname=request.user.username)
+            note = Note.objects.get(id=note_id, Uname=request.user.username)
             data = json.loads(request.body)
-            
-            # Update content
+
             heading = data.get('heading', '').strip()
             note_content = data.get('note', '').strip()
             note.content = f"{heading}|||{note_content}" if heading else note_content
-            
+
+            # Update reminder
+            reminder_at = data.get('reminder_at')
+            if reminder_at:
+                try:
+                    note.reminder_at = timezone.make_aware(timezone.datetime.fromisoformat(reminder_at))
+                except Exception:
+                    return JsonResponse({'success': False, 'error': 'Invalid reminder datetime format'}, status=400)
+            else:
+                note.reminder_at = None
+
             # Update tags
             note.tags.all().delete()
             for tag_name in data.get('tags', []):
                 tag_name = tag_name.strip()
                 if tag_name:
                     Tag.objects.create(name=tag_name, note=note)
-            
+
             note.save()
-            return JsonResponse({'success': True})
-            
-        except text.DoesNotExist:
+            return JsonResponse({
+                'success': True,
+                'note': {
+                    'id': note.id,
+                    'heading': heading if heading else "Untitled",
+                    'reminder_at': note.reminder_at.isoformat() if note.reminder_at else None
+                }
+            })
+        except Note.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Note not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
-    
+
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
 
 def share_note(request, note_id):
     """View for displaying and possibly editing a shared note"""
-    note = get_object_or_404(text, id=note_id)
+    note = get_object_or_404(Note, id=note_id)
     
-    # Check if the current user is the owner
     is_owner = request.user.is_authenticated and request.user.username == note.Uname
     
-    # If not the owner, check if they have permission to view/edit
     if not is_owner:
-        # Get share permissions for this note for the current user
         permission = None
         if request.user.is_authenticated:
             try:
@@ -165,7 +196,6 @@ def share_note(request, note_id):
             except SharedNotePermission.DoesNotExist:
                 pass
         
-        # Check for token-based access (for non-registered users)
         share_token = request.GET.get('token')
         if not permission and share_token:
             try:
@@ -176,7 +206,6 @@ def share_note(request, note_id):
             except SharedNotePermission.DoesNotExist:
                 return render(request, 'notesapp/access_denied.html')
         
-        # If no permission found, deny access
         if not permission:
             return render(request, 'notesapp/access_denied.html')
             
@@ -184,13 +213,11 @@ def share_note(request, note_id):
     else:
         can_edit = True
     
-    # Parse the content to separate heading from note content
     if "|||" in note.content:
         heading, content = note.content.split("|||", 1)
     else:
         heading, content = "Untitled", note.content
     
-    # Create context with data needed for shared view
     context = {
         'shared_note': {
             'id': note.id,
@@ -204,23 +231,21 @@ def share_note(request, note_id):
     
     return render(request, 'notesapp/shared_note.html', context)
 
+
 @ensure_csrf_cookie
 @login_required
 def manage_share_permissions(request, note_id):
-    """Endpoint to manage sharing permissions for a note"""
-    note = get_object_or_404(text, id=note_id, Uname=request.user.username)
+    note = get_object_or_404(Note, id=note_id, Uname=request.user.username)
     
     if request.method == "POST":
         try:
             data = json.loads(request.body)
             email = data.get('email')
-            permission_type = data.get('permission', 'view')  # Default to view-only
+            permission_type = data.get('permission', 'view')
             
-            # Generate a unique token for this share
             import uuid
             share_token = str(uuid.uuid4())
             
-            # Check if the user already exists
             from django.contrib.auth.models import User
             user = None
             try:
@@ -228,7 +253,6 @@ def manage_share_permissions(request, note_id):
             except User.DoesNotExist:
                 pass
                 
-            # Create or update permission
             if user:
                 permission, created = SharedNotePermission.objects.update_or_create(
                     note=note,
@@ -248,7 +272,6 @@ def manage_share_permissions(request, note_id):
                     }
                 )
                 
-            # Generate share URL
             share_url = f"/notes/share/{note.id}/?token={share_token}"
                 
             return JsonResponse({
@@ -261,7 +284,6 @@ def manage_share_permissions(request, note_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
             
     elif request.method == "GET":
-        # Return list of all current share permissions
         permissions = SharedNotePermission.objects.filter(note=note)
         
         permission_data = []
@@ -287,12 +309,11 @@ def manage_share_permissions(request, note_id):
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
+
 @ensure_csrf_cookie
 def update_shared_note(request, note_id):
-    """Endpoint for collaborators to update a shared note"""
-    note = get_object_or_404(text, id=note_id)
+    note = get_object_or_404(Note, id=note_id)
     
-    # Check if user has edit permission
     is_owner = request.user.is_authenticated and request.user.username == note.Uname
     
     if not is_owner:
@@ -307,7 +328,6 @@ def update_shared_note(request, note_id):
             except SharedNotePermission.DoesNotExist:
                 pass
                 
-        # Check for token-based access with edit permission
         share_token = request.GET.get('token')
         if not permission and share_token:
             try:
@@ -322,17 +342,14 @@ def update_shared_note(request, note_id):
         if not permission:
             return JsonResponse({'success': False, 'error': 'You do not have permission to edit this note'}, status=403)
     
-    # Process the update
     if request.method == "PUT":
         try:
             data = json.loads(request.body)
             
-            # Update content
             heading = data.get('heading', '').strip()
             note_content = data.get('note', '').strip()
             note.content = f"{heading}|||{note_content}" if heading else note_content
             
-            # Optionally update tags
             if 'tags' in data:
                 note.tags.all().delete()
                 for tag_name in data.get('tags', []):
@@ -341,9 +358,6 @@ def update_shared_note(request, note_id):
                         Tag.objects.create(name=tag_name, note=note)
             
             note.save()
-            
-            # Record edit history (optional enhancement)
-            # You could add an EditHistory model to track who made changes and when
             
             return JsonResponse({'success': True})
             
