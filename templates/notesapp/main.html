@@ -306,6 +306,13 @@
                 class="heading-input"
                 placeholder="Enter Note Title"
             />
+            <label for="reminder_at" style="margin-top: 10px; font-weight: 500;">Set Reminder:</label>
+            <input
+                type="datetime-local"
+                id="reminder_at"
+                class="reminder-input"
+                style="margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"
+            />
             <div class="controls">
                 <button id="voice-btn" class="btn btn-primary">
                     <i class="fas fa-microphone"></i> </button>
@@ -382,7 +389,6 @@
                 <i class="fas fa-book" style="margin-right: 8px; color: #007bff"></i>
                 Your Saved Notes
             </h2>
-
             <div style="display: flex; align-items: center; padding: 8px">
                 <select
                     id="tagFilter"
@@ -590,15 +596,78 @@
 
     <!-- Common script for theme and scroll -->
     <script src="{% static 'javascript/common.js' %}"></script>
-
-    <!-- Other scripts -->
+        <!-- Other scripts -->
     <script src="{% static 'javascript/authenticated.js' %}"></script>
     <script src="{% static 'javascript/autosave.js' %}"></script>
+    
+    <!-- Inject upcoming reminders for debug -->
+    <script>
+        window.upcomingReminders = JSON.parse('{{ upcomingReminders|escapejs }}');
+        //console.log("Reminders from backend:", window.upcomingReminders);
 
-    <!-- Inline script for theme toggle and initialization -->
+        const upcomingReminders = window.upcomingReminders || [];
+
+        function requestNotificationPermission() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        upcomingReminders.forEach(r => {
+                            scheduleNotification(r.id, r.heading, r.reminder_at);
+                        });
+                    }
+                });
+            }
+        }
+
+        function showDesktopNotification(title, options = {}) {
+            if (Notification.permission === "granted") {
+                const notification = new Notification(title, options);
+                notification.onclick = () => {
+                    window.focus();
+                    notification.close();
+                };
+                setTimeout(() => notification.close(), 5000);
+            }
+        }
+        
+        function scheduleNotification(noteId, heading, reminderAt) {
+            const reminderTime = new Date(reminderAt).getTime();
+            const now = Date.now();
+            const delay = reminderTime - now;
+
+            if (delay > 0) {
+                setTimeout(() => {
+                if (Notification.permission === "granted") {
+                    new Notification("Note Reminder", {
+                        body: heading || "You have a reminder!",
+                        //icon: "/static/images/reminder-icon.png" // optional
+                        });
+                    }
+                }, delay);
+            }
+        }
+
+
+        function showNotification(title) {
+            showDesktopNotification("🔔 Reminder", {
+                body: title,
+                icon: "/static/images/favicon-32x32.png"
+            });
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize theme and scroll-to-top from common.js
+            // Ask for notification permission
+            if ("Notification" in window) {
+                if (Notification.permission === "default") {
+                    Notification.requestPermission().then(permission => {
+                        console.log("Notification permission:", permission);
+                    });
+                }
+            } else {
+                alert("This browser does NOT support desktop notifications.");
+            }
             if (typeof initializeTheme === 'function') {
                 initializeTheme();
             } else {

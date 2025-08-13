@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission().then(permission => {
+      console.log("Permission result:", permission);
+      });
+  }
   // Quill Editor Initialization
     // Get references to key elements
     const quill = new Quill("#addTxt", {
@@ -316,6 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .getElementById("tagInput")
           .value.split(",")
           .map((t) => t.trim()),
+        reminder_at: document.getElementById("reminder_at").value
       };
 
       fetch(`/notes/updatenote/${noteId}/`, {
@@ -331,6 +337,10 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.success) {
             resetForm();
             fetchNotes();
+            console.log("Note saved with reminder:", noteData.reminder_at);
+            if (noteData.reminder_at) {
+              scheduleNotification(data.note?.id || noteId, noteData.heading, noteData.reminder_at);
+            }
           }
         });
     } else {
@@ -342,6 +352,7 @@ document.addEventListener("DOMContentLoaded", function () {
           .getElementById("tagInput")
           .value.split(",")
           .map((t) => t.trim()),
+        reminder_at: document.getElementById("reminder_at").value
       };
 
       fetch("/notes/newnote/", {
@@ -357,6 +368,11 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.success) {
             resetForm();
             fetchNotes();
+            console.log("Note saved with reminder:", noteData.reminder_at);
+            // ✅ Schedule notification for this newly added note
+            if (noteData.reminder_at) {
+              scheduleNotification(data.note.id, noteData.heading, noteData.reminder_at);
+            }
           }
         });
     }
@@ -753,6 +769,28 @@ notesContainer.addEventListener('click', async function(e) {
   // Initial notes load
   fetchNotes();
 });
+function scheduleNotification(noteId, heading, reminderAt) {
+  const reminderTime = new Date(reminderAt).getTime();
+  const now = Date.now();
+  const delay = reminderTime - now;
+
+  console.log("Scheduling notification in", delay / 1000, "seconds");
+
+  if (delay > 0) {
+    setTimeout(() => {
+      console.log("Triggering notification for", heading);
+      if (Notification.permission === "granted") {
+        new Notification("Note Reminder", {
+          body: heading || "You have a reminder!",
+          icon: "/static/images/reminder-icon.png"
+        });
+      }
+    }, delay);
+  } else {
+    console.log("Reminder time is in the past, skipping notification");
+  }
+}
+
 
 // Toast notification function
 function showToast(message, duration = 3000) {
