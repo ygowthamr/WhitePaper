@@ -6,19 +6,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <script>
+    // Set theme instantly before CSS loads
+    (function() {
+        try {
+            var savedTheme = localStorage.getItem('darkMode');
+            var systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme;
+            if (savedTheme === 'true') theme = 'dark';
+            else if (savedTheme === 'false') theme = 'light';
+            else theme = systemPrefersDark ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+    })();
+    </script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <link rel="icon" href="{% static 'images/favicon-32x32.png' %}" type="image/png">
-
     <link rel="stylesheet" href="{% static 'css/NewStyle.css' %}">
     <title>Whitepaper - Login</title>
-   
     <style>
         /* Base styles from previous CSS */
 
