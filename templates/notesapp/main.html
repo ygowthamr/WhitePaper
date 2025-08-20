@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="{% static 'css/NewStyle.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         /* --- Original Styles from main.html inline blocks --- */
         :root {
@@ -306,7 +307,9 @@
                 placeholder="Enter Note Title"
             />
             <div class="controls">
-                <button id="voice-btn">Start Voice Input</button>
+                <button id="voice-btn" class="btn btn-primary">
+                    <i class="fas fa-microphone"></i> </button>
+                </button>
                 <span id="status"></span>
             </div>
             <div id="addTxt" class="note-textarea"></div>
