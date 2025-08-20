@@ -1,4 +1,4 @@
 from django.contrib import admin
-from notesapp.models import text
+from notesapp.models import Note
 
-admin.site.register(text)
+admin.site.register(Note)
