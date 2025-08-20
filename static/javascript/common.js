@@ -1,38 +1,38 @@
+function setThemeInstant(theme) {
+    // theme: 'dark' or 'light'
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('darkMode', theme === 'dark' ? 'true' : 'false');
+    const themeIcon = document.querySelector('.theme-toggle i') || document.querySelector('#themeToggle i');
+    if (themeIcon) {
+        themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
 function initializeTheme() {
     try {
         const savedTheme = localStorage.getItem('darkMode');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const isDark = savedTheme === 'true' || (savedTheme === null && systemPrefersDark);
-        
-        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-        
-        // Support both .theme-toggle (index.html) and #themeToggle (main.html)
-        const themeIcon = document.querySelector('.theme-toggle i') || document.querySelector('#themeToggle i');
-        if (themeIcon) {
-            themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-        }
+        let theme;
+        if (savedTheme === 'true') theme = 'dark';
+        else if (savedTheme === 'false') theme = 'light';
+        else theme = systemPrefersDark ? 'dark' : 'light';
+        setThemeInstant(theme);
     } catch (e) {
         console.error('Error initializing theme:', e);
     }
 }
 
+
 function toggleTheme() {
     try {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('darkMode', newTheme === 'dark' ? 'true' : 'false');
-        
-        // Support both .theme-toggle (index.html) and #themeToggle (main.html)
-        const themeIcon = document.querySelector('.theme-toggle i') || document.querySelector('#themeToggle i');
-        if (themeIcon) {
-            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
+        setThemeInstant(newTheme);
     } catch (e) {
         console.error('Error toggling theme:', e);
     }
 }
+
 
 // Scroll-to-top functionality
 function handleScrollToTop() {
