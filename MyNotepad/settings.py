@@ -13,26 +13,31 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+# Load environment variables
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv not installed, continue without it
+    pass
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR=os.path.join(BASE_DIR,'templates')
-STATIC_DIR=os.path.join(BASE_DIR,'static')
-
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a5*a9*82gs&52#4stx8uqrfycl!@l7j=pwvzj0w#22_fr-gfo#'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-a5*a9*82gs&52#4stx8uqrfycl!@l7j=pwvzj0w#22_fr-gfo#')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'notesapp',
     'django.contrib.admin',
@@ -50,15 +55,15 @@ INSTALLED_APPS = [
 ]
 
 # Set SITE_ID
-SITE_ID = 5  # Required for allauth
+SITE_ID = int(os.getenv('SITE_ID', '5'))  # Required for allauth
 
-# Add GitHub OAuth credentials
+# SECURE GitHub OAuth credentials using environment variables
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'Github OAuth': {
-            'client_id': 'Ov23li0JG2RoWmaOE1CV', 
-            'secret': '3281a84cae4d4098d78e894bebf1c46fe98fb9fb', 
-            'key': ''  
+        'APP': {
+            'client_id': os.getenv('GITHUB_CLIENT_ID', ''),
+            'secret': os.getenv('GITHUB_CLIENT_SECRET', ''),
+            'key': ''
         }
     }
 }
@@ -78,7 +83,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # Commented out for development
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -106,10 +111,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MyNotepad.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -118,18 +121,16 @@ DATABASES = {
 }
 
 # Session settings
-
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_SECURE = True 
-# CSRF_COOKIE_SECURE = True 
+SESSION_COOKIE_SECURE = not DEBUG  # Only secure cookies in production
+# CSRF_COOKIE_SECURE = not DEBUG
 
 LOGIN_URL = '/accounts/login/'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -145,33 +146,29 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS=[
+STATICFILES_DIRS = [
     STATIC_DIR, 
 ]
 
-APPEND_SLASH=False
+APPEND_SLASH = False
+
+# Allauth settings for better social authentication
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Disable email verification for development
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True

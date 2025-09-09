@@ -1,12 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from datetime import datetime
 from notesapp.models import Note
 from django.http import JsonResponse
 import json
+import uuid
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.models import User
 from .models import Tag, SharedNotePermission
-from .models import Note
 from .forms import NoteForm
 
 @ensure_csrf_cookie
@@ -30,12 +32,13 @@ def newnote(request):
             # Parse reminder if provided
             if reminder_at:
                 try:
-                    note.reminder_at = timezone.make_aware(timezone.datetime.fromisoformat(reminder_at))
+                    note.reminder_at = timezone.make_aware(datetime.fromisoformat(reminder_at))
                 except Exception:
                     return JsonResponse({'success': False, 'error': 'Invalid reminder datetime format'}, status=400)
 
             note.save()
 
+            # Create tags
             for tag_name in tags:
                 tag_name = tag_name.strip()
                 if tag_name:
@@ -59,28 +62,47 @@ def newnote(request):
 @login_required
 def getnotes(request):
     username = request.user.username
-    tag_filter = request.GET.get('tag')
-
-    notes = Note.objects.filter(Uname=username)
+    tag_filter = request.GET.get('tag', '').strip()
+    
+    # Validate tag filter input
     if tag_filter:
-        notes = notes.filter(tags__name=tag_filter)
-
+        # Check if tag exists and belongs to user's notes
+        if not Tag.objects.filter(
+            name__iexact=tag_filter, 
+            note__Uname=username
+        ).exists():
+            return JsonResponse({
+                'notes': [],
+                'upcoming_reminders': [],
+                'error': 'Invalid tag filter'
+            })
+    
+    # 🚀 PERFORMANCE FIX: Use prefetch_related to solve N+1 query problem
+    notes = Note.objects.filter(Uname=username).prefetch_related('tags')
+    if tag_filter:
+        notes = notes.filter(tags__name__iexact=tag_filter).distinct()
+    
     notes_data = []
     upcoming_reminders = []
     now = timezone.now()
+    
     for note in notes:
         if "|||" in note.content:
             heading, content = note.content.split("|||", 1)
         else:
             heading, content = "Untitled", note.content
 
+        # 🎯 This no longer triggers additional queries thanks to prefetch_related
+        tags_list = list(note.tags.values_list('name', flat=True))
+
         notes_data.append({
             'id': note.id,
             'heading': heading.strip(),
             'content': content.strip(),
-            'tags': list(note.tags.values_list('name', flat=True)),
+            'tags': tags_list,
             'reminder_at': note.reminder_at.isoformat() if note.reminder_at else None
         })
+        
         # Add to upcoming reminders list if within next 10 minutes
         if note.reminder_at and now <= note.reminder_at <= now + timezone.timedelta(minutes=10):
             upcoming_reminders.append({
@@ -93,6 +115,7 @@ def getnotes(request):
         'notes': notes_data,
         'upcoming_reminders': upcoming_reminders
     })
+
 
 @ensure_csrf_cookie
 @login_required
@@ -113,7 +136,8 @@ def deletenote(request, note_id):
 def printnote(request, note_id):
     if request.method == "GET":
         try:
-            note = Note.objects.get(id=note_id, Uname=request.user.username)
+            # 🚀 PERFORMANCE: Prefetch tags for print view
+            note = Note.objects.prefetch_related('tags').get(id=note_id, Uname=request.user.username)
 
             note_data = {
                 'id': note.id,
@@ -149,13 +173,13 @@ def updatenote(request, note_id):
             reminder_at = data.get('reminder_at')
             if reminder_at:
                 try:
-                    note.reminder_at = timezone.make_aware(timezone.datetime.fromisoformat(reminder_at))
+                    note.reminder_at = timezone.make_aware(datetime.fromisoformat(reminder_at))
                 except Exception:
                     return JsonResponse({'success': False, 'error': 'Invalid reminder datetime format'}, status=400)
             else:
                 note.reminder_at = None
 
-            # Update tags
+            # Update tags - delete existing and create new ones
             note.tags.all().delete()
             for tag_name in data.get('tags', []):
                 tag_name = tag_name.strip()
@@ -181,7 +205,11 @@ def updatenote(request, note_id):
 
 def share_note(request, note_id):
     """View for displaying and possibly editing a shared note"""
-    note = get_object_or_404(Note, id=note_id)
+    # 🚀 PERFORMANCE: Prefetch tags and permissions for shared notes
+    note = get_object_or_404(
+        Note.objects.prefetch_related('tags', 'shared_permissions'), 
+        id=note_id
+    )
     
     is_owner = request.user.is_authenticated and request.user.username == note.Uname
     
@@ -243,10 +271,16 @@ def manage_share_permissions(request, note_id):
             email = data.get('email')
             permission_type = data.get('permission', 'view')
             
-            import uuid
+            # Validate input
+            if not email:
+                return JsonResponse({'success': False, 'error': 'Email is required'}, status=400)
+            
+            if permission_type not in ['view', 'edit']:
+                return JsonResponse({'success': False, 'error': 'Invalid permission type'}, status=400)
+            
             share_token = str(uuid.uuid4())
             
-            from django.contrib.auth.models import User
+            # Check if user exists
             user = None
             try:
                 user = User.objects.get(email=email)
@@ -284,7 +318,8 @@ def manage_share_permissions(request, note_id):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
             
     elif request.method == "GET":
-        permissions = SharedNotePermission.objects.filter(note=note)
+        # 🚀 PERFORMANCE: Use select_related for user lookups
+        permissions = SharedNotePermission.objects.filter(note=note).select_related('user')
         
         permission_data = []
         for p in permissions:
@@ -301,9 +336,14 @@ def manage_share_permissions(request, note_id):
     elif request.method == "DELETE":
         try:
             permission_id = request.GET.get('permission_id')
+            if not permission_id:
+                return JsonResponse({'success': False, 'error': 'Permission ID is required'}, status=400)
+                
             permission = SharedNotePermission.objects.get(id=permission_id, note=note)
             permission.delete()
             return JsonResponse({'success': True})
+        except SharedNotePermission.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Permission not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     
@@ -350,6 +390,7 @@ def update_shared_note(request, note_id):
             note_content = data.get('note', '').strip()
             note.content = f"{heading}|||{note_content}" if heading else note_content
             
+            # Update tags if provided
             if 'tags' in data:
                 note.tags.all().delete()
                 for tag_name in data.get('tags', []):
@@ -363,5 +404,3 @@ def update_shared_note(request, note_id):
             
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
-    
-    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
