@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="icon" type="image/x-icon" href="../../static/images/favicon.png">
+    
+    <title>FAQ - Whitepaper</title>
+    <style>
+        :root {
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --secondary: #64748b;
+            --primary: #2563eb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--surface);
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .content-card {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .faq-section {
+            margin-bottom: 2rem;
+        }
+
+        .faq-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .faq-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            background-color: #f8fafc;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            color: var(--text);
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: #f1f5f9;
+        }
+
+        .faq-question.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .faq-answer.active {
+            padding: 1rem 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            margin: 0;
+            color: var(--text);
+        }
+
+        .faq-answer ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-section {
+            background-color: #f0f9ff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+            margin-top: 2rem;
+        }
+
+        .contact-section h3 {
+            margin-top: 0;
+            color: var(--text);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .faq-question {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .faq-answer.active {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Footer Styles */
+        footer{
+            position: relative;
+            width:100%;
+            height: auto;
+            background: var(--surface);
+        }
+        .footer-container{
+            width:100%;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-gap:20px;
+        }
+        .footer-container .sec h2{
+            position: relative;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .footer-container .sec p{
+            color: var(--text);
+        }
+        .footer-container .social{
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(5,50px);
+        }
+        .footer-container .social{
+            list-style: none;
+        }
+        .footer-container .social li a{
+            display:inline-block;
+            width: 36px;
+            height: 36px;
+            background:var(--text);
+            display: grid;
+            align-content: center;
+            text-decoration: none;
+        }
+        .footer-container .social li a i{
+            color:var(--background);
+            font-size: 20px;
+            position: relative;
+            left:10px;
+        }
+
+        /* quick links and support combine*/
+        .footer-container .quicklinks{
+            position: relative;
+        }
+
+        .footer-container .quicklinks ul li{
+            list-style: none;
+            position: relative;
+            left:-35px;
+        }
+        .footer-container .quicklinks ul li a{
+            color:var(--text);
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /*  contact */
+        .footer-container .contact .info{
+            position: relative;
+            left:-35px;
+        }
+        .footer-container .contact .info li{
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            margin-bottom: 16px;
+        }
+        .footer-container .contact .info li span{
+            color:var(--text);
+            font-size: 15px;
+        }
+        .footer-container .contact .info li a{
+            color:var(--text);
+            text-decoration: none;
+        }
+
+        /* footer hover effects */
+        .footer-container .quicklinks li a:hover{
+            color:var(--primary);
+            position: relative;
+            left:5px;
+        }
+        .location:hover,.call:hover,.mail:hover{
+            position: relative;
+            left:5px;
+        }
+        .footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
+            color:var(--primary);
+        }
+
+        /* footer media queries */
+        @media(max-width:991px){
+            footer{
+                padding: 40px;
+            }
+            .footer-container{
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                grid-gap: 20px;
+            }
+        }
+
+        @media(max-width:768px){
+            .footer-container{
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(1,1fr);
+                grid-gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="{% url 'mynotepad' %}" class="logo">Whitepaper</a>
+            <a href="{% url 'mynotepad' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="content-card">
+            <h1 class="page-title">Frequently Asked Questions</h1>
+            <p class="page-subtitle">Find answers to common questions about Whitepaper</p>
+
+            <div class="faq-section">
+                <h2>Getting Started</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I create an account?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To create an account, click the "Sign Up" button on the homepage. You'll need to provide your email address and create a password. Once registered, you can start creating and organizing your notes immediately.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is Whitepaper free to use?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, Whitepaper offers a free tier with basic features. You can create unlimited notes, use tags for organization, and access your notes from any device. Premium features may be available for advanced users.</p>
+                    </div>
+                </div>
+
+
+            <div class="faq-section">
+                <h2>Using the Application</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I create a new note?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To create a new note, click the "New Note" button or use the editor area. You can then type your content, add formatting, and save the note. Your notes are automatically saved as you type.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I organize my notes with tags?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>When creating or editing a note, you can add tags in the tag input field. Separate multiple tags with commas. You can then filter and search your notes by these tags to quickly find what you need.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I share my notes with others?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can share your notes with other users. Use the share feature to generate a link or invite specific users to view your notes. You can control the permissions for shared notes.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I search through my notes?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Use the search bar to find notes by title, content, or tags. The search is real-time and will show results as you type. You can also use advanced search filters to narrow down your results.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <h2>Data & Security</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is my data secure?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we take data security seriously. All data is encrypted in transit and at rest. We use industry-standard security practices and regularly audit our systems to ensure your information is protected.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I export my notes?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can export your notes in various formats including plain text, markdown, and PDF. This feature is available in your account settings.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What happens if I delete my account?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>When you delete your account, all your notes and data will be permanently removed from our servers. We recommend exporting your data before deleting your account if you want to keep a backup.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-section">
+                <h2>Technical Support</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What browsers are supported?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Whitepaper works on all modern browsers including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend using the latest version of your browser.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I use Whitepaper on mobile devices?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, Whitepaper is fully responsive and works great on mobile devices. You can access all features through your mobile browser, and the interface adapts to your screen size.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I reset my password?
+                        <i class="fas fa-chevron-down faq-icon"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you've forgotten your password, click the "Forgot Password" link on the login page. You'll receive an email with instructions to reset your password securely.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h3>Still have questions?</h3>
+                <p>If you couldn't find the answer you're looking for, our support team is here to help.</p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>whitepaper@email.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+12345678900</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-body">
+            <div class="footer-container">
+               <!---discript-->
+               <div class="sec discript">
+                   
+                   <a href="{% url 'mynotepad' %}" class="logo">
+                       <i class="fas fa-pen-fancy" style="padding-right:10px;"></i>Whitepaper</a>
+                   </a>
+                   <p>
+                       A user-friendly notepad for creating, editing, and managing notes efficiently. It focuses on simplicity, scalability, and an intuitive experience for smooth note-taking.
+                   </p>
+                   <!--icons-->
+   
+                   <ul class="social">
+                       <li><a href="https://www.facebook.com/" class="icons"><i class="fa-brands fa-facebook-f"></i></a></li>
+                       <li><a href="https://www.instagram.com/" class="icons"><i class="fa-brands fa-instagram"></i></a></li>
+                       <li><a href="https://github.com/" class="icons"><i class="fa-brands fa-github"></i></a></li>
+                       <li><a href="https://www.linkedin.com/" class="icons"><i class="fa-brands fa-linkedin"></i></a></li>
+                       <li><a href="https://x.com/" class="icons"><i class="fa-brands fa-x-twitter"></i></a></li>
+                   </ul>
+               </div>
+   
+                <!--Quick links_--->
+                <div class="sec quicklinks">
+                   <h2>Quick Links</h2>
+                   <ul>
+                       <li><a href="{% url 'mynotepad' %}" class="link"><i class="fa-solid fa-house" style="padding-right: 5px;"></i>Home</a>
+                       </li>
+                       <li><a href="#" class="link"><i class="fa-solid fa-circle-info"style="padding-right: 5px;"></i>About Us</a></li>
+                       <li><a href="#" class="link"><i  class="fas fa-edit" style="padding-right: 5px;"></i>Editing</a></li>
+                       <li><a href="#" class="link"> <i class="fa-solid fa-note-sticky" style="padding-right: 5px;"></i>Notes</a></li>
+                   </ul>
+               </div>
+   
+                <!--support-->
+                <div class="sec quicklinks">
+                   <h2>Support</h2>
+                   <ul>
+                       <li><a href="{% url 'terms_conditions' %}">Terms & Conditions</a></li>
+                       <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                       <li><a href="{% url 'faq' %}">FAQ</a></li>
+                   </ul>
+               </div>
+               <!--contact-->
+               <div class="sec contact">
+                   <h2>Contact</h2>
+                   <ul class="info">
+                       <li class="location">
+                           <span><a><i class="fa-solid fa-location-dot"></i></span>India</a></li>
+                       <li class="call"><span><a><i class="fa-solid fa-phone"></i></span><a href="tel:+12345678900">+12345678900</a></li>
+                       <li class="mail"><span><a><i class="fa-solid fa-envelope" ></i></span><a href="mailto:whitepaper@email.com">whitepaper@email.com</a></li>
+                   </ul>
+               </div>
+           </div>
+             </div>
+           </div>
+
+        <p class="footer">&copy; <span id="currentYear"></span> Whitepaper. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+        
+        // FAQ Accordion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const isActive = this.classList.contains('active');
+                    
+                    // Close all other FAQ items
+                    faqQuestions.forEach(q => {
+                        q.classList.remove('active');
+                        q.nextElementSibling.classList.remove('active');
+                    });
+                    
+                    // Toggle current FAQ item
+                    if (!isActive) {
+                        this.classList.add('active');
+                        answer.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

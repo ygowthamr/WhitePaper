@@ -61,7 +61,11 @@ White Paper is a web application developed using the Python Django framework. Th
 
 3. **Install dependencies**:  
    ```bash
-   pip install -r requirements.txt
+   pip install -r requirements_clean.txt
+   ```
+   or
+   ```bash
+   pip install -r requirements_dev.txt
    ```
 
 4. **Configure the database**:  
@@ -210,14 +214,17 @@ WhitePaper/
     requirements.txt
     static/
         css/
+            main.css
             NewStyle.css
             responsive.css
             style.css
         images/
+            favicon-32x32.png
+            scroll-top.png
         javascript/
-            Theme.js
             authenticated.js
             autosave.js
+            common.js
             script.js
     templates/
         notesapp/
