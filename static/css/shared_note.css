@@ -1,0 +1,230 @@
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --secondary: #64748b;
+    --gradient: linear-gradient(135deg, #2563eb, #60a5fa);
+    --success: #10b981;
+    --error: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: var(--surface);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    padding: 1rem 2rem;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.main-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.shared-note {
+    background-color: var(--surface);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--primary);
+}
+
+.note-header {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-author {
+    color: var(--secondary);
+    font-size: 0.875rem;
+}
+
+.note-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.note-title-input {
+    width: 100%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.note-title-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.note-content {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    white-space: pre-wrap;
+}
+
+.note-content-textarea {
+    width: 100%;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    padding: 0.75rem;
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    min-height: 200px;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.note-content-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.tags-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.note-tag {
+    color: var(--primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.tags-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid transparent;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+}
+
+.tags-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.sign-up-prompt {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+}
+
+.primary-btn {
+    background: var(--gradient);
+    color: white;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.secondary-btn {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    margin-right: 0.5rem;
+}
+
+.secondary-btn:hover {
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.edit-mode-toggle {
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.save-indicator {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.save-indicator.success {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+    opacity: 1;
+}
+
+.save-indicator.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--error);
+    opacity: 1;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1rem;
+}

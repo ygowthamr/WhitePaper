@@ -1,0 +1,403 @@
+  /* Base styles from previous CSS */
+
+        /* Auth Form Styles */
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            padding: 2.5rem;
+            background: var(--surface);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .auth-container h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: var(--gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.3s; }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .form-error {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .auth-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .auth-divider {
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .auth-divider span {
+            padding: 0 1rem;
+        }
+
+        .social-auth {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-button {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            background: white;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .social-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Toast Animation */
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .auth-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+
+            .social-auth {
+                flex-direction: column;
+            }
+        }
+         /* Root variables for light and dark themes */
+         :root {
+            /* Light Theme */
+            --background: #ffffff;
+            --surface: #f4f7f6;
+            --text: #1a202c;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #718096;
+            --error: #e53e3e;
+            --gradient: linear-gradient(135deg, #2563eb, #4f46e5);
+        }
+
+        /* Dark Theme */
+        :root.dark-theme {
+            --background: #121212;
+            --surface: #1e1e1e;
+            --text: #e2e8f0;
+            --primary: #4f46e5;
+            --primary-dark: #6366f1;
+            --secondary: #a0aec0;
+            --error: #ff5252;
+            --gradient: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        /* Existing CSS remains the same, with added body and html styles */
+        body, html {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Rest of the existing CSS remains unchanged */
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            padding: 2.5rem;
+            background: var(--surface);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* ... (rest of the previous CSS remains the same) */
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+
+          /* footer */
+   .footer-body{
+    display: grid;
+    justify-content: center;
+    align-content: end;
+    background: var(--surface);
+    padding: 25px;
+    }
+    footer{
+    position: relative;
+    width:100%;
+    height: auto;
+    background: var(--surface);
+   }
+   .footer-container{
+    width:100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-gap:20px;
+    
+}
+.footer-container .sec h2{
+  position: relative;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 15px;
+  transform: translate(-15%,0%);
+}
+.footer-container .sec p{
+    color: var(--text);
+    margin: 20px;
+   transform: translate(-5%,0%);
+    
+   
+}
+.footer-container .social{
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(5,50px);
+}
+.footer-container .social{
+    list-style: none;
+}
+.footer-container .social li a{
+ display:inline-block;
+ width: 36px;
+ height: 36px;
+ background:var(--text);
+ display: grid;
+ align-content: center;
+ text-decoration: none;
+}
+.footer-container .social li a i{
+    color:var(--background);
+    font-size: 20px;
+    position: relative;
+    left:10px;
+
+}
+
+/* quick links and support combine*/
+.footer-container .quicklinks{
+    position: relative;
+   
+   
+
+}
+
+.footer-container .quicklinks ul li{
+  list-style: none;
+  position: relative;
+  left:-35px;
+}
+.footer-container .quicklinks ul li a{
+    color:var(--text);
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+/*  contact */
+.footer-container .contact .info{
+  
+  position: relative;
+  left:-35px;
+
+}
+.footer-container .contact .info li{
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    margin-bottom: 16px;
+}
+.footer-container .contact .info li span{
+ color:var(--text);
+ font-size: 15px;
+ 
+}
+.footer-container .contact .info li a{
+    color:var(--text);
+    text-decoration: none;
+}
+/* media */
+@media(max-width:991px){
+   footer{
+    padding: 40px;
+   }
+   .footer-container{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap: 30px;
+    
+   }
+  
+   .footer-container .quicklinks ul {
+    transform: translate(10%,0%);
+   }
+   .footer-container .quicklinks h2{
+    
+    transform: translate(-1%,0%);
+    width:150px;
+   }
+   .footer-container .contact ul{
+    
+    width:250px;
+    transform: translate(15%,0);
+   }
+   .footer-container .contact h2{
+    transform: translate(-1%,0%);
+    width:250px;
+    
+   }
+}
+
+@media(max-width:768px){
+    .footer-container{
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+        grid-gap: 20px;
+       }
+       
+}
+
+/* footer */
+.footer-container .quicklinks li a:hover{
+   color:var( --primary);
+   position: relative;
+   left:5px;
+}
+.location:hover,.call:hover,.mail:hover{
+   
+   position: relative;
+   left:5px;
+}
+.footer-container .contact .info li i:hover,.footer-container .contact .info li a:hover{
+    color:var( --primary);
+}
